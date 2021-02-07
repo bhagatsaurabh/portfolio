@@ -1,0 +1,29 @@
+.Tooltip {
+  position: relative;
+  display: flex;
+}
+.Tooltip .TooltipText {
+  opacity: 0;
+  transition: opacity 0.1s linear;
+  text-align: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 70%);
+  z-index: 1;
+  pointer-events: none;
+  color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  background-color: var(--text);
+  color: var(--background);
+}
+@media (hover: hover) {
+  .Tooltip:hover .TooltipText {
+    opacity: 0.85;
+  }
+}

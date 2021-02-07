@@ -1,0 +1,4 @@
+.SkillIcon {
+  transition: filter var(--theme-transition-duration) linear;
+  filter: var(--iconFilter);
+}
