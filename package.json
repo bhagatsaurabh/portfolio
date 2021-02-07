@@ -23,8 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy-pages": "git subtree push --prefix build origin gh-pages",
-    "force-deploy-pages": "git push origin (git subtree split --prefix build main):gh-pages --force"
+    "deploy-pages": "cd build && git add . -f && git commit -m \"Release at $(Get-Date -Format \"MM/dd/yyyy HH:mm K\")\" && git push origin gh-pages"
   },
   "eslintConfig": {
     "extends": [
