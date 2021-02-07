@@ -1,4 +1,3 @@
-# saurabh-bhagat.github.io
 My portfolio
 
 Don't expect it to be perfect :)
