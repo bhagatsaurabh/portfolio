@@ -192,3 +192,28 @@ code {
 .floating-project-exit-active {
   opacity: 0;
 }
+
+.context {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  transition: opacity 0.5s linear;
+}
+.context-enter {
+  opacity: 0;
+}
+.context-enter-active {
+  opacity: 1;
+}
+.context-enter-done {
+  opacity: 1;
+}
+.context-exit {
+  opacity: 1;
+}
+.context-exit-active {
+  opacity: 0;
+}
+.context-exit-done {
+  opacity: 0;
+}

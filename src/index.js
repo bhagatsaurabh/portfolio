@@ -17,6 +17,7 @@ import skillsReducer from './store/reducers/skills';
 import projectReduer from './store/reducers/project';
 import contactReducer from './store/reducers/contact';
 import Resume from './containers/resume/resume';
+import { CSSTransition } from 'react-transition-group';
 
 const rootReducer = combineReducers({
   app: appReducer,
@@ -35,9 +36,29 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Route path="/">
-        {route => route.location.pathname !== '/resume' ? <App /> : null}
+        {route => <CSSTransition
+          in={route.location.pathname !== '/resume'}
+          timeout={500}
+          mountOnEnter
+          classNames="context"
+        >
+          <div className="context">
+            <App />
+          </div>
+        </CSSTransition>}
       </Route>
-      <Route exact path="/resume" component={Resume} />
+      <Route exact path="/resume">
+        {({ match }) => <CSSTransition
+          in={match !== null}
+          timeout={500}
+          mountOnEnter
+          classNames="context"
+        >
+          <div className="context">
+            <Resume />
+          </div>
+        </CSSTransition>}
+      </Route>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
