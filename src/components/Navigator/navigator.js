@@ -43,6 +43,10 @@ class Navigator extends Component {
     }
   }
 
+  navigationHandler = (path) => {
+    if (this.props.location.pathname !== path) this.props.history.push(path);
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -77,7 +81,7 @@ class Navigator extends Component {
                   onMouseLeave={() => {
                     if (!this.state.hoverable) return;
                   }}
-                  onClick={() => this.props.history.push(navigation.path)}
+                  onClick={() => this.navigationHandler(navigation.path)}
                 >
                   <Tooltip customStyle={{ fontSize: '.9rem' }} tip={navigation.title}>
                     <div className={iconClasses.join(' ')}></div>

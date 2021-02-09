@@ -39,6 +39,17 @@ class FloatingProject extends Component {
     }
   }
 
+  previewClickHandler = () => {
+    let rect = this.previewElement.getBoundingClientRect();
+
+    this.props.openPreview(this.props.project.liveLink, {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    });
+  }
+
   render() {
     let floatingProjectClasses = [classes.FloatingProject];
     if (this.state.fullscreen) {
@@ -98,7 +109,7 @@ class FloatingProject extends Component {
             <div className={classes.Controls}>
               <GlassButton icon={leftArrowIcon} iconPosition="left" text="Back" clicked={this.closeProjectHandler} />
               {this.props.project.liveLink ?
-                <GlassButton icon={eyeIcon} iconPosition="left" text="Preview" clicked={() => console.log('Preview clicked')} /> : null
+                <GlassButton ref={element => this.previewElement = element} icon={eyeIcon} iconPosition="left" text="Preview" clicked={this.previewClickHandler} /> : null
               }
             </div>
           </div>
@@ -128,7 +139,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    closeProject: () => dispatch({ type: ActionTypes.SET_CLOSE_PROJECT })
+    closeProject: () => dispatch({ type: ActionTypes.SET_CLOSE_PROJECT }),
+    openPreview: (link, initialStyle) => dispatch({ type: ActionTypes.SET_OPEN_PREVIEW, link, initialStyle })
   }
 };
 

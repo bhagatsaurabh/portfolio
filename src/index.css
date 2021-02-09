@@ -12,6 +12,9 @@ code {
 }
 :root {
   --theme-transition-duration: 0.35s;
+
+  --preview-initial-top: 0;
+  --preview-initial-left: 0;
 }
 
 .light {

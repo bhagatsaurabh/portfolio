@@ -179,7 +179,7 @@ class Tree extends Component {
         } else {
           this.currStep = 0;
           this.stepDelta = 1;
-          this.direction = this.props.navigationOccured.direction < 0;
+          this.direction = this.props.navigationOccured ? this.props.navigationOccured.direction < 0 : false;
           this.assignTargetRotations(this.root.transform.childs[0], 1, getRandom(this.minIdleSway, this.maxIdleSway));
           this.currAnimation = 'idle';
         }

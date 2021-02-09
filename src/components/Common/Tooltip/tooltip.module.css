@@ -9,9 +9,6 @@
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, 70%);
   z-index: 1;
   pointer-events: none;
   color: var(--background);
@@ -22,6 +19,27 @@
   background-color: var(--text);
   color: var(--background);
 }
+.TooltipText.Left {
+  left: 0;
+  top: 50%;
+  transform: translate(-120%, -50%);
+}
+.TooltipText.Right {
+  right: 0;
+  top: 50%;
+  transform: translate(120%, -50%);
+}
+.TooltipText.Top {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -170%);
+}
+.TooltipText.Bottom {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 70%);
+}
+
 @media (hover: hover) {
   .Tooltip:hover .TooltipText {
     opacity: 0.85;

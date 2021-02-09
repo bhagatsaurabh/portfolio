@@ -18,6 +18,7 @@ import projectReduer from './store/reducers/project';
 import contactReducer from './store/reducers/contact';
 import Resume from './containers/resume/resume';
 import { CSSTransition } from 'react-transition-group';
+import previewReducer from './store/reducers/preview';
 
 const rootReducer = combineReducers({
   app: appReducer,
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
   achievements: achievementsReducer,
   skills: skillsReducer,
   project: projectReduer,
-  contact: contactReducer
+  contact: contactReducer,
+  preview: previewReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk))

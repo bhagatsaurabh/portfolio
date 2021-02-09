@@ -1,0 +1,55 @@
+.Preview {
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 100%;
+  transition: left 0.5s cubic-bezier(0.66, 0.04, 0.35, 0.97);
+}
+.Preview.Show {
+  left: 0;
+}
+.Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+  z-index: 1;
+}
+.Container.Show {
+  opacity: 1;
+}
+.CloseButton {
+  position: absolute;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  right: 0;
+  transition: box-shadow 0.1s linear;
+  z-index: 2;
+  border-radius: 999px;
+  box-shadow: 0 0 5px 0 var(--boxShadowColor);
+  background-color: var(--background);
+}
+.Background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  opacity: 0.7;
+}
+
+@media (hover: hover) {
+  .CloseButton:hover {
+    cursor: pointer;
+  }
+}

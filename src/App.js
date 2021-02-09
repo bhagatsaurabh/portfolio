@@ -14,6 +14,8 @@ import projectBack1 from './assets/images/project-background-1.jpg';
 import projectBack2 from './assets/images/project-background-2.jpg';
 import projectBack3 from './assets/images/project-background-3.jpg';
 import LiveBackground from './components/LiveBackground/live-background';
+import Preview from './components/Preview/preview';
+import Loading from './components/Common/Loading/loading';
 
 let fallbackBackgrounds = [projectBack1, projectBack2, projectBack3];
 
@@ -97,7 +99,7 @@ class App extends Component {
     let tempCurrPath = this.currPath;
     this.currPath = this.props.location.pathname;
     this.state.visited.add(this.currPath);
-    let app = 'Loading...';
+    let app = <Loading show={!this.props.projectImagesLoaded} />;
 
     if (this.props.projectImagesLoaded) {
       app = (
@@ -141,6 +143,7 @@ class App extends Component {
               }
             </Route>
           )}
+          <Preview />
         </div >
       );
     }
