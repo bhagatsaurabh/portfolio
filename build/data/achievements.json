@@ -1,0 +1,92 @@
+[
+    {
+        "year": 2015,
+        "events": [
+            {
+                "heading": "CodeVita Season 5",
+                "outcome": null,
+                "type": [
+                    "competitive"
+                ]
+            }
+        ]
+    },
+    {
+        "year": 2016,
+        "events": [
+            {
+                "heading": "CodeVita Season 6",
+                "outcome": "Qualified Rank: Top 1%",
+                "type": [
+                    "competitive"
+                ]
+            }
+        ]
+    },
+    {
+        "year": 2017,
+        "events": [
+            {
+                "heading": "Rajasthan Digifest 3",
+                "outcome": null,
+                "type": [
+                    "hackathon"
+                ],
+                "project": {
+                    "title": "SmartMed",
+                    "description": "An AI powered medicine scanner."
+                }
+            },
+            {
+                "heading": "Texas Instruments IICDC",
+                "outcome": null,
+                "type": [
+                    "hackathon"
+                ],
+                "project": {
+                    "title": "6DoF HUD",
+                    "description": "A HUD display for pilots with 6DoF head and target tracking."
+                }
+            }
+        ]
+    },
+    {
+        "year": 2018,
+        "events": [
+            {
+                "heading": "Rajasthan Digifest 4",
+                "outcome": "Semi-finalist, Merit",
+                "type": [
+                    "hackathon"
+                ],
+                "project": {
+                    "title": "TreeSense",
+                    "description": "Environmental health monitoring using satellite data."
+                }
+            },
+            {
+                "heading": "Rajasthan Digifest 5",
+                "outcome": null,
+                "type": [
+                    "hackathon"
+                ]
+            }
+        ]
+    },
+    {
+        "year": 2019,
+        "events": [
+            {
+                "heading": "Smart India Hackathon",
+                "outcome": "Finalist",
+                "type": [
+                    "hackathon"
+                ],
+                "project": {
+                    "title": "Hotel Menu Visualizer",
+                    "description": "An AR enabled app for tourists to visualize food menu."
+                }
+            }
+        ]
+    }
+]

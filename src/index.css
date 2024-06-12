@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -65,4 +66,227 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+=======
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+:root {
+  --theme-transition-duration: 0.35s;
+
+  --preview-initial-top: 0;
+  --preview-initial-left: 0;
+}
+
+.light {
+  --themeIconPrimary: #ffffff;
+  --themeIconSecondary: #ffffff;
+
+  --primary: #ffffff;
+  --primaryTransparent: #ffffff7f;
+  --secondary: #ffffff;
+  --secondaryTransparent: #ffffff7f;
+  --iconFilter: none;
+  --background: #fff;
+  --backgroundFilter: none;
+  --hoverBackgroundColor: rgb(245, 245, 245);
+  --text: #000000;
+  --particlesColor: #363537;
+  --treeColor: #363537;
+  --boxShadowColor: #555;
+}
+.dark {
+  --themeIconPrimary: #363537;
+  --themeIconSecondary: #363537;
+
+  --primary: #363537;
+  --primaryTransparent: #3635377f;
+  --secondary: #363537;
+  --secondaryTransparent: #3635377f;
+  --iconFilter: invert(1);
+  --background: rgb(0, 0, 0);
+  --backgroundFilter: brightness(0.7);
+  --hoverBackgroundColor: rgb(110, 110, 110);
+  --text: #ffffff;
+  --particlesColor: rgb(231, 231, 231);
+  --treeColor: #b2b2b2;
+  --boxShadowColor: rgb(0, 0, 0);
+}
+.guava-light {
+  --themeIconPrimary: #ffffff;
+  --themeIconSecondary: #8bf8c0;
+
+  --primary: #8bf8c0;
+  --primaryTransparent: #8bf8c07f;
+  --secondary: #ffffff;
+  --secondaryTransparent: #ffffff7f;
+  --iconFilter: invert(85%) sepia(13%) saturate(1097%) hue-rotate(91deg)
+    brightness(104%) contrast(95%);
+
+  --text: #000000;
+}
+.guava-dark {
+  --themeIconPrimary: #363537;
+  --themeIconSecondary: #8bf8c0;
+
+  --primary: #8bf8c0;
+  --primaryTransparent: #8bf8c07f;
+  --secondary: #363537;
+  --secondaryTransparent: #3635377f;
+
+  --text: #ffffff;
+}
+.blackberry-light {
+  --themeIconPrimary: #ffffff;
+  --themeIconSecondary: #c5a6dd;
+
+  --primary: #c5a6dd;
+  --primaryTransparent: #c5a6dd7f;
+  --secondary: #ffffff;
+  --secondaryTransparent: #ffffff7f;
+
+  --text: #000000;
+}
+.blackberry-dark {
+  --themeIconPrimary: #363537;
+  --themeIconSecondary: #c5a6dd;
+
+  --primary: #c5a6dd;
+  --primaryTransparent: #c5a6dd7f;
+  --secondary: #363537;
+  --secondaryTransparent: #3635377f;
+
+  --text: #ffffff;
+}
+.blueberry-light {
+  --themeIconPrimary: #ffffff;
+  --themeIconSecondary: #88e6fb;
+
+  --primary: #88e6fb;
+  --primaryTransparent: #88e6fb7f;
+  --secondary: #ffffff;
+  --secondaryTransparent: #ffffff7f;
+
+  --text: #000000;
+}
+.blueberry-dark {
+  --themeIconPrimary: #363537;
+  --themeIconSecondary: #88e6fb;
+
+  --primary: #88e6fb;
+  --primaryTransparent: #88e6fb7f;
+  --secondary: #363537;
+  --secondaryTransparent: #3635377f;
+
+  --text: #ffffff;
+}
+
+.section {
+  position: absolute;
+  overflow: auto;
+  box-sizing: border-box;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0.66, 0.04, 0.35, 0.97);
+  width: 100%;
+  z-index: 2;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.section::-webkit-scrollbar {
+  display: none;
+}
+.section-forward-enter {
+  left: 100%;
+  opacity: 0;
+}
+.section-forward-enter-active {
+  left: 0;
+  opacity: 1;
+  transition-property: left, opacity;
+}
+.section-forward-exit {
+  left: 0;
+  opacity: 1;
+}
+.section-forward-exit-active {
+  left: -100%;
+  opacity: 0;
+  transition-property: left, opacity;
+}
+.section-forward-exit-done {
+  left: -100%;
+  opacity: 0;
+}
+.section-backward-enter {
+  left: -100%;
+  opacity: 0;
+}
+.section-backward-enter-active {
+  left: 0;
+  opacity: 1;
+  transition-property: left, opacity;
+}
+.section-backward-exit {
+  left: 0;
+  opacity: 1;
+}
+.section-backward-exit-active {
+  left: 100%;
+  opacity: 0;
+  transition-property: left, opacity;
+}
+.section-backward-exit-done {
+  left: 100%;
+  opacity: 0;
+}
+
+.floating-project {
+  transition: opacity 5s linear;
+}
+.floating-project-enter {
+  opacity: 0;
+}
+.floating-project-enter-active {
+  opacity: 1;
+}
+.floating-project-exit {
+  opacity: 1;
+}
+.floating-project-exit-active {
+  opacity: 0;
+}
+
+.context {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  transition: opacity 0.5s linear;
+}
+.context-enter {
+  opacity: 0;
+}
+.context-enter-active {
+  opacity: 1;
+}
+.context-enter-done {
+  opacity: 1;
+}
+.context-exit {
+  opacity: 1;
+}
+.context-exit-active {
+  opacity: 0;
+}
+.context-exit-done {
+  opacity: 0;
+>>>>>>> 4d4a24e1b662f018100b72dfcb352876fe272521
 }
