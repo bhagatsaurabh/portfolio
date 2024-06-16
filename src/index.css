@@ -24,6 +24,7 @@ code {
 
   --preview-initial-top: 0;
   --preview-initial-left: 0;
+  --scroll-timing-fn: cubic-bezier(0.33, 0.03, 0.35, 0.97);
 }
 
 .light {
@@ -65,10 +66,11 @@ code {
   position: absolute;
   overflow: auto;
   box-sizing: border-box;
-  transition-duration: 1s;
-  transition-timing-function: cubic-bezier(0.66, 0.04, 0.35, 0.97);
+  transition: left 0.75s cubic-bezier(0.33, 0.03, 0.35, 0.97),
+    opacity 0.8s cubic-bezier(0.33, 0.03, 0.35, 0.97);
   width: 100%;
   z-index: 2;
+  opacity: 0;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -77,14 +79,21 @@ code {
   display: none;
 }
 
+.section-forward-appear {
+  opacity: 1;
+}
+
 .section-forward-enter {
-  left: 100%;
+  left: 40%;
   opacity: 0;
 }
 .section-forward-enter-active {
   left: 0;
   opacity: 1;
-  transition-property: left, opacity;
+}
+.section-forward-enter-done {
+  left: 0;
+  opacity: 1;
 }
 
 .section-forward-exit {
@@ -92,23 +101,25 @@ code {
   opacity: 1;
 }
 .section-forward-exit-active {
-  left: -100%;
+  left: -25%;
   opacity: 0;
-  transition-property: left, opacity;
 }
 .section-forward-exit-done {
-  left: -100%;
+  left: -40%;
   opacity: 0;
 }
 
 .section-backward-enter {
-  left: -100%;
+  left: -40%;
   opacity: 0;
 }
 .section-backward-enter-active {
   left: 0;
   opacity: 1;
-  transition-property: left, opacity;
+}
+.section-backward-enter-done {
+  left: 0;
+  opacity: 1;
 }
 
 .section-backward-exit {
@@ -116,12 +127,11 @@ code {
   opacity: 1;
 }
 .section-backward-exit-active {
-  left: 100%;
+  left: 25%;
   opacity: 0;
-  transition-property: left, opacity;
 }
 .section-backward-exit-done {
-  left: 100%;
+  left: 40%;
   opacity: 0;
 }
 

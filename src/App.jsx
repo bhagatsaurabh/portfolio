@@ -5,9 +5,9 @@ import { CSSTransition } from "react-transition-group";
 import PropTypes from "prop-types";
 
 import classes from "./app.module.css";
-import LiveBackground from "./components/Common/LiveBackground/live-background";
-import ScrollingBackground from "./components/Common/ScrollingBackground/scrolling-background";
-import ThemeSelector from "./components/Common/ThemeSelector/theme-selector";
+import LiveBackground from "./components/common/LiveBackground/live-background";
+import ScrollingBackground from "./components/common/ScrollingBackground/scrolling-background";
+import ThemeSelector from "./components/common/ThemeSelector/theme-selector";
 // import Preview from "./components/Preview/preview";
 import { loadPreferences } from "./store/actions/preferences";
 import { currTheme } from "./store/reducers/preferences";
@@ -117,12 +117,13 @@ const App = (props) => {
             <CSSTransition
               key={route.name}
               in={location.pathname === route.path}
-              timeout={1000}
+              timeout={750}
               classNames={
                 direction >= 0 ? "section-forward" : "section-backward"
               }
               nodeRef={route.nodeRef}
               mountOnEnter
+              appear
             >
               <div ref={route.nodeRef} className="section">
                 <route.component />

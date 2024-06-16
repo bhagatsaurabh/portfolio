@@ -45,23 +45,29 @@
 }
 .IntroFloat {
   opacity: 0;
-  animation: slidein 0.5s linear forwards;
+  animation: slideup 0.5s linear forwards;
   animation-delay: 0.2s;
 }
 .SummaryFloat {
-  animation: slidein 0.5s linear forwards;
-  animation-delay: 1.5s;
   opacity: 0;
+  animation: slidedown 0.5s linear forwards;
+  animation-delay: 1.5s;
 }
 
-@keyframes slidein {
+@keyframes slideup {
   0% {
     top: 1.8rem;
     opacity: 0;
   }
-  50% {
-    top: 0.9rem;
-    opacity: 0.4;
+  100% {
+    top: 0;
+    opacity: 0.8;
+  }
+}
+@keyframes slidedown {
+  0% {
+    top: -1.2rem;
+    opacity: 0;
   }
   100% {
     top: 0;
