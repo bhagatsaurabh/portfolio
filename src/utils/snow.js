@@ -33,7 +33,7 @@ export class Snow {
   config = {
     minRadius: 1,
     maxRadius: 2,
-    stormDuration: 1000,
+    stormDuration: 750,
     offset: 10,
     steps: 150,
   };

@@ -1,10 +1,11 @@
 import classes from "./contact.module.css";
-import Tooltip from "../../components/Common/Tooltip/tooltip";
-// import SkillIcon from "../../components/Common/SkillIcon/skill-icon";
+import Tooltip from "../common/Tooltip/tooltip";
 // import GlassButton from "../../components/Common/GlassButton/glass-button";
-// import resumeIcon from "../../assets/images/resume.png";
 import myImage from "@/assets/images/me.png";
 import { useSelector } from "react-redux";
+import Icon from "../common/Icon/icon";
+import FeedButton from "../common/FeedButton/feed-button.jsx";
+import { router } from "@/router";
 
 const Contact = (props) => {
   const contact = useSelector((state) => state.contact);
@@ -14,7 +15,7 @@ const Contact = (props) => {
       {<img className={classes.Me} alt="Me" src={myImage} />}
       <a className={classes.Email} href={"mailto:" + contact.email}>
         <Tooltip customStyle={{ marginRight: ".5rem" }} tip="E-mail">
-          {/* <SkillIcon name="email" /> */}
+          <Icon name="email" size={1.5} />
         </Tooltip>
         {contact.email}
       </a>
@@ -29,17 +30,18 @@ const Contact = (props) => {
               href={platform.link}
             >
               <Tooltip tip={platform.name}>
-                {/* <SkillIcon name={platform.name.toLowerCase()} /> */}
+                <Icon name={platform.name.toLowerCase()} size={1.5} />
               </Tooltip>
             </a>
           ))}
       </div>
-      {/* <GlassButton
+      <FeedButton
         customStyle={{ alignSelf: "unset", marginTop: "1rem" }}
-        icon={resumeIcon}
-        clicked={() => this.props.history.push("/resume")}
-        text="Résumé"
-      /> */}
+        icon="resume"
+        onClick={() => router.navigate("/resume")}
+      >
+        {"Résumé"}
+      </FeedButton>
       <div className={classes.Copyright}>
         &copy;&nbsp;{new Date().getFullYear()}&nbsp;Saurabh Bhagat
       </div>

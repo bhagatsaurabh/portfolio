@@ -1,5 +1,5 @@
 import Intro from "@/components/Intro/intro";
-import Contact from "@/components/contact/contact";
+import Contact from "@/components/Contact/contact";
 import { createRef } from "react";
 /* import ProjectsPro from "./containers/projects-pro/projects-pro";
 import ProjectsInd from "./containers/projects-ind/projects-ind";

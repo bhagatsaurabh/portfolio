@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import classes from "./theme-selector.module.css";
-import { lightIcon, darkIcon } from "@/assets/icons";
 import { currTheme } from "@/store/reducers/preferences";
 import { themes } from "@/utils/constants";
+import Icon from "../Icon/icon";
 
 const ThemeSelector = () => {
   const theme = useSelector(currTheme);
@@ -25,18 +25,8 @@ const ThemeSelector = () => {
 
   return (
     <button onClick={handleClick} className={classes["theme-button"]}>
-      <img
-        draggable="false"
-        className={lightClasses.join(" ")}
-        src={lightIcon}
-        alt="Light theme icon"
-      />
-      <img
-        draggable="false"
-        className={darkClasses.join(" ")}
-        src={darkIcon}
-        alt="Dark theme icon"
-      />
+      <Icon name="themeLight" size={2} className={lightClasses.join(" ")} />
+      <Icon name="themeDark" size={2} className={darkClasses.join(" ")} />
     </button>
   );
 };

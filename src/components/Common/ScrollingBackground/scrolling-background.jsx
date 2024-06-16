@@ -1,14 +1,11 @@
 import PropTypes from "prop-types";
 
-import classes from "./scrolling-background.module.css";
+import styles from "./scrolling-background.module.css";
 
 const ScrollingBackground = (props) => {
   const { position = 0 } = props;
 
-  let classNames = [
-    classes.ScrollingBackground,
-    classes["Position" + position],
-  ];
+  let classNames = [styles.ScrollingBackground, styles["Position" + position]];
 
   return <div className={classNames.join(" ")}></div>;
 };
