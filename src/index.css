@@ -1,3 +1,12 @@
+#root {
+  height: 100%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -30,7 +39,7 @@ code {
   --backgroundFilter: none;
   --hoverBackgroundColor: rgb(245, 245, 245);
   --text: #000000;
-  --particlesColor: #363537;
+  --snowColor: #363537;
   --treeColor: #363537;
   --boxShadowColor: #555;
 }
@@ -47,7 +56,7 @@ code {
   --backgroundFilter: brightness(0.7);
   --hoverBackgroundColor: rgb(110, 110, 110);
   --text: #ffffff;
-  --particlesColor: rgb(231, 231, 231);
+  --snowColor: rgb(231, 231, 231);
   --treeColor: #b2b2b2;
   --boxShadowColor: rgb(0, 0, 0);
 }
@@ -131,7 +140,7 @@ code {
 .context {
   position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   transition: opacity 0.5s linear;
 }
 .context-enter {

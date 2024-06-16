@@ -1,7 +1,7 @@
-import Particles from "./Particles/particles";
+import Snow from './Snow/snow'
 import Tree from "./Tree/tree";
 
 export default class LiveBackground {
-  static Particles = Particles;
+  static Snow = Snow;
   static Tree = Tree;
 }
