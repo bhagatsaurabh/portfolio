@@ -33,7 +33,7 @@ export class Tree {
   }
   set color(c) {
     this.state.color = c;
-    this.setColor(this.root);
+    this.setColor(this.root.transform.childs[0]);
   }
 
   constructor(canvas, config, onComplete) {

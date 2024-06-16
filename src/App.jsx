@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
-// import { Route } from "react-router-dom";
-// import { CSSTransition } from "react-transition-group";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { CSSTransition } from "react-transition-group";
 import PropTypes from "prop-types";
 
 import classes from "./app.module.css";
-// import { routes } from "@/router/routes";
-// import ThemeSelector from "./components/ThemeSelector/theme-selector";
-import LiveBackground from "./components/LiveBackground/live-background";
+import LiveBackground from "./components/Common/LiveBackground/live-background";
+import ScrollingBackground from "./components/Common/ScrollingBackground/scrolling-background";
+import ThemeSelector from "./components/Common/ThemeSelector/theme-selector";
 // import Preview from "./components/Preview/preview";
 import { loadPreferences } from "./store/actions/preferences";
 import { currTheme } from "./store/reducers/preferences";
-import ScrollingBackground from "./components/ScrollingBackground/scrolling-background";
-import ThemeSelector from "./components/ThemeSelector/theme-selector";
+import { routeOrder, routes } from "@/router/routes.jsx";
+import usePrevious from "./hooks/usePrevious";
+import { loadContact } from "./store/actions/contact";
+import { clamp } from "./utils";
+import { router } from "./router";
 
 const App = (props) => {
   const { fetchData } = props;
@@ -20,10 +23,15 @@ const App = (props) => {
   const [prefLoaded, setPrefLoaded] = useState(false);
   const theme = useSelector(currTheme);
   const [wind, setWind] = useState(null);
+  const location = useLocation();
+  const prevPath = usePrevious(location.pathname);
+  const direction =
+    routeOrder[location.pathname] - routeOrder[prevPath ?? location.pathname];
 
   let gesture = [];
   const preferences = useCallback(async () => {
     await dispatch(loadPreferences());
+    dispatch(loadContact());
     setPrefLoaded(true);
   }, [dispatch]);
 
@@ -62,9 +70,19 @@ const App = (props) => {
       Math.atan2(last.y - first.y, last.x - first.x) * (180 / Math.PI);
     if (theta > -45 && theta < 45) {
       setWind(true);
+      router.navigate({
+        pathname:
+          routes[clamp(routeOrder[location.pathname] - 1, 0, routes.length - 1)]
+            .path,
+      });
     } else if (theta > 45 && theta < 135);
     else if (theta > 135 || theta < -135) {
       setWind(false);
+      router.navigate({
+        pathname:
+          routes[clamp(routeOrder[location.pathname] + 1, 0, routes.length - 1)]
+            .path,
+      });
     } else;
     gesture = [];
   };
@@ -94,23 +112,24 @@ const App = (props) => {
 
           {/* <Navigator navigations={routes} visited={state.visited} /> */}
           <ThemeSelector />
-          <ScrollingBackground position={/* routeOrder[currPath] */ 0} />
-          {/* {routes.map((route) => (
-            <Route key={route.path} exact path={route.path}>
-              {({ match }) => (
-                <CSSTransition
-                  in={match !== null}
-                  timeout={1000}
-                  mountOnEnter
-                  classNames={"section-forward"}
-                >
-                  <div className="section">
-                    <route.component />
-                  </div>
-                </CSSTransition>
-              )}
-            </Route>
-          ))} */}
+          <ScrollingBackground position={routeOrder[location.pathname]} />
+          {routes.map((route) => (
+            <CSSTransition
+              key={route.name}
+              in={location.pathname === route.path}
+              timeout={1000}
+              classNames={
+                direction >= 0 ? "section-forward" : "section-backward"
+              }
+              nodeRef={route.nodeRef}
+              mountOnEnter
+            >
+              <div ref={route.nodeRef} className="section">
+                <route.component />
+              </div>
+            </CSSTransition>
+          ))}
+
           {/* <Preview /> */}
         </>
       )}
