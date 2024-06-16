@@ -12,16 +12,14 @@ import LiveBackground from "./components/LiveBackground/live-background";
 import { loadPreferences } from "./store/actions/preferences";
 import { currTheme } from "./store/reducers/preferences";
 import ScrollingBackground from "./components/ScrollingBackground/scrolling-background";
+import ThemeSelector from "./components/ThemeSelector/theme-selector";
 
-/* const primaryThemes = [
-  { name: "light", displayColor: "#ffffff" },
-  { name: "dark", displayColor: "#363537" },
-]; */
 const App = (props) => {
   const { fetchData } = props;
   const dispatch = useDispatch();
   const [prefLoaded, setPrefLoaded] = useState(false);
   const theme = useSelector(currTheme);
+  const [wind, setWind] = useState(null);
 
   let gesture = [];
   const preferences = useCallback(async () => {
@@ -36,9 +34,6 @@ const App = (props) => {
     return () => {};
   }, [fetchData, preferences]);
 
-  /*   const themeChangeHandler = (thme) => {
-    dispatch({ type: "preferences/set-theme", payload: thme });
-  }; */
   const touchStartHandler = (event) => {
     gesture = [{ x: event.touches[0].clientX, y: event.touches[0].clientY }];
   };
@@ -61,18 +56,16 @@ const App = (props) => {
       gesture = [];
       return;
     }
-    /*  let first = gesture[0],
-      last = gesture[gesture.length - 1]; */
-    /* let theta =
-      Math.atan2(last.y - first.y, last.x - first.x) * (180 / Math.PI); */
-    /* if (theta > -45 && theta < 45) {
-      if (routeOrder[currPath] - 1 >= 0)
-        props.history.push(routes[routeOrder[currPath] - 1].path);
+    let first = gesture[0],
+      last = gesture[gesture.length - 1];
+    let theta =
+      Math.atan2(last.y - first.y, last.x - first.x) * (180 / Math.PI);
+    if (theta > -45 && theta < 45) {
+      setWind(true);
     } else if (theta > 45 && theta < 135);
     else if (theta > 135 || theta < -135) {
-      if (routeOrder[currPath] + 1 < Object.keys(routeOrder).length)
-        props.history.push(routes[routeOrder[currPath] + 1].path);
-    } else; */
+      setWind(false);
+    } else;
     gesture = [];
   };
 
@@ -86,23 +79,21 @@ const App = (props) => {
     >
       {prefLoaded && (
         <>
-          <LiveBackground.Particles
+          <LiveBackground.Snow
             theme={theme}
             customStyle={{ zIndex: 1 }}
-            navigationOccured={null}
+            windDirection={wind}
+            onComplete={() => setWind(null)}
           />
           <LiveBackground.Tree
             theme={theme}
             customStyle={{ zIndex: 1 }}
-            navigationOccured={null}
+            windDirection={wind}
+            onComplete={() => setWind(null)}
           />
 
           {/* <Navigator navigations={routes} visited={state.visited} /> */}
-          {/* <ThemeSelector
-            primary={primaryThemes}
-            selected={null}
-            onSelect={themeChangeHandler}
-          /> */}
+          <ThemeSelector />
           <ScrollingBackground position={/* routeOrder[currPath] */ 0} />
           {/* {routes.map((route) => (
             <Route key={route.path} exact path={route.path}>

@@ -1,0 +1,29 @@
+button.theme-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0;
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 100;
+}
+
+.theme-icon {
+  height: 2rem;
+  opacity: 0;
+  transition: opacity 0.15s linear, transform 0.15s linear;
+}
+
+img.theme-icon:not(:first-child) {
+  position: absolute;
+  left: 0;
+  filter: invert(1) brightness(0.75);
+}
+
+.theme-icon.active {
+  opacity: 1;
+  transform: rotateZ(360deg);
+}

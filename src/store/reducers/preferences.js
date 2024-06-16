@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { loadPreferences, setTheme } from "../actions/preferences";
+import { setTheme } from "../actions/preferences";
 import { themes } from "@/utils/constants";
 import { currSystemTheme, getThemeClass } from "@/utils";
 
@@ -15,14 +15,12 @@ const currTheme = (state) =>
 
 const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(loadPreferences.fulfilled, (state, action) => {
-      state.userTheme = action.payload;
-    })
     .addCase(setTheme, (state, action) => {
       const newTheme = action.payload;
       if (Object.values(themes).includes(newTheme)) {
         const themeClass = getThemeClass(
-          newTheme === themes.SYSTEM ? currSystemTheme() : newTheme
+          newTheme === themes.SYSTEM ? currSystemTheme() : newTheme,
+          state.userTheme
         );
         const docRoot = document.documentElement;
         docRoot.dataset.theme = themeClass;
@@ -33,13 +31,15 @@ const reducer = createReducer(initialState, (builder) => {
           if (docRoot.className === "") {
             docRoot.classList.add(themeClass);
           } else {
-            docRoot.classList.replace(getThemeClass(), themeClass);
+            docRoot.classList.replace(
+              getThemeClass(null, state.userTheme),
+              themeClass
+            );
           }
         }
         state.userTheme = newTheme;
         localStorage.setItem("preferences", JSON.stringify(state));
       }
-      return state;
     })
     .addDefaultCase(() => {});
 });
