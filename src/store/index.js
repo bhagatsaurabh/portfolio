@@ -10,11 +10,13 @@ import projectReduer from "./store/reducers/project";
 import contactReducer from "./store/reducers/contact";
 import previewReducer from "./store/reducers/preview"; */
 import preferencesReducer from "@/store/reducers/preferences";
+import contactReducer from "@/store/reducers/contact";
 
 export const store = configureStore({
   reducer: {
     // app: appReducer,
     preferences: preferencesReducer,
+    contact: contactReducer,
     /* portfolio: portfolioReducer,
     projectsPro: projectsProReducer,
     projectsInd: projectsIndReducer,

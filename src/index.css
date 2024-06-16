@@ -76,6 +76,7 @@ code {
 .section::-webkit-scrollbar {
   display: none;
 }
+
 .section-forward-enter {
   left: 100%;
   opacity: 0;
@@ -85,6 +86,7 @@ code {
   opacity: 1;
   transition-property: left, opacity;
 }
+
 .section-forward-exit {
   left: 0;
   opacity: 1;
@@ -98,6 +100,7 @@ code {
   left: -100%;
   opacity: 0;
 }
+
 .section-backward-enter {
   left: -100%;
   opacity: 0;
@@ -107,6 +110,7 @@ code {
   opacity: 1;
   transition-property: left, opacity;
 }
+
 .section-backward-exit {
   left: 0;
   opacity: 1;

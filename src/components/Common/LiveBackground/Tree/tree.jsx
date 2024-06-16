@@ -1,10 +1,12 @@
 import { createRef, useEffect, useRef } from "react";
 import * as Percept from "canvas-percept";
 import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
 
 import classes from "./tree.module.css";
 import { Tree as TreeC } from "@/utils/tree";
 import usePrevious from "@/hooks/usePrevious";
+import me from "@/assets/images/me-under-tree.png";
 
 const Tree = (props) => {
   const { onComplete } = props;
@@ -33,6 +35,21 @@ const Tree = (props) => {
       onComplete
     );
     drawing.current.add(tree.current.root);
+    const meWidth = 238 * 0.25;
+    const meHeight = 141 * 0.25;
+    drawing.current.add(
+      new Percept.View.Image(
+        uuid(),
+        new Percept.Vector(
+          canvas.current.width * 0.8 + meWidth / 2,
+          canvas.current.height - meHeight / 2
+        ),
+        me,
+        meWidth,
+        meHeight,
+        { filter: "brightness(0.5)" }
+      )
+    );
     canvas.current.draw(drawing.current);
 
     return () => {

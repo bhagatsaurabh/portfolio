@@ -9,6 +9,7 @@ button.theme-button {
   top: 0.5rem;
   right: 0.5rem;
   z-index: 100;
+  opacity: 0.55;
 }
 
 .theme-icon {
@@ -17,6 +18,9 @@ button.theme-button {
   transition: opacity 0.15s linear, transform 0.15s linear;
 }
 
+img.theme-icon:first-child {
+  filter: brightness(0.75);
+}
 img.theme-icon:not(:first-child) {
   position: absolute;
   left: 0;

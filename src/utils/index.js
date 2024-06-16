@@ -19,3 +19,5 @@ export const sanitizePrefs = (prefs = {}) => {
     : themes.SYSTEM;
   return prefs;
 };
+export const clamp = (value, min, max) =>
+  Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
