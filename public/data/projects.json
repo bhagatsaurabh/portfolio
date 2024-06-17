@@ -1,0 +1,132 @@
+[
+  {
+    "id": 0,
+    "name": "EqPlot",
+    "description": "Evaluate mathematical equations and visualize its 2D/3D representation in realtime !",
+    "descriptionLong": null,
+    "tags": ["android", "java"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/EqPlot",
+    "liveLink": "https://github.com/saurabh-prosoft/EqPlot"
+  },
+  {
+    "id": 1,
+    "name": "RMAC",
+    "description": "Back when I was in 12th grade, students in my college used to play games or download movies on lab computers, one of the professor asked me if I could make something so that he can monitor them. Since then this project has evolved into a spyware 😆",
+    "descriptionLong": null,
+    "tags": ["java", "javascript", "vue", "c/c++"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/rmac",
+    "liveLink": "https://console.rmac.saurabhagat.me"
+  },
+  {
+    "id": 2,
+    "name": "HiDE",
+    "description": "Online platform for project creation and development in teams with real-time collaborative tools.",
+    "descriptionLong": null,
+    "tags": ["angular", "typescript", "nodejs", "web-socket", "web-rtc"],
+    "image": null,
+    "githubLink": null,
+    "liveLink": null
+  },
+  {
+    "id": 3,
+    "name": "NodeIP",
+    "description": "Simple node-based editor for image processing.",
+    "descriptionLong": null,
+    "tags": ["javascript", "web-canvas", "web-worker"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/node-ip",
+    "liveLink": "https://node-ip.saurabhagat.me/"
+  },
+  {
+    "id": 4,
+    "name": "OpenChat",
+    "description": "End-to-end encrypted messaging solution for the web.",
+    "descriptionLong": null,
+    "tags": ["vue", "firebase", "indexed-db"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/openchat",
+    "liveLink": "https://openchat.saurabhagat.me"
+  },
+  {
+    "id": 5,
+    "name": "Percept",
+    "description": "HTML5 Canvas rendering engine",
+    "descriptionLong": null,
+    "tags": ["typescript", "npm-package", "web-canvas", "react"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/percept",
+    "liveLink": "https://percept.saurabhagat.me"
+  },
+  {
+    "id": 6,
+    "name": "Mixbee",
+    "description": "Simple and effective sound mixing and recording webapp.",
+    "descriptionLong": null,
+    "tags": ["react", "web-audio"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/mix-bee",
+    "liveLink": "https://mix-bee.saurabhagat.me"
+  },
+  {
+    "id": 7,
+    "name": "Tank Me",
+    "description": "Multiplayer online PvP tank battle !",
+    "descriptionLong": null,
+    "tags": ["typescript", "web-gl", "vue", "game", "3d"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/tank-me",
+    "liveLink": "https://tankme.saurabhagat.me"
+  },
+  {
+    "id": 8,
+    "name": "vAP",
+    "description": "Easy-to-use webapp for audio synthesis, processing and visualization.",
+    "descriptionLong": null,
+    "tags": ["react", "web-audio", "web-canvas"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/vap",
+    "liveLink": "https://vap.saurabhagat.me/"
+  },
+  {
+    "id": 9,
+    "name": "My Website",
+    "description": "May not be considered a project per-se but it required a lot of time 🤷‍♂️ and I learned alot through it.",
+    "descriptionLong": null,
+    "tags": ["react", "web-canvas"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/portfolio",
+    "liveLink": "https://saurabhagat.me"
+  },
+  {
+    "id": 10,
+    "name": "Catana Adventures",
+    "description": "2D side-scrolling 'purr-former' starring a 'feline-tastic' hero on whisker-raising adventures !",
+    "descriptionLong": null,
+    "tags": ["typescript", "game", "2d"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/catana-adventures",
+    "liveLink": "https://catana-adventures.saurabhagat.me"
+  },
+  {
+    "id": 11,
+    "name": "SAGD Explorer",
+    "description": "Basic scripts for browsing Google Cloud Service Account Storage",
+    "descriptionLong": null,
+    "tags": ["javascript", "npm-package", "gcp"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/sagd-explorer",
+    "liveLink": null
+  },
+  {
+    "id": 12,
+    "name": "FlowConnect",
+    "description": "A highly-customizable library for creating node-based editors, graphs and diagrams.",
+    "descriptionLong": null,
+    "tags": ["typescript", "npm-package", "vue", "vuepress", "web-canvas"],
+    "image": null,
+    "githubLink": "https://github.com/saurabh-prosoft/flow-connect",
+    "liveLink": "https://flow-connect.saurabhagat.me"
+  }
+]

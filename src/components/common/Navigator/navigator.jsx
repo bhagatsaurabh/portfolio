@@ -1,31 +1,27 @@
-import { createRef, useCallback, useEffect, useRef, useState } from "react";
+import { createRef, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import styles from "./navigator.module.css";
 import { clamp } from "@/utils";
 import { normalize } from "@/utils/graphics";
 
-const Navigator = ({ checkpoints }) => {
+const Navigator = ({ checkpoints, index, onNavigate }) => {
   const thumbEl = createRef();
   const trackEl = createRef();
-  const [currIndex, setCurrIndex] = useState(0);
   const lock = useRef(false);
 
   let pointerId = -1;
   const moveThumb = useCallback(
     (amount) => {
-      const idx = Math.round(amount * (checkpoints.length - 1));
-      thumbEl.current.style.left = `calc(${
-        idx * (100 / (checkpoints.length - 1))
-      }% - 0.375rem)`;
-      if (currIndex !== idx) {
-        setCurrIndex(idx);
+      const newIdx = Math.round(amount * (checkpoints.length - 1));
+      if (index !== newIdx) {
         if (window.matchMedia("(pointer: coarse)").matches) {
           navigator.vibrate(50);
         }
+        onNavigate(newIdx);
       }
     },
-    [checkpoints.length, currIndex, thumbEl]
+    [checkpoints.length, thumbEl, index, onNavigate]
   );
   const handlePointerMove = useCallback(
     (e) => {
@@ -97,7 +93,13 @@ const Navigator = ({ checkpoints }) => {
       onTouchEnd={(e) => e.stopPropagation()}
       className={styles.Navigator}
     >
-      <div ref={thumbEl} className={styles.Thumb}></div>
+      <div
+        ref={thumbEl}
+        className={styles.Thumb}
+        style={{
+          left: `calc(${index * (100 / (checkpoints.length - 1))}% - 0.275rem)`,
+        }}
+      ></div>
       <div ref={trackEl} className={styles.Track}>
         <div className={styles.Checkpoints}>
           {checkpoints.map((checkpoint, idx) => (
@@ -105,7 +107,7 @@ const Navigator = ({ checkpoints }) => {
               key={checkpoint.name}
               className={[
                 styles.Checkpoint,
-                idx === currIndex ? styles.current : "",
+                idx === index ? styles.current : "",
               ].join(" ")}
               style={{ left: `${idx * (100 / (checkpoints.length - 1))}%` }}
             >
@@ -119,7 +121,9 @@ const Navigator = ({ checkpoints }) => {
 };
 
 Navigator.propTypes = {
+  index: PropTypes.number,
   checkpoints: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+  onNavigate: PropTypes.func,
 };
 
 export default Navigator;
