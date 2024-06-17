@@ -86,6 +86,10 @@ const App = (props) => {
     gesture = [];
   };
 
+  const handleNavigate = (idx) => {
+    router.navigate(routes[idx].path);
+  };
+
   return (
     <div
       className={[classes.App, theme].join(" ")}
@@ -110,6 +114,7 @@ const App = (props) => {
           />
 
           <Navigator
+            index={routeOrder[location.pathname]}
             checkpoints={[
               { name: "Intro" },
               { name: "Projects" },
@@ -117,6 +122,7 @@ const App = (props) => {
               { name: "Skills" },
               { name: "AboutMe" },
             ]}
+            onNavigate={handleNavigate}
           />
           <ThemeSelector />
           <ScrollingBackground position={routeOrder[location.pathname]} />
