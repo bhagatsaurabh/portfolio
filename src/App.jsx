@@ -8,14 +8,13 @@ import classes from "./app.module.css";
 import LiveBackground from "./components/common/LiveBackground/live-background";
 import ScrollingBackground from "./components/common/ScrollingBackground/scrolling-background";
 import ThemeSelector from "./components/common/ThemeSelector/theme-selector";
-// import Preview from "./components/Preview/preview";
 import { loadPreferences } from "./store/actions/preferences";
 import { currTheme } from "./store/reducers/preferences";
-import { routeOrder, routes } from "@/router/routes.jsx";
-import usePrevious from "./hooks/usePrevious";
 import { loadContact } from "./store/actions/contact";
+import { router, routeOrder, routes } from "./router";
+import usePrevious from "./hooks/usePrevious";
 import { clamp } from "./utils";
-import { router } from "./router";
+import Navigator from "./components/common/Navigator/navigator";
 
 const App = (props) => {
   const { fetchData } = props;
@@ -92,8 +91,8 @@ const App = (props) => {
       className={[classes.App, theme].join(" ")}
       id="App"
       onTouchStart={touchStartHandler}
-      onTouchEnd={touchEndHandler}
       onTouchMove={touchMoveHandler}
+      onTouchEnd={touchEndHandler}
     >
       {prefLoaded && (
         <>
@@ -110,7 +109,15 @@ const App = (props) => {
             onComplete={() => setWind(null)}
           />
 
-          {/* <Navigator navigations={routes} visited={state.visited} /> */}
+          <Navigator
+            checkpoints={[
+              { name: "Intro" },
+              { name: "Projects" },
+              { name: "Highlights" },
+              { name: "Skills" },
+              { name: "AboutMe" },
+            ]}
+          />
           <ThemeSelector />
           <ScrollingBackground position={routeOrder[location.pathname]} />
           {routes.map((route) => (
@@ -130,8 +137,6 @@ const App = (props) => {
               </div>
             </CSSTransition>
           ))}
-
-          {/* <Preview /> */}
         </>
       )}
     </div>

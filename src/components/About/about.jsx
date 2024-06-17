@@ -1,17 +1,17 @@
-import classes from "./contact.module.css";
-import Tooltip from "../common/Tooltip/tooltip";
-// import GlassButton from "../../components/Common/GlassButton/glass-button";
-import myImage from "@/assets/images/me.png";
 import { useSelector } from "react-redux";
-import Icon from "../common/Icon/icon";
+
+import classes from "./about.module.css";
+import Tooltip from "../common/Tooltip/tooltip.jsx";
+import myImage from "@/assets/images/me.png";
+import Icon from "../common/Icon/icon.jsx";
 import FeedButton from "../common/FeedButton/feed-button.jsx";
 import { router } from "@/router";
 
-const Contact = (props) => {
+const About = (props) => {
   const contact = useSelector((state) => state.contact);
 
   return (
-    <div className={classes.Contact}>
+    <div className={classes.About}>
       {<img className={classes.Me} alt="Me" src={myImage} />}
       <a className={classes.Email} href={"mailto:" + contact.email}>
         <Tooltip customStyle={{ marginRight: ".5rem" }} tip="E-mail">
@@ -49,4 +49,4 @@ const Contact = (props) => {
   );
 };
 
-export default Contact;
+export default About;
