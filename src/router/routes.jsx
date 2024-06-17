@@ -1,11 +1,9 @@
 import Intro from "@/components/Intro/intro";
-import Contact from "@/components/Contact/contact";
+import About from "@/components/About/about";
 import { createRef } from "react";
-/* import ProjectsPro from "./containers/projects-pro/projects-pro";
-import ProjectsInd from "./containers/projects-ind/projects-ind";
-import Achievements from "./containers/achievements/achievements";
-import Skills from "./containers/skills/skills";
-import Contact from "./containers/contact/contact"; */
+import Projects from "@/components/Projects/projects";
+import Highlights from "@/components/Highlights/highlights";
+import Skills from "@/components/Skills/skills";
 
 export const routes = [
   {
@@ -15,32 +13,40 @@ export const routes = [
     nodeRef: createRef(),
     component: Intro,
   },
-  /* {
-    path: "/projects-professional",
-    component: ProjectsPro,
-    title: "Projects - Professional",
-  }, */
-  /* {
-    path: "/projects-individual",
-    component: ProjectsInd,
-    title: "Projects - Individual",
-  }, */
-  // { path: "/achievements", component: Achievements, title: "Achievements" },
-  // { path: "/skills", component: Skills, title: "Skills" },
   {
-    path: "/contact",
-    name: "Contact",
-    element: <Contact />,
+    path: "/projects",
+    name: "Projects",
+    element: <Projects />,
     nodeRef: createRef(),
-    component: Contact,
+    component: Projects,
+  },
+  {
+    path: "/highlights",
+    name: "Highlights",
+    element: <Highlights />,
+    nodeRef: createRef(),
+    component: Highlights,
+  },
+  {
+    path: "/skills",
+    name: "Skills",
+    element: <Skills />,
+    nodeRef: createRef(),
+    component: Skills,
+  },
+  {
+    path: "/about",
+    name: "About",
+    element: <About />,
+    nodeRef: createRef(),
+    component: About,
   },
 ];
 
 export const routeOrder = {
   "/": 0,
-  // "/projects-professional": 1,
-  // "/projects-individual": 2,
-  // "/achievements": 3,
-  // "/skills": 4,
-  "/contact": 1,
+  "/projects": 1,
+  "/highlights": 2,
+  "/skills": 3,
+  "/about": 4,
 };
