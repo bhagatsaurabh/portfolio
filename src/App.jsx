@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import PropTypes from "prop-types";
 
 import classes from "./app.module.css";
-import LiveBackground from "./components/common/LiveBackground/live-background";
+import LiveBackground from "./components/common/LiveBackground/live-background.jsx";
 import ScrollingBackground from "./components/common/ScrollingBackground/scrolling-background";
 import ThemeSelector from "./components/common/ThemeSelector/theme-selector";
 import { loadPreferences } from "./store/actions/preferences";
