@@ -8,7 +8,7 @@
   color: var(--text);
   transition: color var(--theme-transition-duration) linear;
   box-sizing: border-box;
-  height: 100vh;
+  height: 100%;
   font-weight: 300;
 }
 .Float {

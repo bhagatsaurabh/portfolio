@@ -1,0 +1,27 @@
+.Projects {
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  color: var(--text);
+  transition: color var(--theme-transition-duration) linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+.Container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-height: 100%;
+  overflow-y: auto;
+  gap: 1rem;
+  padding: 5rem 0;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 10% 90%,
+    transparent 100%
+  );
+}

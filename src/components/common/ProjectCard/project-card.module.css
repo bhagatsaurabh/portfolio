@@ -1,0 +1,79 @@
+.ProjectCard {
+  position: relative;
+  width: 80vw;
+  min-height: 53vw;
+  backdrop-filter: blur(5px);
+  padding: 0.5rem;
+}
+.ProjectCard .Cover {
+  width: 100%;
+  height: 53vw;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 25%,
+    rgba(0, 0, 0, 0.75) 50%,
+    rgba(0, 0, 0, 0.25) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  opacity: 0.8;
+}
+.ProjectCard video.Cover {
+  object-fit: cover;
+}
+.ProjectCard .Info {
+  width: 100%;
+  padding: 0 0.75rem 0.75rem 0.75rem;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-right: 1px solid grey;
+}
+.ProjectCard .Title {
+  position: absolute;
+  top: 53vw;
+  transform: translateY(-100%);
+  z-index: 51;
+  width: calc(100% - 1rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+.ProjectCard .Title h3 {
+  font-weight: 500;
+  margin: 0;
+}
+.ProjectCard .Title .Links {
+  display: flex;
+  gap: 0.25rem;
+}
+.ProjectCard .Footer {
+  display: flex;
+  justify-content: center;
+  padding: 0.25rem 0.75rem 0.75rem 0.75rem;
+  border-left: 1px solid grey;
+  border-right: 1px solid grey;
+}
+.Footer .Tags {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+  .ProjectCard {
+    width: 40vw;
+    height: 26vw;
+    min-height: unset;
+  }
+}
+
+@media (min-width: 768px) {
+  .ProjectCard {
+    width: 20rem;
+    height: 13rem;
+    min-height: unset;
+  }
+}

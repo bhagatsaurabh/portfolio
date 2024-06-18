@@ -15,6 +15,8 @@ import { router, routeOrder, routes } from "./router";
 import usePrevious from "./hooks/usePrevious";
 import { clamp } from "./utils";
 import Navigator from "./components/common/Navigator/navigator";
+import { loadProjects } from "./store/actions/projects";
+import { cleanup } from "./store/actions/preloader";
 
 const App = (props) => {
   const { fetchData } = props;
@@ -31,6 +33,7 @@ const App = (props) => {
   const preferences = useCallback(async () => {
     await dispatch(loadPreferences());
     dispatch(loadContact());
+    dispatch(loadProjects());
     setPrefLoaded(true);
   }, [dispatch]);
 
@@ -38,7 +41,9 @@ const App = (props) => {
     preferences();
     // fetchData();
 
-    return () => {};
+    return () => {
+      dispatch(cleanup());
+    };
   }, [fetchData, preferences]);
 
   const touchStartHandler = (event) => {

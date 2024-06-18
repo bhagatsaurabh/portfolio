@@ -1,0 +1,13 @@
+.ExternalLink {
+  font-size: 0;
+  padding: 0.35rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.621);
+  background-color: rgba(186, 186, 186, 0.247);
+}
+
+@media (hover: hover) {
+  .ExternalLink:hover {
+    background-color: rgba(186, 186, 186, 0.512);
+  }
+}
