@@ -75,7 +75,7 @@ code {
   width: 100%;
   z-index: 2;
   opacity: 0;
-
+  height: 100%;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
