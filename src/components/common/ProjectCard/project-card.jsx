@@ -20,8 +20,22 @@ const ProjectCard = ({ project }) => {
     return () => {};
   }, []);
 
+  const handleOpen = (e) => {
+    if (
+      (!e.key || (e.key && ["Enter", "Space"].includes(e.key))) &&
+      (project.liveLink || project.githubLink)
+    ) {
+      window.open(project.liveLink || project.githubLink, "_blank");
+    }
+  };
+
   return (
-    <div className={styles.ProjectCard}>
+    <article
+      className={styles.ProjectCard}
+      tabIndex="0"
+      onKeyUp={handleOpen}
+      onClick={handleOpen}
+    >
       {typeof mediaSource === "undefined" ? (
         <div
           className={styles.Cover}
@@ -61,7 +75,7 @@ const ProjectCard = ({ project }) => {
       <div className={styles.Info}>
         <span>{project.description}</span>
       </div>
-    </div>
+    </article>
   );
 };
 

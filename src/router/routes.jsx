@@ -4,6 +4,7 @@ import { createRef } from "react";
 import Projects from "@/components/Projects/projects";
 import Highlights from "@/components/Highlights/highlights";
 import Skills from "@/components/Skills/skills";
+import Experience from "@/components/Experience/experience";
 
 export const routes = [
   {
@@ -19,6 +20,13 @@ export const routes = [
     element: <Projects />,
     nodeRef: createRef(),
     component: Projects,
+  },
+  {
+    path: "/work",
+    name: "Work",
+    element: <Experience />,
+    nodeRef: createRef(),
+    component: Experience,
   },
   {
     path: "/highlights",
@@ -46,7 +54,8 @@ export const routes = [
 export const routeOrder = {
   "/": 0,
   "/projects": 1,
-  "/highlights": 2,
-  "/skills": 3,
-  "/about": 4,
+  "/work": 2,
+  "/highlights": 3,
+  "/skills": 4,
+  "/about": 5,
 };

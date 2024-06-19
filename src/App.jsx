@@ -29,6 +29,14 @@ const App = (props) => {
   const direction =
     routeOrder[location.pathname] - routeOrder[prevPath ?? location.pathname];
 
+  useEffect(() => {
+    const dir =
+      routeOrder[location.pathname] - routeOrder[prevPath ?? location.pathname];
+    if (dir !== 0) {
+      setWind(dir < 0);
+    }
+  }, [location.pathname, prevPath]);
+
   let gesture = [];
   const preferences = useCallback(async () => {
     await dispatch(loadPreferences());
@@ -73,7 +81,6 @@ const App = (props) => {
     let theta =
       Math.atan2(last.y - first.y, last.x - first.x) * (180 / Math.PI);
     if (theta > -45 && theta < 45) {
-      setWind(true);
       router.navigate({
         pathname:
           routes[clamp(routeOrder[location.pathname] - 1, 0, routes.length - 1)]
@@ -81,7 +88,6 @@ const App = (props) => {
       });
     } else if (theta > 45 && theta < 135);
     else if (theta > 135 || theta < -135) {
-      setWind(false);
       router.navigate({
         pathname:
           routes[clamp(routeOrder[location.pathname] + 1, 0, routes.length - 1)]
@@ -121,11 +127,12 @@ const App = (props) => {
           <Navigator
             index={routeOrder[location.pathname]}
             checkpoints={[
-              { name: "Intro" },
-              { name: "Projects" },
-              { name: "Highlights" },
-              { name: "Skills" },
-              { name: "AboutMe" },
+              { name: "Intro", title: "Intro" },
+              { name: "Projects", title: "Projects" },
+              { name: "Work", title: "Experience" },
+              { name: "Highlights", title: "Highlights" },
+              { name: "Skills", title: "Skills" },
+              { name: "About", title: "Me" },
             ]}
             onNavigate={handleNavigate}
           />
