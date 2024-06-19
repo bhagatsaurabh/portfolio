@@ -1,2 +1,14 @@
 .Experience {
+  padding: 2rem;
+}
+.Experience h4 {
+  /* margin: 0; */
+  font-weight: 100;
+}
+
+.Experience h5 {
+  font-weight: 100;
+}
+.Experience ul li {
+  margin-bottom: 0.5rem;
 }
