@@ -111,6 +111,7 @@ code {
 .section-forward-exit-done {
   left: -40%;
   opacity: 0;
+  z-index: 0;
 }
 
 .section-backward-enter {
@@ -137,6 +138,7 @@ code {
 .section-backward-exit-done {
   left: 40%;
   opacity: 0;
+  z-index: 0;
 }
 
 .floating-project {

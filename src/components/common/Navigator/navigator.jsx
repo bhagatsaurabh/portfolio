@@ -8,9 +8,10 @@ import { normalize } from "@/utils/graphics";
 const Navigator = ({ checkpoints, index, onNavigate }) => {
   const thumbEl = createRef();
   const trackEl = createRef();
+  const titlesContainer = createRef();
   const lock = useRef(false);
+  const pointerId = useRef(-1);
 
-  let pointerId = -1;
   const moveThumb = useCallback(
     (amount) => {
       const newIdx = Math.round(amount * (checkpoints.length - 1));
@@ -26,11 +27,11 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
   const handlePointerMove = useCallback(
     (e) => {
       e.preventDefault();
-      if (!pointerId === e.pointerId) return;
+      if (pointerId.current !== e.pointerId || !trackEl.current) return;
 
       if (lock.current) {
         const { x: trackX, width: trackWidth } =
-          trackEl.current?.getBoundingClientRect() ?? {};
+          trackEl.current.getBoundingClientRect();
         moveThumb(
           normalize(clamp(e.clientX - trackX, 0, trackWidth), 0, trackWidth)
         );
@@ -45,18 +46,23 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
     document.addEventListener("pointerleave", handlePointerLeave);
     document.addEventListener("pointerout", handlePointerOut);
     document.addEventListener("pointerup", handlePointerUp);
+    const handle = setTimeout(
+      () => titlesContainer.current?.classList.remove(styles.titlehidden),
+      500
+    );
     return () => {
       document.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("pointercancel", handlePointerCancel);
       document.removeEventListener("pointerleave", handlePointerLeave);
       document.removeEventListener("pointerout", handlePointerOut);
       document.removeEventListener("pointerup", handlePointerUp);
+      clearTimeout(handle);
     };
   }, [handlePointerMove]);
 
   const handlePointerDown = (e) => {
     e.preventDefault();
-    pointerId = e.pointerId;
+    pointerId.current = e.pointerId;
     lock.current = true;
     thumbEl.current?.classList.add(styles.active);
 
@@ -70,7 +76,7 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
   const cancel = (e) => {
     e.preventDefault();
     lock.current = false;
-    pointerId = -1;
+    pointerId.current = -1;
     thumbEl.current?.classList.remove(styles.active);
   };
   const handlePointerCancel = (e) => cancel(e);
@@ -79,44 +85,67 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
   const handlePointerUp = (e) => cancel(e);
 
   return (
-    <div
-      onPointerDown={handlePointerDown}
-      onPointerCancel={(e) => e.stopPropagation()}
-      onPointerLeave={(e) => e.stopPropagation()}
-      onPointerOut={(e) => e.stopPropagation()}
-      onPointerUp={(e) => {
-        e.stopPropagation();
-        handlePointerUp(e);
-      }}
-      onTouchStart={(e) => e.stopPropagation()}
-      onTouchMove={(e) => e.stopPropagation()}
-      onTouchEnd={(e) => e.stopPropagation()}
-      className={styles.Navigator}
-    >
+    <>
       <div
-        ref={thumbEl}
-        className={styles.Thumb}
-        style={{
-          left: `calc(${index * (100 / (checkpoints.length - 1))}% - 0.275rem)`,
+        ref={titlesContainer}
+        className={[styles.SectionTitles, styles.titlehidden].join(" ")}
+      >
+        {checkpoints.map((checkpoint, idx) => (
+          <h2
+            key={checkpoint.name}
+            className={[
+              styles.SectionTitle,
+              idx === index ? styles.titleactive : "",
+              idx === 0 || idx === checkpoints.length - 1
+                ? styles.titleignore
+                : "",
+            ].join(" ")}
+          >
+            {checkpoint.title}
+          </h2>
+        ))}
+      </div>
+      <div
+        onPointerDown={handlePointerDown}
+        onPointerCancel={(e) => e.stopPropagation()}
+        onPointerLeave={(e) => e.stopPropagation()}
+        onPointerOut={(e) => e.stopPropagation()}
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          handlePointerUp(e);
         }}
-      ></div>
-      <div ref={trackEl} className={styles.Track}>
-        <div className={styles.Checkpoints}>
-          {checkpoints.map((checkpoint, idx) => (
-            <div
-              key={checkpoint.name}
-              className={[
-                styles.Checkpoint,
-                idx === index ? styles.current : "",
-              ].join(" ")}
-              style={{ left: `${idx * (100 / (checkpoints.length - 1))}%` }}
-            >
-              {checkpoint.name}
-            </div>
-          ))}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        className={styles.Navigator}
+      >
+        <div
+          ref={thumbEl}
+          className={styles.Thumb}
+          style={{
+            left: `calc(${
+              index * (100 / (checkpoints.length - 1))
+            }% - 0.275rem)`,
+          }}
+        ></div>
+        <div ref={trackEl} className={styles.Track}>
+          <div className={styles.Checkpoints}>
+            {checkpoints.map((checkpoint, idx) => (
+              <div
+                key={checkpoint.name}
+                className={[
+                  styles.Checkpoint,
+                  idx === index ? styles.current : "",
+                ].join(" ")}
+                style={{ left: `${idx * (100 / (checkpoints.length - 1))}%` }}
+              >
+                {checkpoint.name}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
