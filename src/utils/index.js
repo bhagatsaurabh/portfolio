@@ -21,3 +21,10 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+export const debounce = (func, timeout = 100) => {
+  let handle;
+  return (...args) => {
+    clearTimeout(handle);
+    handle = setTimeout(() => func.apply(this, args), timeout);
+  };
+};

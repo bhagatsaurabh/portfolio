@@ -17,6 +17,7 @@ import { clamp } from "./utils";
 import Navigator from "./components/common/Navigator/navigator";
 import { loadProjects } from "./store/actions/projects";
 import { cleanup } from "./store/actions/preloader";
+import { setShowScrollHint } from "./store/actions/app";
 
 const App = (props) => {
   const { fetchData } = props;
@@ -81,6 +82,7 @@ const App = (props) => {
     let theta =
       Math.atan2(last.y - first.y, last.x - first.x) * (180 / Math.PI);
     if (theta > -45 && theta < 45) {
+      dispatch(setShowScrollHint(false));
       router.navigate({
         pathname:
           routes[clamp(routeOrder[location.pathname] - 1, 0, routes.length - 1)]
@@ -88,6 +90,7 @@ const App = (props) => {
       });
     } else if (theta > 45 && theta < 135);
     else if (theta > 135 || theta < -135) {
+      dispatch(setShowScrollHint(false));
       router.navigate({
         pathname:
           routes[clamp(routeOrder[location.pathname] + 1, 0, routes.length - 1)]
@@ -130,7 +133,6 @@ const App = (props) => {
               { name: "Intro", title: "Intro" },
               { name: "Projects", title: "Projects" },
               { name: "Work", title: "Experience" },
-              { name: "Highlights", title: "Highlights" },
               { name: "Skills", title: "Skills" },
               { name: "About", title: "Me" },
             ]}

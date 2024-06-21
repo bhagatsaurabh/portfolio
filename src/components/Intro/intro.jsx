@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
+import ScrollHint from "../common/ScrollHint/scroll-hint";
 import classes from "./intro.module.css";
 
 const Intro = () => {
   let nameClasses = [classes.Float, classes.IntroFloat];
-  let summaryClasses = [classes.Float, classes.SummaryFloat];
+  const showScrollHint = useSelector((state) => state.app.showScrollHint);
 
   return (
     <div className={classes.Intro}>
@@ -13,9 +15,7 @@ const Intro = () => {
           <div className={classes.Last}>bhagat</div>
         </div>
       </div>
-      <div className={summaryClasses.join(" ")}>
-        a front-end enthusiast, software engineer and UI/UX designer
-      </div>
+      <ScrollHint show={showScrollHint} />
     </div>
   );
 };
