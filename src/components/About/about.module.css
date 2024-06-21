@@ -6,10 +6,15 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  padding-top: 4rem;
+  padding: 2rem;
   position: fixed;
   color: var(--text);
   transition: color var(--theme-transition-duration) linear;
+}
+.About h4 {
+  font-weight: 100;
+  margin: 0.5rem 0;
+  text-align: center;
 }
 .Platforms {
   display: flex;
@@ -38,7 +43,15 @@
 }
 .Me {
   margin-bottom: 1.5rem;
-  opacity: 0.9;
+  opacity: 0.8;
+}
+.About > span {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+.About > span img {
+  margin-right: 0.5rem;
 }
 
 @media (orientation: landscape) {

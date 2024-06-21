@@ -21,3 +21,8 @@ export { default as game } from "./game.png";
 export { default as _3d } from "./3d.png";
 export { default as _2d } from "./2d.png";
 export { default as webaudio } from "./webaudio.png";
+export { default as figma } from "./figma.png";
+export { default as blender } from "./blender.png";
+export { default as azure } from "./azure.png";
+export { default as bicep } from "./bicep.png";
+export { default as pin } from "./pin.png";

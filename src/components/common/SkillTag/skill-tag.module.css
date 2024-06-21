@@ -1,0 +1,9 @@
+.SkillTag {
+  display: flex;
+  align-items: center;
+  width: min-content;
+}
+
+.SkillTag img {
+  margin-right: 0.25rem;
+}

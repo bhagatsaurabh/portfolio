@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-flow: column;
   z-index: 50;
   color: var(--text);
@@ -13,9 +13,9 @@
 }
 .Float {
   position: relative;
-  margin: 0 1rem 0 1rem;
-  padding: 1rem;
+  padding: 1rem 2rem 1rem 2rem;
   box-sizing: border-box;
+  width: 100%;
 }
 .Float::before {
   display: none;
