@@ -16,6 +16,8 @@ export class Tree {
     preStormStepDelta: 9,
     stormStepDelta: 40,
     postStormStepDelta: 1,
+    initialLength: 75,
+    initialWidth: 5,
   };
   state = {
     animation: "idle",
@@ -36,21 +38,21 @@ export class Tree {
     this.setColor(this.root.transform.childs[0]);
   }
 
-  constructor(canvas, config, onComplete) {
+  constructor(pos, config, onComplete) {
     this.config = { ...this.config, ...config };
-    this.canvas = canvas;
     this.onComplete = onComplete;
 
-    this.setup();
+    this.setup(pos);
   }
 
-  setup() {
-    this.root = new View.Empty(
-      "root",
-      new Vector(this.canvas.width * 0.8, this.canvas.height)
-    );
+  setup(pos) {
+    this.root = new View.Empty("root", new Vector(pos.x, pos.y));
     this.root.length = 0;
-    this.generateBranches(75, 5, this.root);
+    this.generateBranches(
+      this.config.initialLength,
+      this.config.initialWidth,
+      this.root
+    );
 
     this.branchRotate(this.root.transform.childs[0]);
     this.state.maxDepth = this.getDepth(this.root.transform.childs[0]);

@@ -19,8 +19,7 @@ import { loadProjects } from "./store/actions/projects";
 import { cleanup } from "./store/actions/preloader";
 import { setShowScrollHint } from "./store/actions/app";
 
-const App = (props) => {
-  const { fetchData } = props;
+const App = () => {
   const dispatch = useDispatch();
   const [prefLoaded, setPrefLoaded] = useState(false);
   const theme = useSelector(currTheme);
@@ -29,6 +28,7 @@ const App = (props) => {
   const prevPath = usePrevious(location.pathname);
   const direction =
     routeOrder[location.pathname] - routeOrder[prevPath ?? location.pathname];
+  const route = routes.find((route) => route.path === location.pathname);
 
   useEffect(() => {
     const dir =
@@ -48,12 +48,11 @@ const App = (props) => {
 
   useEffect(() => {
     preferences();
-    // fetchData();
 
     return () => {
       dispatch(cleanup());
     };
-  }, [fetchData, preferences]);
+  }, [preferences]);
 
   const touchStartHandler = (event) => {
     gesture = [{ x: event.touches[0].clientX, y: event.touches[0].clientY }];
@@ -101,6 +100,7 @@ const App = (props) => {
   };
 
   const handleNavigate = (idx) => {
+    dispatch(setShowScrollHint(false));
     router.navigate(routes[idx].path);
   };
 
@@ -118,12 +118,14 @@ const App = (props) => {
             theme={theme}
             customStyle={{ zIndex: 1 }}
             windDirection={wind}
+            blur={route?.globalBlur}
             onComplete={() => setWind(null)}
           />
           <LiveBackground.Tree
             theme={theme}
             customStyle={{ zIndex: 1 }}
             windDirection={wind}
+            blur={route?.globalBlur}
             onComplete={() => setWind(null)}
           />
 

@@ -46,7 +46,7 @@ const Snow = (props) => {
   return (
     <div
       style={{ ...props.customStyle }}
-      className={classes.Snow}
+      className={[classes.Snow, props.blur ? classes.blur : ""].join(" ")}
       ref={(element) => (container.current = element)}
     >
       <canvas
@@ -62,6 +62,7 @@ Snow.propTypes = {
   customStyle: PropTypes.any,
   windDirection: PropTypes.bool,
   theme: PropTypes.string,
+  blur: PropTypes.bool,
 };
 
 export default Snow;

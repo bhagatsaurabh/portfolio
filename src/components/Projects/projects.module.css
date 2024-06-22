@@ -19,9 +19,29 @@
   gap: 1rem;
   padding: 5rem 0;
   mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 1) 10% 90%,
-    transparent 100%
-  );
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 1) 10% 90%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to left,
+      transparent 0,
+      rgba(0, 0, 0, 1) 0.5rem calc(100% - 0.5rem),
+      transparent 100%
+    );
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+  backdrop-filter: blur(0px);
+  animation: blur 0.25s linear forwards 0.75s normal;
+}
+
+@keyframes blur {
+  0% {
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    backdrop-filter: blur(3px);
+  }
 }

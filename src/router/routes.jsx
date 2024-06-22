@@ -12,6 +12,7 @@ export const routes = [
     element: <Intro />,
     nodeRef: createRef(),
     component: Intro,
+    globalBlur: false,
   },
   {
     path: "/projects",
@@ -19,6 +20,7 @@ export const routes = [
     element: <Projects />,
     nodeRef: createRef(),
     component: Projects,
+    globalBlur: false,
   },
   {
     path: "/work",
@@ -26,6 +28,7 @@ export const routes = [
     element: <Experience />,
     nodeRef: createRef(),
     component: Experience,
+    globalBlur: true,
   },
   {
     path: "/skills",
@@ -33,6 +36,7 @@ export const routes = [
     element: <Skills />,
     nodeRef: createRef(),
     component: Skills,
+    globalBlur: false,
   },
   {
     path: "/about",
@@ -40,6 +44,7 @@ export const routes = [
     element: <About />,
     nodeRef: createRef(),
     component: About,
+    globalBlur: false,
   },
 ];
 

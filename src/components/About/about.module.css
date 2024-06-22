@@ -20,7 +20,7 @@
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  margin: 1rem;
 }
 .PlatformLink {
   padding: 1rem;
@@ -44,6 +44,7 @@
 .Me {
   margin-bottom: 1.5rem;
   opacity: 0.8;
+  filter: grayscale(1);
 }
 .About > span {
   margin-top: 1.5rem;

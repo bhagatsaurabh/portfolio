@@ -9,7 +9,10 @@ const Intro = () => {
   return (
     <div className={classes.Intro}>
       <div className={nameClasses.join(" ")}>
-        <div className={classes.Greeting}>{"Hi, I'm"}</div>
+        <div className={classes.Greeting}>
+          <span>Hi</span>
+          <span>{", I'm"}</span>
+        </div>
         <div className={classes.Name}>
           <div className={classes.First}>Saurabh</div>
           <div className={classes.Last}>bhagat</div>
