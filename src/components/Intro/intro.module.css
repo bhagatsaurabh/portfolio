@@ -43,34 +43,25 @@
   margin-left: 1rem;
   margin-top: 0.3rem;
 }
-.IntroFloat {
+.Greeting span:first-child {
   opacity: 0;
-  animation: slideup 0.5s linear forwards;
-  animation-delay: 0.2s;
+  animation: fadein 0.5s linear forwards 0.2s;
 }
-.SummaryFloat {
+.Greeting span:last-child,
+.Name {
   opacity: 0;
-  animation: slidedown 0.5s linear forwards;
-  animation-delay: 1.5s;
+  animation: fadein 0.5s linear forwards 1.5s;
+}
+.Name .Last {
+  opacity: 0;
+  animation: fadein 0.5s linear forwards 1.75s;
 }
 
-@keyframes slideup {
+@keyframes fadein {
   0% {
-    top: 1.8rem;
     opacity: 0;
   }
   100% {
-    top: 0;
-    opacity: 0.8;
-  }
-}
-@keyframes slidedown {
-  0% {
-    top: -1.2rem;
-    opacity: 0;
-  }
-  100% {
-    top: 0;
     opacity: 0.8;
   }
 }

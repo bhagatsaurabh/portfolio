@@ -6,6 +6,7 @@ import styles from "./project-card.module.css";
 import Icon from "../Icon/icon";
 import ExternalLink from "../ExternalLink/external-link";
 import { preload } from "@/store/actions/preloader";
+import SelfCover from "../SelfCover/self-cover";
 
 const ProjectCard = ({ project }) => {
   const mediaSource = useSelector(
@@ -40,7 +41,9 @@ const ProjectCard = ({ project }) => {
         <div
           className={styles.Cover}
           style={{ backgroundImage: `url(${project.image})` }}
-        ></div>
+        >
+          {project.name === "My Website" && <SelfCover />}
+        </div>
       ) : (
         <video
           className={styles.Cover}

@@ -1,14 +1,94 @@
 .Experience {
-  padding: 2rem;
+  width: 100%;
+  height: 100%;
+  overflow-y: overlay;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 3rem,
+    rgba(0, 0, 0, 1) 5rem calc(100% - 8rem),
+    transparent calc(100% - 3rem)
+  );
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
 }
-.Experience h4 {
-  /* margin: 0; */
+.Container {
+  padding: 6rem 2.5rem 6rem 2.5rem;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  font-weight: lighter;
+}
+.Container h4 {
   font-weight: 100;
+}
+.Container img {
+  position: relative;
+  top: 0.15rem;
+}
+.Container button img {
+  top: unset;
+}
+.Container button {
+  margin-top: 1rem;
+}
+.Container h2 {
+  margin: 0;
+  font-weight: 100;
+}
+.Container span {
+  display: block;
+}
+.Container .Set {
+  border-left: 1px solid grey;
+  padding-left: 0.75rem;
+  max-height: 2.75rem;
+  overflow: hidden;
+  transition: max-height 0.75s cubic-bezier(0, 0, 0.04, 1),
+    margin-bottom 0.5s linear;
+  margin-bottom: 0;
+}
+.Container .Set h2 {
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.Container .Set span:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+.Expand {
+  max-height: var(--max-height) !important;
+}
+.Container .Set.Expand:not(:last-child) {
+  margin-bottom: 2rem;
 }
 
-.Experience h5 {
-  font-weight: 100;
+.Container .Set:nth-child(1) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.8s normal;
 }
-.Experience ul li {
-  margin-bottom: 0.5rem;
+.Container .Set:nth-child(2) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.7s normal;
+}
+.Container .Set:nth-child(3) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1s normal;
+}
+.Container .Set:nth-child(4) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.9s normal;
+}
+.Container .Set:nth-child(5) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1.05s normal;
+}
+
+@keyframes fadeslide {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

@@ -1,15 +1,14 @@
 import { createRef, useEffect, useRef } from "react";
 import * as Percept from "canvas-percept";
 import PropTypes from "prop-types";
-import { v4 as uuid } from "uuid";
 
-import classes from "./tree.module.css";
+import styles from "./self-cover.module.css";
 import { Tree as TreeC } from "@/utils/tree";
 import usePrevious from "@/hooks/usePrevious";
-import me from "@/assets/images/me-under-tree.png";
+import { init } from "@/utils/phaser";
 
-const Tree = (props) => {
-  const { onComplete } = props;
+const SelfCover = (props) => {
+  const { onComplete, theme, windDirection } = props;
   const dimensions = useRef({ width: 0, height: 0 });
   const tree = useRef(null);
   const prevProps = usePrevious(props);
@@ -18,6 +17,7 @@ const Tree = (props) => {
   const drawing = createRef();
 
   useEffect(() => {
+    const game = init();
     dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
@@ -31,41 +31,34 @@ const Tree = (props) => {
         color: getComputedStyle(
           document.querySelector("#App")
         ).getPropertyValue("--treeColor"),
+        initialLength: 60,
+        initialWidth: 3,
+        minBranchLengthFactor: 0.675,
+        maxBranchLengthFactor: 0.75,
+        branchWidthFactor: 0.7,
+        minBranchRotation: 5,
+        maxBranchRotation: 35,
       },
       onComplete
     );
     drawing.current.add(tree.current.root);
-    const meWidth = 238 * 0.25;
-    const meHeight = 141 * 0.25;
-    drawing.current.add(
-      new Percept.View.Image(
-        uuid(),
-        new Percept.Vector(
-          canvas.current.width * 0.8 + meWidth / 2,
-          canvas.current.height - meHeight / 2
-        ),
-        me,
-        meWidth,
-        meHeight,
-        { filter: "brightness(0.5)" }
-      )
-    );
     canvas.current.draw(drawing.current);
 
     return () => {
       canvas.current.dispose();
+      game.destroy(true);
     };
   }, []);
 
   useEffect(() => {
     if (
-      typeof props.windDirection === "boolean" &&
+      typeof windDirection === "boolean" &&
       prevProps &&
-      prevProps.windDirection !== props.windDirection
+      prevProps.windDirection !== windDirection
     ) {
-      tree.current.storm(props.windDirection);
+      tree.current.storm(windDirection);
     }
-    if (props.theme !== prevProps?.theme) {
+    if (theme !== prevProps?.theme) {
       tree.current.color = getComputedStyle(
         document.querySelector("#App")
       ).getPropertyValue("--treeColor");
@@ -74,19 +67,16 @@ const Tree = (props) => {
 
   return (
     <div
-      style={{ ...props.customStyle }}
-      className={[classes.Tree, props.blur ? classes.blur : ""].join(" ")}
+      id="selfcover"
+      className={styles.SelfCover}
       ref={(element) => (container.current = element)}
     ></div>
   );
 };
-
-Tree.propTypes = {
-  customStyle: PropTypes.any,
-  windDirection: PropTypes.bool,
-  theme: PropTypes.string,
+SelfCover.propTypes = {
   onComplete: PropTypes.func,
-  blur: PropTypes.bool,
+  theme: PropTypes.string,
+  windDirection: PropTypes.bool,
 };
 
-export default Tree;
+export default SelfCover;

@@ -26,7 +26,7 @@ const Tree = (props) => {
       tree.current.update()
     );
     tree.current = new TreeC(
-      canvas.current,
+      { x: canvas.current.width * 0.8, y: canvas.current.height },
       {
         color: getComputedStyle(
           document.querySelector("#App")
@@ -75,7 +75,7 @@ const Tree = (props) => {
   return (
     <div
       style={{ ...props.customStyle }}
-      className={classes.Tree}
+      className={[classes.Tree, props.blur ? classes.blur : ""].join(" ")}
       ref={(element) => (container.current = element)}
     ></div>
   );
@@ -86,6 +86,7 @@ Tree.propTypes = {
   windDirection: PropTypes.bool,
   theme: PropTypes.string,
   onComplete: PropTypes.func,
+  blur: PropTypes.bool,
 };
 
 export default Tree;

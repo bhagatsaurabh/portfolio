@@ -26,3 +26,7 @@ export { default as blender } from "./blender.png";
 export { default as azure } from "./azure.png";
 export { default as bicep } from "./bicep.png";
 export { default as pin } from "./pin.png";
+export { default as testcafe } from "./testcafe.png";
+export { default as monitor } from "./monitor.png";
+export { default as function } from "./function.png";
+export { default as info } from "./info.png";
