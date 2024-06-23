@@ -4,6 +4,7 @@ import classes from "./theme-selector.module.css";
 import { currTheme } from "@/store/reducers/preferences";
 import { themes } from "@/utils/constants";
 import Icon from "../Icon/icon";
+import { setTheme } from "@/store/actions/preferences";
 
 const ThemeSelector = () => {
   const theme = useSelector(currTheme);
@@ -17,10 +18,9 @@ const ThemeSelector = () => {
   else darkClasses.push(classes["active"]);
 
   const handleClick = () => {
-    dispatch({
-      type: "preferences/set-theme",
-      payload: theme === themes.LIGHT ? themes.DARK : themes.LIGHT,
-    });
+    dispatch(
+      setTheme({ theme: theme === themes.LIGHT ? themes.DARK : themes.LIGHT })
+    );
   };
 
   return (

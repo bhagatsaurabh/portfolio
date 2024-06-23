@@ -1,5 +1,8 @@
 import * as Phaser from "phaser";
 
+import { InvertPipeline } from "./invert-pipeline";
+import { themes } from "./constants";
+
 class Boot extends Phaser.Scene {
   constructor() {
     super("boot");
@@ -60,36 +63,32 @@ class Bird {
     this.sprite.anims.play("fly");
 
     this.generateRandomPath();
-    this.previousX = this.sprite.x;
     this.birdTween = this.game.tweens.add({
       targets: { t: 0 },
       t: 1,
       duration: Phaser.Math.Between(4000, 6000),
       repeat: -1,
-      yoyo: true,
+      yoyo: false,
       onUpdate: (tween) => {
         const t = tween.getValue();
         const point = this.birdPath.getPoint(t);
         this.sprite.setPosition(point.x, point.y);
 
-        const nextPoint = this.birdPath.getPoint(Math.min(t + 0.01, 1));
-        if (nextPoint) {
-          let angle = Phaser.Math.Angle.BetweenPoints(point, nextPoint);
-          const maxRotation = Phaser.Math.DegToRad(89);
-          if (angle > maxRotation) {
-            angle = maxRotation;
-          } else if (angle < -maxRotation) {
-            angle = -maxRotation;
+        const prevPoint = this.birdPath.getPoint(Math.max(t - 0.01, 0));
+        if (prevPoint) {
+          let angle = Phaser.Math.Angle.BetweenPoints(prevPoint, point);
+          const maxRotation = Phaser.Math.DegToRad(90);
+          if (angle < -maxRotation) {
+            angle += Math.PI;
+            this.sprite.setFlipX(true);
+          } else if (angle > maxRotation) {
+            angle -= Math.PI;
+            this.sprite.setFlipX(true);
+          } else {
+            this.sprite.setFlipX(false);
           }
           this.sprite.rotation = angle;
         }
-
-        if (point.x < this.previousX) {
-          this.sprite.setFlipX(false);
-        } else {
-          this.sprite.setFlipX(true);
-        }
-        this.previousX = point.x;
       },
       onRepeat: () => {
         this.generateRandomPath();
@@ -108,8 +107,24 @@ class MainGame extends Phaser.Scene {
     this.createBirds();
   }
   createBirds() {
+    this.pipeline = this.renderer.pipelines.add(
+      "InvertPipeline",
+      new InvertPipeline(this.game)
+    );
     for (let i = 0; i < this.noOfBirds; i += 1) {
       this.birds.push(new Bird(this, i));
+    }
+    if (this.game.theme === themes.DARK) this.enablePipeline(true);
+  }
+  enablePipeline(enable) {
+    if (enable) {
+      this.birds.forEach((bird) => {
+        bird.sprite.setPipeline(this.pipeline);
+      });
+    } else {
+      this.birds.forEach((bird) => {
+        bird.sprite.resetPipeline();
+      });
     }
   }
   setCamera() {
@@ -140,6 +155,8 @@ const config = {
   scene: [Boot, Preloader, MainGame],
 };
 
-export const init = () => {
-  return new Phaser.Game(config);
+export const init = (theme) => {
+  const game = new Phaser.Game(config);
+  game.theme = theme;
+  return game;
 };

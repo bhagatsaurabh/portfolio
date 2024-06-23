@@ -8,13 +8,16 @@
   box-sizing: border-box;
   padding: 2rem;
   position: fixed;
-  color: var(--text);
+  color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
 }
 .About h4 {
+  font-size: 0.9rem;
   font-weight: 100;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
   text-align: center;
+  color: var(--text-1);
+  transition: color var(--theme-transition-duration) linear;
 }
 .Platforms {
   display: flex;
@@ -23,7 +26,8 @@
   margin: 1rem;
 }
 .PlatformLink {
-  padding: 1rem;
+  margin: 1rem;
+  font-size: 0;
 }
 .Email {
   display: flex;
@@ -31,15 +35,34 @@
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--text);
+  color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
 }
+.Email img {
+  margin-right: 0.5rem;
+}
 .Email:visited {
-  color: var(--text);
+  color: var(--text-0);
+}
+.Location {
+  opacity: 0.6;
 }
 .Copyright {
   position: absolute;
   bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-3);
+  transition: color var(--theme-transition-duration) linear;
+}
+.MeContainer {
+  text-align: center;
+  display: flex;
+  transition: max-height 0.5s linear;
+  max-height: 0;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  animation: open 0.75s cubic-bezier(0, 0, 0.02, 1) forwards 1s normal;
 }
 .Me {
   margin-bottom: 1.5rem;
@@ -57,15 +80,24 @@
 
 @media (orientation: landscape) {
   .Me {
-    max-width: unset;
-    min-width: unset;
-    max-height: 30%;
+    max-width: 30%;
+    min-width: 130px;
+    max-height: 12rem;
   }
 }
 @media (orientation: portrait) {
   .Me {
     max-width: 30%;
-    min-width: 150px;
-    max-height: unset;
+    min-width: 130px;
+    max-height: 12rem;
+  }
+}
+
+@keyframes open {
+  0% {
+    max-height: 0;
+  }
+  100% {
+    max-height: 12rem;
   }
 }

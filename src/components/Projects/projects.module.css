@@ -2,37 +2,27 @@
   width: 100%;
   height: 100%;
   z-index: 50;
-  color: var(--text);
+  color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 3rem,
+    rgba(0, 0, 0, 1) 6.5rem calc(100% - 9.5rem),
+    transparent calc(100% - 3rem)
+  );
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+  overflow-y: overlay;
 }
 .Container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  max-height: 100%;
-  overflow-y: auto;
+  min-height: 100%;
   gap: 1rem;
-  padding: 5rem 0;
-  mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(0, 0, 0, 1) 10% 90%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to left,
-      transparent 0,
-      rgba(0, 0, 0, 1) 0.5rem calc(100% - 0.5rem),
-      transparent 100%
-    );
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-composite: intersect;
+  padding: 7rem 2rem;
   backdrop-filter: blur(0px);
   animation: blur 0.25s linear forwards 0.75s normal;
 }

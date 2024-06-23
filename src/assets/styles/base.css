@@ -1,0 +1,77 @@
+#root {
+  height: 100%;
+}
+#selfcover {
+  position: absolute;
+}
+html,
+body {
+  height: 100%;
+  background: var(--background);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+:root {
+  --theme-transition-duration: 0.35s;
+  --preview-initial-top: 0;
+  --preview-initial-left: 0;
+  --scroll-timing-fn: cubic-bezier(0.33, 0.03, 0.35, 0.97);
+}
+.light {
+  --background-0: #fff;
+  --background-1: #d2d2d2;
+  --background-2: #b7b7b7;
+  --background-3: #9a9a9a;
+  --text-0: #000;
+  --text-1: #404040;
+  --text-2: #626262;
+  --text-3: #7e7e7e;
+  --iconFilter: none;
+  --backgroundFilter: none;
+  --snowColor: #363537;
+  --treeColor: #363537;
+}
+.dark {
+  --background-0: #000;
+  --background-1: #404040;
+  --background-2: #626262;
+  --background-3: #7e7e7e;
+  --text-0: #fff;
+  --text-1: #d2d2d2;
+  --text-2: #b7b7b7;
+  --text-3: #9a9a9a;
+  --iconFilter: invert(1);
+  --backgroundFilter: brightness(0.7);
+  --snowColor: rgb(231, 231, 231);
+  --treeColor: #b2b2b2;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-0: #000;
+    --background-1: #404040;
+    --background-2: #626262;
+    --background-3: #7e7e7e;
+    --text-0: #fff;
+    --text-1: #d2d2d2;
+    --text-2: #b7b7b7;
+    --text-3: #9a9a9a;
+    --iconFilter: invert(1);
+    --backgroundFilter: brightness(0.7);
+    --snowColor: rgb(231, 231, 231);
+    --treeColor: #b2b2b2;
+  }
+}

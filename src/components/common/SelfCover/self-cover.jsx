@@ -4,20 +4,18 @@ import PropTypes from "prop-types";
 
 import styles from "./self-cover.module.css";
 import { Tree as TreeC } from "@/utils/tree";
-import usePrevious from "@/hooks/usePrevious";
-import { init } from "@/utils/phaser";
+import { useSelector } from "react-redux";
+import { currTheme } from "@/store/reducers/preferences";
 
-const SelfCover = (props) => {
-  const { onComplete, theme, windDirection } = props;
+const SelfCover = () => {
   const dimensions = useRef({ width: 0, height: 0 });
   const tree = useRef(null);
-  const prevProps = usePrevious(props);
   const container = createRef();
-  const canvas = createRef();
+  const canvas = useRef(null);
   const drawing = createRef();
+  const theme = useSelector(currTheme);
 
   useEffect(() => {
-    const game = init();
     dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
@@ -38,36 +36,28 @@ const SelfCover = (props) => {
         branchWidthFactor: 0.7,
         minBranchRotation: 5,
         maxBranchRotation: 35,
-      },
-      onComplete
+      }
     );
     drawing.current.add(tree.current.root);
     canvas.current.draw(drawing.current);
 
+    if (!container.current.querySelector("#selfcover")) {
+      container.current.appendChild(document.querySelector("#selfcover"));
+    }
+
     return () => {
       canvas.current.dispose();
-      game.destroy(true);
     };
   }, []);
 
   useEffect(() => {
-    if (
-      typeof windDirection === "boolean" &&
-      prevProps &&
-      prevProps.windDirection !== windDirection
-    ) {
-      tree.current.storm(windDirection);
-    }
-    if (theme !== prevProps?.theme) {
-      tree.current.color = getComputedStyle(
-        document.querySelector("#App")
-      ).getPropertyValue("--treeColor");
-    }
-  }, [props]);
+    tree.current.color = getComputedStyle(
+      document.querySelector("#App")
+    ).getPropertyValue("--treeColor");
+  }, [theme]);
 
   return (
     <div
-      id="selfcover"
       className={styles.SelfCover}
       ref={(element) => (container.current = element)}
     ></div>

@@ -21,10 +21,26 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
-export const debounce = (func, timeout = 100) => {
-  let handle;
+export function throttle(cb, delay) {
+  let wait = false;
+  let storedArgs = null;
+  function checkStoredArgs() {
+    if (storedArgs == null) {
+      wait = false;
+    } else {
+      cb(...storedArgs);
+      storedArgs = null;
+      setTimeout(checkStoredArgs, delay);
+    }
+  }
   return (...args) => {
-    clearTimeout(handle);
-    handle = setTimeout(() => func.apply(this, args), timeout);
+    console.log(wait);
+    if (wait) {
+      storedArgs = args;
+      return;
+    }
+    cb(...args);
+    wait = true;
+    setTimeout(checkStoredArgs, delay);
   };
-};
+}
