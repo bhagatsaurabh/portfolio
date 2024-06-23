@@ -22,6 +22,9 @@
   flex-direction: column;
   font-weight: lighter;
 }
+.Container img {
+  opacity: .75;
+}
 .Container h4 {
   font-weight: 100;
 }
@@ -38,12 +41,16 @@
 .Container h2 {
   margin: 0;
   font-weight: 100;
+  color: var(--text-0);
+  transition: color var(--theme-transition-duration) linear;
 }
 .Container span {
   display: block;
+  color: var(--text-1);
+  transition: color var(--theme-transition-duration) linear;
 }
 .Container .Set {
-  border-left: 1px solid grey;
+  border-left: 1px solid var(--text-3);
   padding-left: 0.75rem;
   max-height: 2.75rem;
   overflow: hidden;

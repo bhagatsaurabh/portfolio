@@ -1,0 +1,69 @@
+.section {
+  position: absolute;
+  overflow: auto;
+  box-sizing: border-box;
+  transition: left 0.75s cubic-bezier(0.33, 0.03, 0.35, 0.97),
+    opacity 0.8s cubic-bezier(0.33, 0.03, 0.35, 0.97);
+  width: 100%;
+  z-index: 2;
+  opacity: 0;
+  height: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.section::-webkit-scrollbar {
+  display: none;
+}
+.section-forward-appear {
+  opacity: 1;
+}
+.section-forward-enter {
+  left: 40%;
+  opacity: 0;
+}
+.section-forward-enter-active {
+  left: 0;
+  opacity: 1;
+}
+.section-forward-enter-done {
+  left: 0;
+  opacity: 1;
+}
+.section-forward-exit {
+  left: 0;
+  opacity: 1;
+}
+.section-forward-exit-active {
+  left: -40%;
+  opacity: 0;
+}
+.section-forward-exit-done {
+  left: -40%;
+  opacity: 0;
+  z-index: 0;
+}
+.section-backward-enter {
+  left: -40%;
+  opacity: 0;
+}
+.section-backward-enter-active {
+  left: 0;
+  opacity: 1;
+}
+.section-backward-enter-done {
+  left: 0;
+  opacity: 1;
+}
+.section-backward-exit {
+  left: 0;
+  opacity: 1;
+}
+.section-backward-exit-active {
+  left: 40%;
+  opacity: 0;
+}
+.section-backward-exit-done {
+  left: 40%;
+  opacity: 0;
+  z-index: 0;
+}

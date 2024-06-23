@@ -38,7 +38,7 @@ export class Tree {
     this.setColor(this.root.transform.childs[0]);
   }
 
-  constructor(pos, config, onComplete) {
+  constructor(pos, config, onComplete = () => {}) {
     this.config = { ...this.config, ...config };
     this.onComplete = onComplete;
 

@@ -16,15 +16,15 @@ const currTheme = (state) =>
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setTheme, (state, action) => {
-      const newTheme = action.payload;
-      if (Object.values(themes).includes(newTheme)) {
+      const { theme, init } = action.payload;
+      if (Object.values(themes).includes(theme)) {
         const themeClass = getThemeClass(
-          newTheme === themes.SYSTEM ? currSystemTheme() : newTheme,
+          theme === themes.SYSTEM ? currSystemTheme() : theme,
           state.userTheme
         );
         const docRoot = document.documentElement;
         docRoot.dataset.theme = themeClass;
-        if (newTheme === themes.SYSTEM) {
+        if (theme === themes.SYSTEM) {
           docRoot.className = themeClass;
           state.systemTheme = currSystemTheme();
         } else {
@@ -37,8 +37,18 @@ const reducer = createReducer(initialState, (builder) => {
             );
           }
         }
-        state.userTheme = newTheme;
-        localStorage.setItem("preferences", JSON.stringify(state));
+        state.userTheme = theme;
+        if (!init) {
+          localStorage.setItem(
+            "preferences",
+            JSON.stringify({
+              theme:
+                state.userTheme === themes.SYSTEM
+                  ? currSystemTheme()
+                  : state.userTheme,
+            })
+          );
+        }
       }
     })
     .addDefaultCase(() => {});

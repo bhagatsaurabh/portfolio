@@ -5,11 +5,11 @@
 }
 .SelfCover canvas {
   pointer-events: none !important;
-}
-.SelfCover canvas:last-child {
-  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
+}
+.SelfCover canvas:last-child {
+  pointer-events: none;
   z-index: 1;
 }

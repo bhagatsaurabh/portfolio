@@ -2,15 +2,16 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { sanitizePrefs } from "@/utils";
 
-const setTheme = createAction("preferences/set-theme", (theme) => ({
-  payload: theme,
+const setTheme = createAction("preferences/set-theme", (payload) => ({
+  payload,
 }));
 
 const loadPreferences = createAsyncThunk(
   "preferences/load",
   async (_, { dispatch }) => {
     const prefs = JSON.parse(localStorage.getItem("preferences")) ?? {};
-    dispatch(setTheme(sanitizePrefs(prefs).theme));
+    await dispatch(setTheme({ theme: sanitizePrefs(prefs).theme, init: true }));
+    return sanitizePrefs(prefs);
   }
 );
 

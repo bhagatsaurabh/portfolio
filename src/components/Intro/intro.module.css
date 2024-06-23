@@ -5,7 +5,7 @@
   align-items: center;
   flex-flow: column;
   z-index: 50;
-  color: var(--text);
+  color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
   box-sizing: border-box;
   height: 100%;
@@ -26,7 +26,7 @@
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-color: var(--secondary);
+  background-color: var(--background-0);
 }
 .Greeting {
   font-size: 2rem;

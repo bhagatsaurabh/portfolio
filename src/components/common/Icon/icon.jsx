@@ -1,18 +1,20 @@
-import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import styles from "./icon.module.css";
 import * as icons from "@/assets/icons";
-import { currTheme } from "@/store/reducers/preferences";
-import { themes } from "@/utils/constants";
 
-const Icon = ({ size, adaptive, name, className, onClick, focusable }) => {
-  const theme = useSelector(currTheme);
-
+const Icon = ({
+  size,
+  adaptive = true,
+  name,
+  className,
+  onClick,
+  focusable,
+}) => {
   const iSize = size || 1;
   const icon = icons[name] ?? icons["warning"];
   const classes = [styles["icon"]];
-  if (adaptive && theme === themes.DARK) {
+  if (adaptive) {
     classes.push(styles["adaptive"]);
   }
   if (className) {

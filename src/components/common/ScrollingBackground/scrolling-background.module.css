@@ -1,7 +1,7 @@
 .ScrollingBackground {
   position: fixed;
   background: url("../../../assets/textures/cardboard-flat.png")
-    var(--background);
+    var(--background-0);
   left: 0;
   width: 200vw;
   height: 100%;

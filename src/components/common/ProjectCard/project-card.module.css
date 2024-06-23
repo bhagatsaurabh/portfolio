@@ -49,6 +49,7 @@
 .ProjectCard .Title .Links {
   display: flex;
   gap: 0.25rem;
+  opacity: 0.75;
 }
 .ProjectCard .Footer {
   display: flex;
@@ -61,6 +62,7 @@
   flex: 1;
   display: flex;
   gap: 0.5rem;
+  opacity: 0.75;
 }
 
 @media (min-width: 480px) and (max-width: 768px) {

@@ -7,7 +7,12 @@ const Projects = () => {
 
   return (
     <div className={styles.Projects}>
-      <div className={styles.Container}>
+      <div
+        onScroll={(e) => {
+          e.preventDefault();
+        }}
+        className={styles.Container}
+      >
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

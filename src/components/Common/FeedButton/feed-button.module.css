@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 999px;
-  border: 1px solid var(--text);
+  border: 1px solid var(--text-0);
   transition: border var(--theme-transition-duration) linear,
     opacity 0.2s linear;
   /* padding: 0.25rem 1rem; */
@@ -23,11 +23,11 @@
   position: absolute;
   height: 250%;
   width: 20%;
-  background-color: var(--text);
+  background-color: var(--text-0);
   opacity: 0.3;
   transform: rotateZ(45deg);
   left: -50%;
-  box-shadow: 0 0 10px 5px var(--text);
+  box-shadow: 0 0 10px 5px var(--text-0);
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
@@ -41,7 +41,7 @@
 .ButtonText {
   font-weight: 300;
   align-self: baseline;
-  color: var(--text);
+  color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
   text-wrap: nowrap;
 }
