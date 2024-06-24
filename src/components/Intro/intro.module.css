@@ -1,21 +1,21 @@
 .Intro {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: column;
+  height: 100%;
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
-  box-sizing: border-box;
-  height: 100%;
-  font-weight: 300;
 }
 .Float {
+  width: min-content;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-flow: column;
   position: relative;
-  padding: 1rem 2rem 1rem 2rem;
-  box-sizing: border-box;
-  width: 100%;
+  padding: 1rem 3rem;
+  font-weight: 300;
 }
 .Float::before {
   display: none;
@@ -55,6 +55,30 @@
 .Name .Last {
   opacity: 0;
   animation: fadein 0.5s linear forwards 1.75s;
+}
+
+.Title {
+  opacity: 0;
+  animation: fadein 0.5s linear forwards 2.4s;
+}
+.Title h5 {
+  font-weight: lighter;
+}
+.Title h5 div {
+  position: relative;
+  display: inline-block;
+}
+
+.Title h5 span {
+  opacity: 0;
+  transition: opacity 0.3s linear;
+}
+.Title h5 > span {
+  opacity: 1;
+}
+.Title h5 span.active {
+  transition: opacity 0.75s linear;
+  opacity: 1;
 }
 
 @keyframes fadein {

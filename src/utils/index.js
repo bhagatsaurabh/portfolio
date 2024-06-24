@@ -21,26 +21,3 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
-export function throttle(cb, delay) {
-  let wait = false;
-  let storedArgs = null;
-  function checkStoredArgs() {
-    if (storedArgs == null) {
-      wait = false;
-    } else {
-      cb(...storedArgs);
-      storedArgs = null;
-      setTimeout(checkStoredArgs, delay);
-    }
-  }
-  return (...args) => {
-    console.log(wait);
-    if (wait) {
-      storedArgs = args;
-      return;
-    }
-    cb(...args);
-    wait = true;
-    setTimeout(checkStoredArgs, delay);
-  };
-}

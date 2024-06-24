@@ -67,8 +67,8 @@
 
 @media (min-width: 480px) and (max-width: 768px) {
   .ProjectCard {
-    width: 40vw;
-    min-height: 26vw;
+    width: 16rem;
+    min-height: 10.5rem;
     display: flex;
     flex-direction: column;
     place-self: flex-start;
@@ -78,10 +78,10 @@
     flex: 1;
   }
   .ProjectCard .Cover {
-    height: 26vw;
+    height: 10.5rem;
   }
   .ProjectCard .Title {
-    top: 26vw;
+    top: 10.5rem;
   }
 }
 

@@ -22,7 +22,7 @@ const FeedButton = forwardRef(
         }}
       >
         {icon && <Icon className={styles.ButtonIcon} name={icon} size={size} />}
-        <div className={styles.ButtonText}>{children}</div>
+        <span className={styles.ButtonText}>{children}</span>
       </button>
     );
   }

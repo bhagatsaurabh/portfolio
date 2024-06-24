@@ -24,6 +24,7 @@ const Icon = ({
 
   return (
     <img
+      draggable="false"
       onClick={handleClick}
       style={{ width: `${iSize}rem` }}
       src={icon}

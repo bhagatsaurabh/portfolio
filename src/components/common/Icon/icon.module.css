@@ -1,4 +1,7 @@
 img.icon {
+  user-select: none;
+}
+img.adaptive {
   filter: invert(0);
   transition: filter var(--theme-transition-duration) linear;
 }

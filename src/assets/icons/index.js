@@ -31,3 +31,6 @@ export { default as monitor } from "./monitor.png";
 export { default as function } from "./function.png";
 export { default as info } from "./info.png";
 export { default as copy } from "./copy.png";
+export { default as leftArrow } from "./left-arrow.png";
+export { default as rightArrow } from "./right-arrow.png";
+export { default as check } from "./check.png";

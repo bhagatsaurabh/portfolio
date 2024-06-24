@@ -4,11 +4,11 @@ import styles from "./skills.module.css";
 const Skills = () => {
   return (
     <div className={styles.Skills}>
-      <h1>
-        <span>I</span> am a
-      </h1>
-      <div className={styles.SkillSet}>
-        <div className={styles.Container}>
+      <div className={styles.Wrapper}>
+        <h1>
+          <span>I</span> am a
+        </h1>
+        <div className={styles.SkillSet}>
           <div className={styles.Upper}>
             <div className={styles.UpperContent}>
               <h3>DevOps Practitioner</h3>
@@ -23,9 +23,7 @@ const Skills = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.SkillSet}>
-        <div className={styles.Container}>
+        <div className={styles.SkillSet}>
           <div className={styles.Upper}>
             <div className={styles.UpperContent}>
               <h3>FrontEnd Engineer</h3>
@@ -43,9 +41,7 @@ const Skills = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.SkillSet}>
-        <div className={styles.Container}>
+        <div className={styles.SkillSet}>
           <div className={styles.Upper}>
             <div className={styles.UpperContent}>
               <h3>Creative Developer</h3>

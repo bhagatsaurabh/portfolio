@@ -116,13 +116,6 @@ const Experience = () => {
           {!expand ? "Know More" : "Hide"}
         </FeedButton>
       </div>
-      {/* <h4>
-        Not all of my experiences are technical. Over the years, I have also
-        been involved in coordinating User Acceptance Tests, creating screen
-        mockups and static UI designs using <Icon name="figma" /> Figma,
-        participating in brainstorming sessions, drafting quarterly plans, and
-        much more.
-      </h4> */}
     </div>
   );
 };
