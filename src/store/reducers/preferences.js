@@ -37,7 +37,9 @@ const reducer = createReducer(initialState, (builder) => {
             );
           }
         }
-        state.userTheme = theme;
+        if (state.userTheme !== theme) {
+          state.userTheme = theme;
+        }
         if (!init) {
           localStorage.setItem(
             "preferences",

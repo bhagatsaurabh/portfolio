@@ -32,6 +32,7 @@ code {
   --scroll-timing-fn: cubic-bezier(0.33, 0.03, 0.35, 0.97);
 }
 .light {
+  --background-nav: #00000014;
   --background-0: #fff;
   --background-1: #d2d2d2;
   --background-2: #b7b7b7;
@@ -46,6 +47,7 @@ code {
   --treeColor: #363537;
 }
 .dark {
+  --background-nav: #ffffff14;
   --background-0: #000;
   --background-1: #404040;
   --background-2: #626262;
@@ -61,6 +63,7 @@ code {
 }
 @media (prefers-color-scheme: dark) {
   :root {
+    --background-nav: #ffffff14;
     --background-0: #000;
     --background-1: #404040;
     --background-2: #626262;
@@ -73,5 +76,23 @@ code {
     --backgroundFilter: brightness(0.7);
     --snowColor: rgb(231, 231, 231);
     --treeColor: #b2b2b2;
+  }
+}
+
+@media (hover: hover) {
+  *::-webkit-scrollbar {
+    width: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+    width: 7px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(174, 174, 174, 0.73);
+    border-radius: 1rem;
+  }
+  * {
+    scrollbar-color: rgba(174, 174, 174, 0.73) rgba(0, 0, 0, 0);
+    scrollbar-width: thin;
   }
 }

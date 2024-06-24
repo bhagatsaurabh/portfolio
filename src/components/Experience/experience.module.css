@@ -1,7 +1,10 @@
 .Experience {
   width: 100%;
   height: 100%;
-  overflow-y: overlay;
+  z-index: 50;
+  color: var(--text-0);
+  transition: color var(--theme-transition-duration) linear;
+
   mask-image: linear-gradient(
     to bottom,
     transparent 3rem,
@@ -11,9 +14,18 @@
   mask-position: center;
   mask-repeat: no-repeat;
   mask-composite: intersect;
+  overflow-y: overlay;
+}
+.Experience button {
+  align-items: flex-start;
+  border: none;
+  opacity: 0;
+  animation: fadein 0.5s linear forwards 2s normal;
 }
 .Container {
-  padding: 6rem 2.5rem 6rem 2.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 6rem 3rem;
   width: 100%;
   min-height: 100%;
   display: flex;
@@ -23,7 +35,7 @@
   font-weight: lighter;
 }
 .Container img {
-  opacity: .75;
+  opacity: 0.75;
 }
 .Container h4 {
   font-weight: 100;
@@ -97,5 +109,13 @@
   100% {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
   }
 }

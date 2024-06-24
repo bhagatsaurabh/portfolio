@@ -1,12 +1,20 @@
 .Skills {
   width: 100%;
   height: 100%;
-  padding: 2rem;
   z-index: 50;
+  color: var(--text-0);
+  transition: color var(--theme-transition-duration) linear;
+}
+.Wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 2rem 3rem;
 }
 .Skills h1 {
   color: var(--text-2);
@@ -22,6 +30,7 @@
     "Helvetica Neue", sans-serif;
 }
 .SkillSet {
+  width: 100%;
   text-align: left;
   margin: 0 auto;
   padding: 2rem 0.75rem;
@@ -84,9 +93,6 @@
   flex-wrap: wrap;
   transform: translateY(-120%);
   animation: slide-t 0.5s cubic-bezier(0, 0, 0.025, 1) 1.55s forwards;
-}
-.Container {
-  width: calc(100vw - 5.5rem);
 }
 
 @keyframes fadein {

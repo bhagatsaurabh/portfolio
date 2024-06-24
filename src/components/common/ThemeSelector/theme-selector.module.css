@@ -13,9 +13,9 @@ button.theme-button {
 }
 
 .theme-icon {
-  height: 2rem;
   opacity: 0;
-  transition: opacity 0.15s linear, transform 0.15s linear;
+  transition: opacity var(--theme-transition-duration) linear,
+    transform var(--theme-transition-duration) linear;
 }
 
 img.theme-icon:first-child {

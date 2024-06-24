@@ -1,10 +1,11 @@
 .Navigator {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   padding: 1rem 0;
   width: 50%;
+  max-width: 15rem;
   opacity: 0.5;
   z-index: 100;
   transition: opacity 0.1s linear;
@@ -98,6 +99,37 @@
   display: none;
 }
 
+.NavigationButtons button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  z-index: 50;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+  transition: opacity 0.5s linear, background-color 0.15s linear,
+    transform 0.15s ease-out;
+  padding: 0.5rem;
+  font-size: 0;
+  border-radius: 50%;
+}
+.NavigationButtons button:active {
+  transform: translateY(-50%) scale(0.85);
+}
+.NavigationButtons button.hidden {
+  opacity: 0;
+  cursor: unset;
+}
+.NavigationButtons .Left {
+  left: 0;
+  margin-left: 0.5rem;
+}
+.NavigationButtons .Right {
+  right: 0;
+  margin-right: 0.5rem;
+}
+
 @keyframes slidein {
   0% {
     transform: rotateZ(180deg) translateY(105%);
@@ -123,6 +155,17 @@
 @media (hover: hover) {
   .Navigator:hover .Thumb {
     transform: translateY(-50%) scale(1);
+  }
+  .NavigationButtons button:hover {
+    background-color: var(--background-nav);
+  }
+  .dark .NavigationButtons button:hover {
+    background-color: #00000014;
+  }
+}
+@media (pointer: coarse) {
+  .NavigationButtons {
+    display: none;
   }
 }
 

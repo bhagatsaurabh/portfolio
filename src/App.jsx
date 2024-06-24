@@ -12,7 +12,7 @@ import { loadPreferences } from "./store/actions/preferences";
 import { currTheme } from "./store/reducers/preferences";
 import { loadContact } from "./store/actions/contact";
 import { router, routeOrder, routes } from "./router";
-import { clamp, throttle } from "./utils";
+import { clamp } from "./utils";
 import Navigator from "./components/common/Navigator/navigator";
 import { loadProjects } from "./store/actions/projects";
 import { cleanup } from "./store/actions/preloader";
@@ -27,14 +27,27 @@ const App = () => {
   const [wind, setWind] = useState(null);
   const location = useLocation();
   const prevPath = useRef(null);
+  const game = useRef(null);
   const direction =
     routeOrder[location.pathname] -
     routeOrder[prevPath.current ?? location.pathname];
   const route = routes.find((route) => route.path === location.pathname);
-  const game = useRef(null);
 
   const initScene = useCallback(async (theme) => {
     game.current = init(theme);
+  }, []);
+  useEffect(() => {
+    (async () => {
+      initScene((await dispatch(loadPreferences())).payload.theme);
+    })();
+    dispatch(loadContact());
+    dispatch(loadProjects());
+    setPrefLoaded(true);
+
+    return () => {
+      dispatch(cleanup());
+      game.current?.destroy(true);
+    };
   }, []);
   useEffect(() => {
     const dir =
@@ -49,21 +62,6 @@ const App = () => {
   }, [theme]);
 
   let gesture = [];
-
-  useEffect(() => {
-    (async () => {
-      initScene((await dispatch(loadPreferences())).payload.theme);
-    })();
-    dispatch(loadContact());
-    dispatch(loadProjects());
-    setPrefLoaded(true);
-
-    return () => {
-      dispatch(cleanup());
-      game.current?.destroy(true);
-    };
-  }, []);
-
   const touchStartHandler = (event) => {
     gesture = [{ x: event.touches[0].clientX, y: event.touches[0].clientY }];
   };
@@ -95,14 +93,11 @@ const App = () => {
     } else if (theta > 45 && theta < 135);
     else if (theta > 135 || theta < -135) {
       moveSection(true);
-    } else;
+    } else {
+      if (routeOrder[location.pathname] === 0) moveSection(true);
+    }
     gesture = [];
   };
-  const throttledWheel = throttle((e) => {
-    console.log(e.deltaY);
-    if (e.deltaY > 0) moveSection(true);
-    else moveSection(false);
-  }, 1000);
   const moveSection = (forward) => {
     if (forward) {
       prevPath.current = location.pathname;
@@ -122,7 +117,6 @@ const App = () => {
       });
     }
   };
-
   const handleNavigate = (idx) => {
     prevPath.current = location.pathname;
     dispatch(setShowScrollHint(false));
@@ -136,7 +130,6 @@ const App = () => {
       onTouchStart={touchStartHandler}
       onTouchMove={touchMoveHandler}
       onTouchEnd={touchEndHandler}
-      onWheel={(e) => throttledWheel(e)}
     >
       <div id="selfcover"></div>
       {prefLoaded && (
@@ -158,13 +151,7 @@ const App = () => {
 
           <Navigator
             index={routeOrder[location.pathname]}
-            checkpoints={[
-              { name: "Intro", title: "Intro" },
-              { name: "Projects", title: "Projects" },
-              { name: "Work", title: "Experience" },
-              { name: "Skills", title: "Skills" },
-              { name: "About", title: "Me" },
-            ]}
+            checkpoints={routes}
             onNavigate={handleNavigate}
           />
           <ThemeSelector />
@@ -181,9 +168,9 @@ const App = () => {
               mountOnEnter
               appear
             >
-              <div ref={route.nodeRef} className="section">
+              <section ref={route.nodeRef}>
                 <route.component />
-              </div>
+              </section>
             </CSSTransition>
           ))}
         </>

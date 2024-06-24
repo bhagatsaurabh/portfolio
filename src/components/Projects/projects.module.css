@@ -4,6 +4,7 @@
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
+
   mask-image: linear-gradient(
     to bottom,
     transparent 3rem,
@@ -16,13 +17,15 @@
   overflow-y: overlay;
 }
 .Container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   min-height: 100%;
   gap: 1rem;
-  padding: 7rem 2rem;
+  padding: 7rem 3rem;
   backdrop-filter: blur(0px);
   animation: blur 0.25s linear forwards 0.75s normal;
 }

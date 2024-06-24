@@ -25,8 +25,18 @@ const ThemeSelector = () => {
 
   return (
     <button onClick={handleClick} className={classes["theme-button"]}>
-      <Icon name="themeLight" size={2} className={lightClasses.join(" ")} />
-      <Icon name="themeDark" size={2} className={darkClasses.join(" ")} />
+      <Icon
+        adaptive={false}
+        name="themeLight"
+        size={1.5}
+        className={lightClasses.join(" ")}
+      />
+      <Icon
+        adaptive={false}
+        name="themeDark"
+        size={1.5}
+        className={darkClasses.join(" ")}
+      />
     </button>
   );
 };

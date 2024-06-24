@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import styles from "./navigator.module.css";
 import { clamp } from "@/utils";
 import { normalize } from "@/utils/graphics";
+import Icon from "../Icon/icon";
+import { routes } from "@/router";
 
 const Navigator = ({ checkpoints, index, onNavigate }) => {
   const thumbEl = createRef();
@@ -83,10 +85,15 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
   const handlePointerLeave = (e) => cancel(e);
   const handlePointerOut = (e) => cancel(e);
   const handlePointerUp = (e) => cancel(e);
+  const handleClick = (direction) => {
+    const newIdx = clamp(index + direction, 0, routes.length - 1);
+    if (newIdx === index) return;
+    onNavigate(newIdx);
+  };
 
   return (
     <>
-      <div
+      <aside
         ref={titlesContainer}
         className={[styles.SectionTitles, styles.titlehidden].join(" ")}
       >
@@ -104,8 +111,8 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
             {checkpoint.title}
           </h2>
         ))}
-      </div>
-      <div
+      </aside>
+      <nav
         onPointerDown={handlePointerDown}
         onPointerCancel={(e) => e.stopPropagation()}
         onPointerLeave={(e) => e.stopPropagation()}
@@ -144,6 +151,23 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
             ))}
           </div>
         </div>
+      </nav>
+      <div className={styles.NavigationButtons}>
+        <button
+          onClick={() => handleClick(-1)}
+          className={[styles.Left, index === 0 ? styles.hidden : ""].join(" ")}
+        >
+          <Icon name="leftArrow" />
+        </button>
+        <button
+          onClick={() => handleClick(1)}
+          className={[
+            styles.Right,
+            index === routes.length - 1 ? styles.hidden : "",
+          ].join(" ")}
+        >
+          <Icon name="rightArrow" />
+        </button>
       </div>
     </>
   );
