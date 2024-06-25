@@ -162,6 +162,12 @@ h5 {
 .ExpList ul li:not(:last-child) {
   margin-bottom: 0.5rem;
 }
+.Org {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
 .OrgDetails {
   margin-bottom: 1.5rem;
 }
@@ -228,8 +234,13 @@ h5 {
   left: -1.5px;
   transform: translate(-50%, 75%);
 }
-.Achievement div span:last-child {
+.Achievement div span.Extra {
   font-weight: 100;
+  font-size: 0.9rem;
+  color: #929292;
+}
+.Achievement div span:last-child {
+  color: #929292;
   font-size: 0.9rem;
 }
 .Container footer {
