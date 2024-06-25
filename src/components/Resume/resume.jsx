@@ -130,7 +130,7 @@ const Resume = () => {
                     <span>2019</span>
                     <div>
                       <span>Smart India Hackathon</span>
-                      <span>Amadeus IT Group</span>
+                      <span className={styles.Extra}>Amadeus IT Group</span>
                       <span>Finalist</span>
                     </div>
                   </div>
@@ -149,7 +149,7 @@ const Resume = () => {
               <div className={styles.ExpList}>
                 <div className={styles.OrgDetails}>
                   <span>
-                    FrontEnd Engineer, Tata Consultancy Services with ABN AMRO
+                    Frontend Engineer, Tata Consultancy Services with ABN AMRO
                     Bank
                   </span>
                   <span>June 2019 - Present</span>
