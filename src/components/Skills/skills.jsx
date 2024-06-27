@@ -11,22 +11,7 @@ const Skills = () => {
         <div className={styles.SkillSet}>
           <div className={styles.Upper}>
             <div className={styles.UpperContent}>
-              <h3>DevOps Practitioner</h3>
-            </div>
-          </div>
-          <div className={styles.Divider}></div>
-          <div className={styles.Lower}>
-            <div className={styles.LowerContent}>
-              <SkillTag icon="azure" name="Azure" size={1.2} />
-              <SkillTag icon="firebase" name="Firebase" size={1.2} />
-              <SkillTag icon="bicep" name="Bicep" size={1.2} />
-            </div>
-          </div>
-        </div>
-        <div className={styles.SkillSet}>
-          <div className={styles.Upper}>
-            <div className={styles.UpperContent}>
-              <h3>FrontEnd Engineer</h3>
+              <h3>Frontend Engineer</h3>
             </div>
           </div>
           <div className={styles.Divider}></div>
@@ -38,6 +23,21 @@ const Skills = () => {
               <SkillTag icon="typescript" name="TypeScript" size={1.2} />
               <SkillTag icon="npm" name="NPM" size={1.2} />
               <SkillTag icon="javascript" name="JavaScript" size={1.2} />
+            </div>
+          </div>
+        </div>
+        <div className={styles.SkillSet}>
+          <div className={styles.Upper}>
+            <div className={styles.UpperContent}>
+              <h3>DevOps Practitioner</h3>
+            </div>
+          </div>
+          <div className={styles.Divider}></div>
+          <div className={styles.Lower}>
+            <div className={styles.LowerContent}>
+              <SkillTag icon="azure" name="Azure" size={1.2} />
+              <SkillTag icon="firebase" name="Firebase" size={1.2} />
+              <SkillTag icon="bicep" name="Bicep" size={1.2} />
             </div>
           </div>
         </div>

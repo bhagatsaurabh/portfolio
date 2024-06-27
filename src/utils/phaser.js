@@ -114,7 +114,7 @@ class MainGame extends Phaser.Scene {
     for (let i = 0; i < this.noOfBirds; i += 1) {
       this.birds.push(new Bird(this, i));
     }
-    if (this.game.theme === themes.DARK) this.enablePipeline(true);
+    if (this.game.theme === themes.LIGHT) this.enablePipeline(true);
   }
   enablePipeline(enable) {
     if (enable) {

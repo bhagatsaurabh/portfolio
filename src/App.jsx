@@ -58,7 +58,7 @@ const App = () => {
     }
   }, [location.pathname]);
   useEffect(() => {
-    game.current?.scene?.keys.game?.enablePipeline(theme === themes.DARK);
+    game.current?.scene?.keys.game?.enablePipeline(theme === themes.LIGHT);
   }, [theme]);
 
   let gesture = [];
