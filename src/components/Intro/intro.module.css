@@ -63,6 +63,7 @@
 }
 .Title h5 {
   font-weight: lighter;
+  color: var(--text-3);
 }
 .Title h5 div {
   position: relative;
@@ -86,6 +87,6 @@
     opacity: 0;
   }
   100% {
-    opacity: 0.8;
+    opacity: 1;
   }
 }

@@ -45,6 +45,7 @@ code {
   --backgroundFilter: none;
   --snowColor: #363537;
   --treeColor: #363537;
+  --treeColorInverse: #b2b2b2;
 }
 .dark {
   --background-nav: #ffffff14;
@@ -60,23 +61,7 @@ code {
   --backgroundFilter: brightness(0.7);
   --snowColor: rgb(231, 231, 231);
   --treeColor: #b2b2b2;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-nav: #ffffff14;
-    --background-0: #000;
-    --background-1: #404040;
-    --background-2: #626262;
-    --background-3: #7e7e7e;
-    --text-0: #fff;
-    --text-1: #d2d2d2;
-    --text-2: #b7b7b7;
-    --text-3: #9a9a9a;
-    --iconFilter: invert(1);
-    --backgroundFilter: brightness(0.7);
-    --snowColor: rgb(231, 231, 231);
-    --treeColor: #b2b2b2;
-  }
+  --treeColorInverse: #363537;
 }
 
 @media (hover: hover) {

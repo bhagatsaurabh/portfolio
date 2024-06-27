@@ -29,6 +29,13 @@ const Tree = (props) => {
         color: getComputedStyle(
           document.querySelector("#App")
         ).getPropertyValue("--treeColor"),
+        initialLength: 60,
+        initialWidth: 3,
+        minBranchLengthFactor: 0.675,
+        maxBranchLengthFactor: 0.75,
+        branchWidthFactor: 0.7,
+        minBranchRotation: 5,
+        maxBranchRotation: 35,
       },
       onComplete
     );

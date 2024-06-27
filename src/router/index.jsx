@@ -17,11 +17,6 @@ export const router = createBrowserRouter([
   {
     path: "/resume",
     element: <Resume />,
-    /* children: routes.map((route) => ({
-      index: route.path === "/",
-      path: route.path === "/" ? undefined : route.path,
-      element: route.element,
-    })), */
   },
 ]);
 

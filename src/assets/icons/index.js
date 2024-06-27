@@ -40,3 +40,4 @@ export { default as tcs } from "./tcs.png";
 export { default as abnamro } from "./abnamro.png";
 export { default as phone } from "./phone.png";
 export { default as download } from "./download.png";
+export { default as speed } from "./speed.png";

@@ -2,6 +2,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  background-color: var(--text-0);
+  transition: background-color var(--theme-transition-duration) linear;
 }
 .SelfCover canvas {
   pointer-events: none !important;

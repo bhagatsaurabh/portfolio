@@ -29,7 +29,7 @@ const SelfCover = () => {
         color: getComputedStyle(
           document.querySelector("#App")
         ).getPropertyValue("--treeColor"),
-        initialLength: 60,
+        initialLength: 45,
         initialWidth: 3,
         minBranchLengthFactor: 0.675,
         maxBranchLengthFactor: 0.75,
@@ -53,7 +53,7 @@ const SelfCover = () => {
   useEffect(() => {
     tree.current.color = getComputedStyle(
       document.querySelector("#App")
-    ).getPropertyValue("--treeColor");
+    ).getPropertyValue("--treeColorInverse");
   }, [theme]);
 
   return (

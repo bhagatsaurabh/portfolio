@@ -57,8 +57,9 @@
   transition: color var(--theme-transition-duration) linear;
 }
 .Container span {
+  font-weight: normal;
   display: block;
-  color: var(--text-1);
+  color: var(--text-2);
   transition: color var(--theme-transition-duration) linear;
 }
 .Container .Set {
@@ -74,6 +75,7 @@
   margin-bottom: 0.75rem;
   opacity: 0;
   transform: translateX(-100%);
+  cursor: pointer;
 }
 .Container .Set span:not(:last-child) {
   margin-bottom: 0.75rem;
@@ -117,5 +119,16 @@
   }
   100% {
     opacity: 0.5;
+  }
+}
+
+@media (min-width: 1000px) {
+  .Container {
+    max-width: 750px;
+  }
+}
+@media (min-width: 1300px) {
+  .Container {
+    max-width: 1000px;
   }
 }

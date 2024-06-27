@@ -26,15 +26,4 @@
   min-height: 100%;
   gap: 1rem;
   padding: 7rem 3rem;
-  backdrop-filter: blur(0px);
-  animation: blur 0.25s linear forwards 0.75s normal;
-}
-
-@keyframes blur {
-  0% {
-    backdrop-filter: blur(0px);
-  }
-  100% {
-    backdrop-filter: blur(3px);
-  }
 }

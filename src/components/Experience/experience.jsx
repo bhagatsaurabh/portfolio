@@ -26,6 +26,7 @@ const Experience = () => {
     <div className={styles.Experience}>
       <div className={styles.Container}>
         <div
+          onClick={() => setExpand(true)}
           ref={(el) => el && (cRefs.current[0] = el)}
           className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
         >
@@ -35,12 +36,53 @@ const Experience = () => {
           >
             <h2>Modernization</h2>
             <span>
-              Migrated a legacy <Icon name="angular" /> Angular codebase to{" "}
-              <Icon name="vue" /> Vue.
+              Led the migration of a legacy <Icon name="angular" /> Angular
+              codebase to <Icon name="vue" /> Vue + Vuex.
+            </span>
+            <span>
+              Upgraded build tooling to Vite, resulting in <Icon name="speed" />{" "}
+              faster build times.
             </span>
           </div>
         </div>
         <div
+          onClick={() => setExpand(true)}
+          ref={(el) => el && (cRefs.current[2] = el)}
+          className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
+        >
+          <div
+            ref={(el) => el && (refs.current[2] = el)}
+            className={styles.Content}
+          >
+            <h2>Automation</h2>
+            <span>
+              Created a functional test suite using <Icon name="testcafe" />{" "}
+              TestCafe, significantly reducing manual regression testing effort.
+            </span>
+            <span>
+              Developed automation tools to assist database migration using{" "}
+              <Icon name="react" /> React and <Icon name="java" /> Java.
+            </span>
+          </div>
+        </div>
+        <div
+          onClick={() => setExpand(true)}
+          ref={(el) => el && (cRefs.current[4] = el)}
+          className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
+        >
+          <div
+            ref={(el) => el && (refs.current[4] = el)}
+            className={styles.Content}
+          >
+            <h2>UI/UX Development</h2>
+            <span>
+              Created both simple and complex screen mockups and static designs
+              maintaining continuous feedback using <Icon name="figma" /> Figma.
+            </span>
+          </div>
+        </div>
+        <div
+          onClick={() => setExpand(true)}
           ref={(el) => el && (cRefs.current[1] = el)}
           className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
         >
@@ -60,26 +102,7 @@ const Experience = () => {
           </div>
         </div>
         <div
-          ref={(el) => el && (cRefs.current[2] = el)}
-          className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
-        >
-          <div
-            ref={(el) => el && (refs.current[2] = el)}
-            className={styles.Content}
-          >
-            <h2>Automation</h2>
-            <span>
-              Developed automation tools to assist in mainframe database
-              migration and to automate COBOL documentation using{" "}
-              <Icon name="java" /> Java and <Icon name="react" /> React.
-            </span>
-            <span>
-              Created a functional test suite using <Icon name="testcafe" />{" "}
-              TestCafe, significantly reducing manual regression testing effort.
-            </span>
-          </div>
-        </div>
-        <div
+          onClick={() => setExpand(true)}
           ref={(el) => el && (cRefs.current[3] = el)}
           className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
         >
@@ -97,21 +120,7 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          ref={(el) => el && (cRefs.current[4] = el)}
-          className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
-        >
-          <div
-            ref={(el) => el && (refs.current[4] = el)}
-            className={styles.Content}
-          >
-            <h2>UI/UX Development</h2>
-            <span>
-              Created both simple and complex screen mockups and static designs
-              maintaining continuous feedback using <Icon name="figma" /> Figma.
-            </span>
-          </div>
-        </div>
+
         <FeedButton onClick={() => setExpand(!expand)} icon="info" size={0.8}>
           {!expand ? "Know More" : "Hide"}
         </FeedButton>

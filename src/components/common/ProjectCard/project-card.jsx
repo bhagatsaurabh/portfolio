@@ -42,7 +42,7 @@ const ProjectCard = ({ project }) => {
           className={styles.Cover}
           style={{ backgroundImage: `url(${project.image})` }}
         >
-          {project.name === "My Website" && <SelfCover />}
+          {project.name === "My Portfolio" && <SelfCover />}
         </div>
       ) : (
         <video
