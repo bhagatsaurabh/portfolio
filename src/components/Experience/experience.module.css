@@ -72,13 +72,13 @@
   margin-bottom: 0;
 }
 .Container .Set h2 {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
   opacity: 0;
   transform: translateX(-100%);
   cursor: pointer;
 }
 .Container .Set span:not(:last-child) {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 .Expand {
   max-height: var(--max-height) !important;

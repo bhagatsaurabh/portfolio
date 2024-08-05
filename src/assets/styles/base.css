@@ -41,6 +41,7 @@ code {
   --text-1: #404040;
   --text-2: #626262;
   --text-3: #7e7e7e;
+  --text-4: #b2b2b2;
   --iconFilter: none;
   --backgroundFilter: none;
   --snowColor: #363537;
@@ -57,6 +58,7 @@ code {
   --text-1: #d2d2d2;
   --text-2: #b7b7b7;
   --text-3: #9a9a9a;
+  --text-4: #898989;
   --iconFilter: invert(1);
   --backgroundFilter: brightness(0.7);
   --snowColor: rgb(231, 231, 231);

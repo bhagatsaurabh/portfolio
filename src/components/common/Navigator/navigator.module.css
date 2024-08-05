@@ -3,100 +3,69 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1rem 0;
   width: 50%;
   max-width: 15rem;
-  opacity: 0.5;
   z-index: 100;
   transition: opacity 0.1s linear;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
   cursor: pointer;
   touch-action: none;
-}
-.Navigator .Track {
-  position: relative;
-  height: 0.15rem;
-  background-color: gray;
-  border-radius: 0.5rem;
-  width: calc(100% + 0.55rem);
-  left: -0.275rem;
-}
-.Navigator .Thumb {
-  position: absolute;
-  top: 50%;
-  left: -0.275rem;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  background-color: grey;
-  transition: transform 0.2s linear, left 0.2s ease-out;
-  transform: translateY(-50%) scale(0.8);
-}
-.Navigator .Thumb.active {
-  transform: translateY(-50%) scale(1);
-}
-.Track .Checkpoints {
-  position: absolute;
-  pointer-events: none;
-  width: 100%;
   display: flex;
-  font-size: 0.8rem;
-  margin-top: 0.6rem;
+  justify-content: center;
+  align-items: center;
 }
-.Track .Checkpoints .Checkpoint {
+.Navigator .Switch {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
   position: absolute;
-  transform: translateX(-50%) scale(0);
-  opacity: 0;
-  transition: opacity 0.2s linear, transform 0.2s linear;
+  left: 50%;
+  opacity: 0.3;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  font-size: 0;
+  cursor: pointer;
 }
-.Track .Checkpoints .Checkpoint.current {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
-  animation: hide 0.2s linear 1.25s 1 forwards normal;
+.Navigator .Switch.open {
+  transform: translate(-50%, -150%);
 }
-.Track .Checkpoints .Checkpoint:first-child {
-  left: 0 !important;
-  transform: translateX(0) scale(0);
+.Navigator .Switch img {
 }
-.Track .Checkpoints .Checkpoint.current:first-child {
-  transform: translateX(0) scale(1);
-}
-.Track .Checkpoints .Checkpoint:last-child {
-  right: 0 !important;
-  left: unset !important;
-  transform: translateX(0) scale(0);
-}
-.Track .Checkpoints .Checkpoint.current:last-child {
-  transform: translateX(0) scale(1);
-}
-
 .SectionTitles {
-  color: var(--text-0);
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
-.SectionTitles.titlehidden {
-  transition: color var(--theme-transition-duration) linear;
-  visibility: hidden;
+.SectionTitleList {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3.5rem;
+  position: relative;
+  top: -3.5rem;
+  transition: top 0.3s cubic-bezier(0, 0, 0.3, 1);
+}
+.SectionTitleList.open {
+  top: 0;
 }
 .SectionTitle {
-  position: fixed;
+  background-color: transparent;
+  border: none;
+  padding: 0;
   margin: 0;
-  font-weight: 100;
-  left: -0.65rem;
-  top: 0.25rem;
+  cursor: pointer;
+  color: var(--text-3);
+  text-align: center;
+  transition: color var(--theme-transition-duration) linear,
+    font-size 0.3s cubic-bezier(0, 0, 0.4, 1);
   z-index: 1;
-  font-size: 2.5rem;
-  writing-mode: tb;
-  transform: rotateZ(180deg) translateY(105%);
-  transition: transform 0.55s linear;
-  opacity: 0.1;
-  animation: slideout 0.55s var(--scroll-timing-fn) forwards normal;
+  font-size: 1rem;
+  font-weight: 100;
 }
 .SectionTitle.titleactive {
-  animation: slidein 0.55s var(--scroll-timing-fn) 1.5s forwards normal;
-}
-.SectionTitle.titleignore {
-  display: none;
+  font-size: 2rem;
 }
 
 .NavigationButtons button {
@@ -132,18 +101,18 @@
 
 @keyframes slidein {
   0% {
-    transform: rotateZ(180deg) translateY(105%);
+    transform: translateY(-150%);
   }
   100% {
-    transform: rotateZ(180deg) translateY(0);
+    transform: translateY(-50%);
   }
 }
 @keyframes slideout {
   0% {
-    transform: rotateZ(180deg) translateY(0);
+    transform: translateY(-50%);
   }
   100% {
-    transform: rotateZ(180deg) translateY(105%);
+    transform: translateY(-150%);
   }
 }
 
@@ -153,9 +122,6 @@
   }
 }
 @media (hover: hover) {
-  .Navigator:hover .Thumb {
-    transform: translateY(-50%) scale(1);
-  }
   .NavigationButtons button:hover {
     background-color: var(--background-nav);
   }
