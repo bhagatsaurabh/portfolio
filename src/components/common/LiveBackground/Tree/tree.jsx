@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import classes from "./tree.module.css";
 import { Tree as TreeC } from "@/utils/tree";
 import usePrevious from "@/hooks/usePrevious";
+import { TreeWGL } from "@/utils/tree-wgl";
 
 const Tree = (props) => {
   const { onComplete } = props;
@@ -16,14 +17,14 @@ const Tree = (props) => {
   const drawing = createRef();
 
   useEffect(() => {
-    dimensions.current.width = container.current.clientWidth;
+    /* dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
     canvas.current = new Percept.Canvas(container.current);
     drawing.current = new Percept.Drawing(canvas.current, () =>
       tree.current.update()
-    );
-    tree.current = new TreeC(
+    ); */
+    /* tree.current = new TreeC(
       { x: canvas.current.width * 0.8, y: canvas.current.height },
       {
         color: getComputedStyle(
@@ -38,16 +39,32 @@ const Tree = (props) => {
         maxBranchRotation: 35,
       },
       onComplete
+    ); */
+    tree.current = new TreeWGL(
+      { x: window.innerWidth * 0.8, y: window.innerHeight },
+      {
+        color: /* getComputedStyle(
+          document.querySelector("#App")
+        ).getPropertyValue("--treeColor") */ 0x000000,
+        initialLength: 60,
+        initialWidth: 3,
+        minBranchLengthFactor: 0.675,
+        maxBranchLengthFactor: 0.75,
+        branchWidthFactor: 0.7,
+        minBranchRotation: 5,
+        maxBranchRotation: 35,
+      },
+      onComplete
     );
-    drawing.current.add(tree.current.root);
+    /* drawing.current.add(tree.current.root);
     canvas.current.draw(drawing.current);
 
     return () => {
       canvas.current.dispose();
-    };
+    }; */
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (
       typeof props.windDirection === "boolean" &&
       prevProps &&
@@ -60,10 +77,11 @@ const Tree = (props) => {
         document.querySelector("#App")
       ).getPropertyValue("--treeColor");
     }
-  }, [props]);
+  }, [props]); */
 
   return (
     <div
+      id="landscape"
       style={{ ...props.customStyle }}
       className={[classes.Tree, props.blur ? classes.blur : ""].join(" ")}
       ref={(element) => (container.current = element)}

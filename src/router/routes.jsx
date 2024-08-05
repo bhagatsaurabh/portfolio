@@ -9,7 +9,7 @@ export const routes = [
   {
     path: "/",
     name: "Intro",
-    title: "Intro",
+    title: "▢",
     element: <Intro />,
     nodeRef: createRef(),
     component: Intro,
@@ -45,7 +45,7 @@ export const routes = [
   {
     path: "/about",
     name: "About",
-    title: "Me",
+    title: "About",
     element: <About />,
     nodeRef: createRef(),
     component: About,

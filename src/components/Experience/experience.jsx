@@ -36,12 +36,12 @@ const Experience = () => {
           >
             <h2>Modernization</h2>
             <span>
-              Led the migration of a legacy <Icon name="angular" /> Angular
-              codebase to <Icon name="vue" /> Vue + Vuex.
+              Migration of legacy codebase to <Icon name="vue" /> Vue with
+              complete functional test suite and over 95% code coverage.
             </span>
             <span>
-              Upgraded build tooling to Vite, resulting in <Icon name="speed" />{" "}
-              faster build times.
+              Utilizing cutting-edge build tooling to reduce build times and{" "}
+              <Icon name="speed" /> speed-up development.
             </span>
           </div>
         </div>
@@ -60,8 +60,8 @@ const Experience = () => {
               TestCafe, significantly reducing manual regression testing effort.
             </span>
             <span>
-              Developed automation tools to assist database migration using{" "}
-              <Icon name="react" /> React and <Icon name="java" /> Java.
+              Developed automation tools to assist in database migration using{" "}
+              <Icon name="react" /> React.
             </span>
           </div>
         </div>
@@ -90,14 +90,18 @@ const Experience = () => {
             ref={(el) => el && (refs.current[1] = el)}
             className={styles.Content}
           >
-            <h2>Developer Experience</h2>
+            <h2>DevOps</h2>
             <span>
               Built a common IaC library of generic <Icon name="bicep" /> Bicep
-              modules to help others in their cloud migration.
+              modules to help others in infrastructure setup as part of cloud
+              migration.
             </span>
             <span>
               Implemented an <Icon name="monitor" /> application monitoring
               process with automated alerts, incidents and a metrics dashboard.
+            </span>
+            <span>
+              Built pipelines for automated network deployment on Azure.
             </span>
           </div>
         </div>

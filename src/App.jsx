@@ -122,6 +122,13 @@ const App = () => {
     dispatch(setShowScrollHint(false));
     router.navigate(routes[idx].path);
   };
+  const sectionClasses = (routPath) => {
+    if (routeOrder[routPath] < routeOrder[location.pathname])
+      return "preload-left";
+    else if (routeOrder[routPath] > routeOrder[location.pathname])
+      return "preload-right";
+    return "";
+  };
 
   return (
     <div
@@ -156,6 +163,7 @@ const App = () => {
           />
           <ThemeSelector />
           <ScrollingBackground position={routeOrder[location.pathname]} />
+
           {routes.map((route) => (
             <CSSTransition
               key={route.name}
@@ -165,10 +173,12 @@ const App = () => {
                 direction >= 0 ? "section-forward" : "section-backward"
               }
               nodeRef={route.nodeRef}
-              mountOnEnter
               appear
             >
-              <section ref={route.nodeRef}>
+              <section
+                ref={route.nodeRef}
+                className={sectionClasses(route.path)}
+              >
                 <route.component />
               </section>
             </CSSTransition>
