@@ -1,15 +1,24 @@
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-import classes from "./about.module.css";
+import styles from "./about.module.css";
 import myImage from "@/assets/images/me.png";
 import Icon from "../common/Icon/icon.jsx";
 import FeedButton from "../common/FeedButton/feed-button.jsx";
 import { router } from "@/router";
-import { useEffect, useState } from "react";
 
 const About = () => {
   const contact = useSelector((state) => state.contact);
   const [emailCopied, setEmailCopied] = useState(false);
+  const location = useLocation();
+  const animated = useRef(false);
+
+  const classes = [styles.About];
+  if (location.pathname === "/about" || animated.current) {
+    classes.push(styles.animate);
+    animated.current = true;
+  }
 
   useEffect(() => {
     let handle = -1;
@@ -25,8 +34,8 @@ const About = () => {
   };
 
   return (
-    <div className={classes.About}>
-      <div className={classes.Container}>
+    <div className={classes.join(" ")}>
+      <div className={styles.Container}>
         <h4>
           Over the past 5 years, my journey has taken me through various
           business domains, from Risk Management and Regulatory Compliance to
@@ -37,17 +46,15 @@ const About = () => {
           productivity with innovative tools, and streamlining workflows with
           DevOps.
         </h4>
-        <div className={classes.MeContainer}>
-          {<img className={classes.Me} alt="Me" src={myImage} />}
+        <div className={styles.MeContainer}>
+          {<img className={styles.Me} alt="Me" src={myImage} />}
         </div>
         <h4>
           Outside of work, I love the thrill of developing games and composing
           instrumental music.
         </h4>
         <div
-          className={[classes.Email, emailCopied ? classes.copied : ""].join(
-            " "
-          )}
+          className={[styles.Email, emailCopied ? styles.copied : ""].join(" ")}
         >
           <a href={"mailto:" + contact.email}>
             <Icon name="email" size={1.5} />
@@ -58,11 +65,11 @@ const About = () => {
             <Icon name="check" />
           </button>
         </div>
-        <div className={classes.Platforms}>
+        <div className={styles.Platforms}>
           {contact.platforms &&
             contact.platforms.map((platform) => (
               <a
-                className={classes.PlatformLink}
+                className={styles.PlatformLink}
                 target="_blank"
                 rel="noreferrer"
                 key={platform.name}
@@ -79,11 +86,11 @@ const About = () => {
         >
           {"Résumé"}
         </FeedButton>
-        <span className={classes.Location}>
+        <span className={styles.Location}>
           <Icon name="pin" size={1} />
-          Amsterdam, Nederlands
+          Mumbai, India
         </span>
-        <span className={classes.Copyright}>
+        <span className={styles.Copyright}>
           &copy;&nbsp;{new Date().getFullYear()}&nbsp;Saurabh Bhagat
         </span>
       </div>

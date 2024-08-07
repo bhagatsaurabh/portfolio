@@ -22,7 +22,6 @@
   font-weight: 100;
   font-size: 2.25rem;
   opacity: 0;
-  animation: fadein 0.5s linear 0.5s forwards;
 }
 .Skills h1 span {
   font-family: serif, math, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -56,7 +55,6 @@
 .UpperContent {
   text-align: center;
   transform: translateY(120%);
-  animation: slide-b 0.5s cubic-bezier(0, 0, 0.05, 1) 1.5s forwards;
   opacity: 0.75;
 }
 .Upper h3 {
@@ -73,7 +71,6 @@
   margin: 0.45rem auto;
   border-bottom: 1px solid #9c9c9c;
   width: 0;
-  animation: expand-h 0.5s cubic-bezier(0, 0, 0.05, 1) 0.9s forwards;
 }
 .Lower {
   overflow: hidden;
@@ -90,6 +87,18 @@
   gap: 1rem;
   flex-wrap: wrap;
   transform: translateY(-120%);
+}
+
+.Skills.animate h1 {
+  animation: fadein 0.5s linear 0.5s forwards;
+}
+.Skills.animate .UpperContent {
+  animation: slide-b 0.5s cubic-bezier(0, 0, 0.05, 1) 1.5s forwards;
+}
+.Skills.animate .Divider {
+  animation: expand-h 0.5s cubic-bezier(0, 0, 0.05, 1) 0.9s forwards;
+}
+.Skills.animate .LowerContent {
   animation: slide-t 0.5s cubic-bezier(0, 0, 0.025, 1) 1.55s forwards;
 }
 

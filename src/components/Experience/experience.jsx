@@ -36,12 +36,17 @@ const Experience = () => {
           >
             <h2>Modernization</h2>
             <span>
-              Migration of legacy codebase to <Icon name="vue" /> Vue with
-              complete functional test suite and over 95% code coverage.
+              Led the migration of a legacy codebase to <Icon name="vue" /> Vue,
+              complete with a functional test suite and over 95% code coverage.
             </span>
             <span>
-              Utilizing cutting-edge build tooling to reduce build times and{" "}
-              <Icon name="speed" /> speed-up development.
+              Fixed tree-shaking issues, introduced code-splitting, and moved to
+              gzip compression, resulting in bundle size reduction from 1374 kb
+              to just 550 kb and ~20% improvement in initial load time.
+            </span>
+            <span>
+              Upgraded build tooling to Vite, resulting in faster{" "}
+              <Icon name="speed" /> build times.
             </span>
           </div>
         </div>
@@ -57,11 +62,29 @@ const Experience = () => {
             <h2>Automation</h2>
             <span>
               Created a functional test suite using <Icon name="testcafe" />{" "}
-              TestCafe, significantly reducing manual regression testing effort.
+              TestCafe with CICD integration, significantly reducing regression
+              testing effort.
+            </span>
+          </div>
+        </div>
+        <div
+          onClick={() => setExpand(true)}
+          ref={(el) => el && (cRefs.current[3] = el)}
+          className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
+        >
+          <div
+            ref={(el) => el && (refs.current[3] = el)}
+            className={styles.Content}
+          >
+            <h2>Developer Experience</h2>
+            <span>
+              Contributed improvements and fixes to Lit components of the common
+              design system library <Icon name="library" />.
             </span>
             <span>
               Developed automation tools to assist in database migration using{" "}
-              <Icon name="react" /> React.
+              <Icon name="react" />
+              React and <Icon name="java" /> Java.
             </span>
           </div>
         </div>
@@ -76,51 +99,57 @@ const Experience = () => {
           >
             <h2>UI/UX Development</h2>
             <span>
-              Created both simple and complex screen mockups and static designs
-              maintaining continuous feedback using <Icon name="figma" /> Figma.
+              Created both simple and complex screen mock-ups and static designs
+              with <Icon name="figma" /> Figma while maintaining continuous
+              feedback.
             </span>
           </div>
         </div>
         <div
           onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[1] = el)}
+          ref={(el) => el && (cRefs.current[5] = el)}
           className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
         >
           <div
-            ref={(el) => el && (refs.current[1] = el)}
+            ref={(el) => el && (refs.current[5] = el)}
             className={styles.Content}
           >
             <h2>DevOps</h2>
             <span>
               Built a common IaC library of generic <Icon name="bicep" /> Bicep
-              modules to help others in infrastructure setup as part of cloud
-              migration.
+              modules with auto-publishing pipelines.
             </span>
             <span>
               Implemented an <Icon name="monitor" /> application monitoring
-              process with automated alerts, incidents and a metrics dashboard.
+              process with alerts, incidents and a metrics dashboard.
             </span>
             <span>
-              Built pipelines for automated network deployment on Azure.
+              Built pipelines for automated network provisioning on{" "}
+              <Icon name="azure" /> Azure.
+            </span>
+            <span>
+              Reduced infrastructure costs by 50% by evaluating application load
+              trends and SKUs.
             </span>
           </div>
         </div>
         <div
           onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[3] = el)}
+          ref={(el) => el && (cRefs.current[6] = el)}
           className={[styles.Set, expand ? styles.Expand : ""].join(" ")}
         >
           <div
-            ref={(el) => el && (refs.current[3] = el)}
+            ref={(el) => el && (refs.current[6] = el)}
             className={styles.Content}
           >
             <h2>Cloud Migration</h2>
             <span>
-              Migrated two applications to <Icon name="azure" /> Azure.
+              Migrated two applications from on-premises to{" "}
+              <Icon name="azure" /> Azure.
             </span>
             <span>
-              Developed an ETL Data Pipeline using Serverless{" "}
-              <Icon name="function" /> Function Apps.
+              Developed an ETL Data Pipeline using <Icon name="nodejs" /> NodeJS
+              and Serverless <Icon name="function" /> Function Apps.
             </span>
           </div>
         </div>

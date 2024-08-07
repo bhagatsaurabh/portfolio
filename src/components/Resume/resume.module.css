@@ -15,14 +15,6 @@
   transform: translateX(-50%);
   top: 1.5rem;
 }
-.Resume section {
-  opacity: 1;
-  position: unset;
-  overflow: unset;
-  width: unset;
-  height: unset;
-  z-index: unset;
-}
 .Resume a {
   text-decoration: none;
   color: #6f6f6f;
@@ -39,234 +31,28 @@
   position: relative;
   top: -0.125rem;
 }
-h5 {
-  font-size: 0.8rem;
-  margin: 0 0 1rem 0;
-  color: #6c6c6c;
-  font-weight: lighter;
-  font-family: monospace;
-}
 .Container {
   margin: 5rem 0;
   box-shadow: 0 0 12px -3px #363636;
   opacity: 1;
-  width: 100%;
+  max-width: 100%;
   position: relative;
   left: 50%;
-  width: 1000px;
-  transform-origin: 50% 0;
-  transform: translateX(-50%) scale(0.35);
-}
-.Email {
-  color: unset !important;
-}
-.Container header h1 {
-  font-weight: normal;
-  font-size: 3.5rem;
-  font-family: monospace, sans-serif, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
-  margin: 0.5rem 0;
-}
-.Container header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2.5rem;
-  background-color: #d2d2d2ba;
-}
-.Container header .Right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-.Summary {
-  padding: 2.5rem 2.5rem 0 2.5rem;
-  background-color: white;
-}
-.Summary p:last-child {
-  margin-bottom: 0;
-  padding-bottom: 1rem;
-}
-.Formal {
-  display: flex;
-  justify-content: center;
-  padding: 2.5rem 2.5rem 0 2.5rem;
-  gap: 2rem;
-  background-color: white;
-}
-.EdSkills {
-}
-.Divider {
-  border: 1px solid #e2e2e2;
-}
-.Education {
-  margin-bottom: 2rem;
-}
-.EdContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-}
-.EdContainer div:last-child span {
-  display: block;
-  padding: 0.1rem;
-}
-.EdContainer div:last-child span:first-child {
-  text-wrap: nowrap;
-}
-.EdContainer div:last-child span:nth-child(2) {
-  font-size: 0.9rem;
-}
-.EdContainer div:last-child span:last-child {
-  font-size: 0.85rem;
-  color: grey;
-}
-.EdContainer img {
-  vertical-align: bottom;
-}
-.Skills {
-  margin-bottom: 2rem;
-}
-.SkillList {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.75rem;
-}
-.SkillList span {
-  display: inline-flex;
-}
-.WorkExp {
-}
-.ExpContainer {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-.ExpList h3 {
-  margin: 1rem 0;
-  font-weight: normal;
-  font-size: 1rem;
-}
-.ExpList h3:first-child {
-  margin-top: 0;
-}
-.ExpList ul {
-  padding-left: 1.25rem;
-}
-.ExpList li {
-  font-size: 0.85rem;
-  color: #383838;
-}
-.ExpList ul li:not(:last-child) {
-  margin-bottom: 0.5rem;
-}
-.Org {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-}
-.OrgDetails {
-  margin-bottom: 1.5rem;
-}
-.OrgDetails span {
-  display: block;
-}
-.OrgDetails span:first-child {
-  font-size: 1.15rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-}
-.OrgDetails span:last-child {
-  font-size: 0.85rem;
-}
-.Projects {
-  padding: 2.5rem 2.5rem 2rem 2.5rem;
-  background-color: white;
-}
-.ProjectsContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.5rem;
-}
-.Project h3 {
-  margin: 0 0 0.5rem 0;
-  font-weight: normal;
-}
-.Project div {
-  font-size: 0.8rem;
-  color: grey;
-}
-.Project p {
-  margin: 0.5rem 0 0 0;
-  font-size: 0.95rem;
-}
-
-.Achievements {
-}
-.AchievementsList {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 18.5rem;
-}
-.AchievementsList span {
-  display: block;
-}
-.AchievementSect {
-  position: relative;
-  border-left: 3px solid grey;
-  padding-left: 0.5rem;
-}
-.Achievement > span {
-  font-size: 0.85rem;
-  color: grey;
-}
-.Achievement > span::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: grey;
-  border-radius: 50%;
-  left: -1.5px;
-  transform: translate(-50%, 75%);
-}
-.Achievement div span.Extra {
-  font-weight: 100;
-  font-size: 0.9rem;
-  color: #929292;
-}
-.Achievement div span:last-child {
-  color: #929292;
-  font-size: 0.9rem;
-}
-.Container footer {
-  text-align: center;
-  width: 100%;
-  padding: 2rem;
-  background-color: #d2d2d2ba;
+  transform: translateX(-50%);
 }
 
 @media (min-width: 560px) {
   .Container {
-    width: 1000px;
-    transform-origin: 50% 0;
-    transform: translateX(-50%) scale(0.5);
+    max-width: 504px;
   }
 }
 @media (min-width: 810px) {
   .Container {
-    width: 1000px;
-    transform-origin: 50% 0;
-    transform: translateX(-50%) scale(0.75);
+    max-width: 648px;
   }
 }
 @media (min-width: 1075px) {
   .Container {
     max-width: 1000px;
-    transform: translateX(-50%) scale(1);
   }
 }
