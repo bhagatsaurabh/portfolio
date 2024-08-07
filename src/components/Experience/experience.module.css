@@ -102,6 +102,9 @@
 .Container .Set:nth-child(5) h2 {
   animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1.05s normal;
 }
+.Container .Set:nth-child(6) h2 {
+  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1.01s normal;
+}
 
 @keyframes fadeslide {
   0% {

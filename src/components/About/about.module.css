@@ -102,6 +102,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+}
+.About.animate .MeContainer {
   animation: open 0.75s cubic-bezier(0, 0, 0.02, 1) forwards 1s normal;
 }
 .Me {

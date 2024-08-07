@@ -1,9 +1,21 @@
+import { useRef } from "react";
+import { useLocation } from "react-router-dom";
+
 import SkillTag from "../common/SkillTag/skill-tag";
 import styles from "./skills.module.css";
 
 const Skills = () => {
+  const location = useLocation();
+  const animated = useRef(false);
+
+  const classes = [styles.Skills];
+  if (location.pathname === "/skills" || animated.current) {
+    classes.push(styles.animate);
+    animated.current = true;
+  }
+
   return (
-    <div className={styles.Skills}>
+    <div className={classes.join(" ")}>
       <div className={styles.Wrapper}>
         <h1>
           <span>I</span> am a
