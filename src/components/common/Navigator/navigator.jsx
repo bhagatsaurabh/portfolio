@@ -53,7 +53,7 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
         >
           {checkpoints.map((checkpoint, idx) => (
             <span
-              role="button"
+              tabIndex={0}
               onClick={() => handleClick(idx)}
               key={checkpoint.name}
               className={[
