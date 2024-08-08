@@ -1,51 +1,36 @@
 import { createRef, useEffect, useRef } from "react";
-import * as Percept from "canvas-percept";
 import PropTypes from "prop-types";
 
 import classes from "./tree.module.css";
-import { Tree as TreeC } from "@/utils/tree";
-import usePrevious from "@/hooks/usePrevious";
 import { TreeWGL } from "@/utils/tree-wgl";
+import { throttle } from "@/utils";
+import usePrevious from "@/hooks/usePrevious";
 
 const Tree = (props) => {
   const { onComplete } = props;
+  const prevProps = usePrevious(props);
   const dimensions = useRef({ width: 0, height: 0 });
   const tree = useRef(null);
-  const prevProps = usePrevious(props);
   const container = createRef();
-  const canvas = createRef();
-  const drawing = createRef();
 
   useEffect(() => {
-    /* dimensions.current.width = container.current.clientWidth;
+    dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
-    canvas.current = new Percept.Canvas(container.current);
-    drawing.current = new Percept.Drawing(canvas.current, () =>
-      tree.current.update()
-    ); */
-    /* tree.current = new TreeC(
-      { x: canvas.current.width * 0.8, y: canvas.current.height },
-      {
-        color: getComputedStyle(
-          document.querySelector("#App")
-        ).getPropertyValue("--treeColor"),
-        initialLength: 60,
-        initialWidth: 3,
-        minBranchLengthFactor: 0.675,
-        maxBranchLengthFactor: 0.75,
-        branchWidthFactor: 0.7,
-        minBranchRotation: 5,
-        maxBranchRotation: 35,
-      },
-      onComplete
-    ); */
     tree.current = new TreeWGL(
-      { x: window.innerWidth * 0.8, y: window.innerHeight },
+      "#landscape",
+      dimensions.current,
       {
-        color: /* getComputedStyle(
-          document.querySelector("#App")
-        ).getPropertyValue("--treeColor") */ 0x000000,
+        x: (dimensions.current.width / 2) * 0.8,
+        y: -dimensions.current.height / 2,
+      },
+      {
+        color: parseInt(
+          getComputedStyle(document.querySelector("#App"))
+            .getPropertyValue("--treeColor")
+            .replace("#", ""),
+          16
+        ),
         initialLength: 60,
         initialWidth: 3,
         minBranchLengthFactor: 0.675,
@@ -56,15 +41,24 @@ const Tree = (props) => {
       },
       onComplete
     );
-    /* drawing.current.add(tree.current.root);
-    canvas.current.draw(drawing.current);
+
+    const throttledCB = throttle((entries) => {
+      if (entries[0]) {
+        dimensions.current.width = entries[0].contentRect.width;
+        dimensions.current.height = entries[0].contentRect.height;
+        tree.current?.resize(dimensions.current);
+      }
+    }, 150);
+    const observer = new ResizeObserver(throttledCB);
+    observer.observe(container.current);
 
     return () => {
-      canvas.current.dispose();
-    }; */
+      observer.disconnect();
+      tree.current.dispose();
+    };
   }, []);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (
       typeof props.windDirection === "boolean" &&
       prevProps &&
@@ -73,11 +67,14 @@ const Tree = (props) => {
       tree.current.storm(props.windDirection);
     }
     if (props.theme !== prevProps?.theme) {
-      tree.current.color = getComputedStyle(
-        document.querySelector("#App")
-      ).getPropertyValue("--treeColor");
+      tree.current.color = parseInt(
+        getComputedStyle(document.querySelector("#App"))
+          .getPropertyValue("--treeColor")
+          .replace("#", ""),
+        16
+      );
     }
-  }, [props]); */
+  }, [props]);
 
   return (
     <div

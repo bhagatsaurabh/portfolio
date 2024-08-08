@@ -21,3 +21,14 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+export const throttle = function (fn, delay) {
+  let timeout = null;
+  return (...args) => {
+    if (!timeout) {
+      fn(...args);
+      timeout = setTimeout(() => {
+        timeout = null;
+      }, delay);
+    }
+  };
+};

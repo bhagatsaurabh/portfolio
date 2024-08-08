@@ -1,34 +1,35 @@
 import { createRef, useEffect, useRef } from "react";
-import * as Percept from "canvas-percept";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import styles from "./self-cover.module.css";
-import { Tree as TreeC } from "@/utils/tree";
-import { useSelector } from "react-redux";
 import { currTheme } from "@/store/reducers/preferences";
+import { TreeWGL } from "@/utils/tree-wgl";
 
 const SelfCover = () => {
   const dimensions = useRef({ width: 0, height: 0 });
   const tree = useRef(null);
   const container = createRef();
-  const canvas = useRef(null);
-  const drawing = createRef();
   const theme = useSelector(currTheme);
 
   useEffect(() => {
     dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
-    canvas.current = new Percept.Canvas(container.current);
-    drawing.current = new Percept.Drawing(canvas.current, () =>
-      tree.current.update()
-    );
-    tree.current = new TreeC(
-      { x: canvas.current.width * 0.8, y: canvas.current.height },
+    tree.current = new TreeWGL(
+      "#selfcover",
+      dimensions.current,
       {
-        color: getComputedStyle(
-          document.querySelector("#App")
-        ).getPropertyValue("--treeColor"),
+        x: (dimensions.current.width / 2) * 0.45,
+        y: -dimensions.current.height / 2,
+      },
+      {
+        color: parseInt(
+          getComputedStyle(document.querySelector("#App"))
+            .getPropertyValue("--treeColor")
+            .replace("#", ""),
+          16
+        ),
         initialLength: 45,
         initialWidth: 3,
         minBranchLengthFactor: 0.675,
@@ -38,22 +39,23 @@ const SelfCover = () => {
         maxBranchRotation: 35,
       }
     );
-    drawing.current.add(tree.current.root);
-    canvas.current.draw(drawing.current);
 
     if (!container.current.querySelector("#selfcover")) {
       container.current.appendChild(document.querySelector("#selfcover"));
     }
 
     return () => {
-      canvas.current.dispose();
+      tree.current.dispose();
     };
   }, []);
 
   useEffect(() => {
-    tree.current.color = getComputedStyle(
-      document.querySelector("#App")
-    ).getPropertyValue("--treeColorInverse");
+    tree.current.color = parseInt(
+      getComputedStyle(document.querySelector("#App"))
+        .getPropertyValue("--treeColorInverse")
+        .replace("#", ""),
+      16
+    );
   }, [theme]);
 
   return (

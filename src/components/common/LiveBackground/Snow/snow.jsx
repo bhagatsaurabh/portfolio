@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import classes from "./snow.module.css";
 import { Snow as SnowC } from "@/utils/snow";
 import usePrevious from "@/hooks/usePrevious";
+import { throttle } from "@/utils";
 
 const Snow = (props) => {
   const prevProps = usePrevious(props);
@@ -23,8 +24,21 @@ const Snow = (props) => {
       ),
     });
 
+    const throttledCB = throttle((entries) => {
+      if (entries[0]) {
+        dimensions.current.width = entries[0].contentRect.width;
+        dimensions.current.height = entries[0].contentRect.height;
+        canvasEl.current.width = dimensions.current.width;
+        canvasEl.current.height = dimensions.current.height;
+        snow.current?.resize(dimensions.current);
+      }
+    }, 150);
+    const observer = new ResizeObserver(throttledCB);
+    observer.observe(container.current);
+
     return () => {
       snow.current && clearInterval(snow.current.snowGeneratorHandle);
+      observer.disconnect();
     };
   }, []);
 
