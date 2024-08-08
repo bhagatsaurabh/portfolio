@@ -78,6 +78,10 @@ export class Snow {
   setColor() {
     this.snow.forEach((flake) => (flake.color = this.state.color));
   }
+  resize() {
+    // Re-compute dimension dependent states
+    this.state.startX = this.canvas.width + this.config.offset;
+  }
   generateSnowFlakes(snow) {
     snow.add(
       new SnowFlake(

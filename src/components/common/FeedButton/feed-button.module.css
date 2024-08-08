@@ -7,7 +7,6 @@
   border: 1px solid var(--text-0);
   transition: border var(--theme-transition-duration) linear,
     opacity 0.2s linear;
-  /* padding: 0.25rem 1rem; */
   padding: var(--padding);
   position: relative;
   overflow: hidden;
