@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Line2, LineGeometry, LineMaterial } from "three/examples/jsm/Addons";
 import { degToRad, radToDeg } from "three/src/math/MathUtils";
 
 import { denormalize, normalize, quadraticEase, rand } from "./graphics";
@@ -39,13 +40,19 @@ export class TreeWGL {
     this.setColor(this.root.children[0]);
   }
 
-  constructor(selector, { width, height }, pos, config, onComplete = () => {}) {
+  constructor(
+    selector,
+    { width, height },
+    getPos,
+    config,
+    onComplete = () => {}
+  ) {
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     this.renderer.setSize(width, height);
     document.querySelector(selector).appendChild(this.renderer.domElement);
 
     this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
-    this.camera.position.set(0, 0, (width / 3.464) * 2);
+    this.camera.position.set(0, 0, (height / 3.464) * 3);
     this.camera.lookAt(0, 0, 0);
 
     this.scene = new THREE.Scene();
@@ -54,21 +61,26 @@ export class TreeWGL {
 
     this.config = { ...this.config, ...config };
     this.onComplete = onComplete;
-    this.setup(pos);
+    this.getPos = getPos;
+    this.setup(width, height);
   }
 
   resize({ width, height }) {
     this.renderer.setSize(width, height);
-    this.camera.position.set(0, 0, (width / 3.464) * 2);
+    this.camera.position.set(0, 0, (height / 3.464) * 3);
     this.camera.aspect = width / height;
+    const pos = this.getPos(width, height);
+    pos.y -= this.config.initialLength;
+    this.root.position.set(pos.x, pos.y);
     this.camera.updateProjectionMatrix();
   }
   dispose() {
     this.scene.clear();
     this.renderer.dispose();
   }
-  setup(pos) {
+  setup(width, height) {
     this.root = new THREE.Group();
+    const pos = this.getPos(width, height);
     this.root.position.set(pos.x, pos.y - this.config.initialLength, 0);
     this.root.length = this.config.initialLength;
 
@@ -94,14 +106,18 @@ export class TreeWGL {
         this.config.maxBranchLengthFactor
       );
 
-    const geometry = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, branchLength, 0),
-    ]);
-    const branch = new THREE.Line(
+    const geometry = new LineGeometry();
+    geometry.setPositions([0, 0, 0, 0, branchLength, 0]);
+    const branch = new Line2(
       geometry,
-      new THREE.LineBasicMaterial({ color: this.state.color, linewidth: width })
+      new LineMaterial({
+        color: this.state.color,
+        linewidth: width,
+      })
     );
+    branch.computeLineDistances();
+    branch.scale.set(1, 1, 1);
+
     branch.position.set(0, parent.length, 0);
     branch.length = branchLength;
 

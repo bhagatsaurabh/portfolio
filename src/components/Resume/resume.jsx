@@ -5,7 +5,7 @@ import styles from "./resume.module.css";
 const Resume = () => {
   useEffect(() => {
     const adobeDCView = new window.AdobeDC.View({
-      clientId: "9ac9ff3507f9407fa6dc3f4d2bee9a4a",
+      clientId: import.meta.env.VITE_ADOBE_PDF_EMBED_APIKEY,
       divId: "adobe-dc-view",
     });
     adobeDCView.previewFile(
