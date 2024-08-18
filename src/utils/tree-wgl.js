@@ -320,7 +320,7 @@ export class TreeWGL {
         return;
     }
 
-    if (Math.abs(this.targetX - this.camera.position.x) > 2) {
+    /* if (Math.abs(this.targetX - this.camera.position.x) > 2) {
       this.camera.position.lerp(
         new THREE.Vector3(
           this.targetX,
@@ -332,6 +332,6 @@ export class TreeWGL {
     } else {
       if (this.targetX > 0) this.targetX = 0;
       else this.targetX = 800;
-    }
+    } */
   }
 }
