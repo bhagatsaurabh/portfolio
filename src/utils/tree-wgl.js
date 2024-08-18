@@ -13,6 +13,8 @@ export class TreeWGL {
     branchWidthFactor: 0.7,
     minBranchRotation: 5,
     maxBranchRotation: 35,
+    xBranchRotation: 40,
+    yBranchRotation: 40,
     stormDuration: 350,
     steps: 100,
     preStormStepDelta: 9,
@@ -52,12 +54,13 @@ export class TreeWGL {
     document.querySelector(selector).appendChild(this.renderer.domElement);
 
     this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
-    this.camera.position.set(0, 0, (height / 3.464) * 3);
+    this.camera.position.set(0, 200, (height / 3.464) * 3);
     this.camera.lookAt(0, 0, 0);
+    this.camera.rotateX(0.102);
 
     this.scene = new THREE.Scene();
 
-    this.renderer.setAnimationLoop(() => this.update());
+    this.renderer.setAnimationLoop((time) => this.update(time));
 
     this.config = { ...this.config, ...config };
     this.onComplete = onComplete;
@@ -67,7 +70,7 @@ export class TreeWGL {
 
   resize({ width, height }) {
     this.renderer.setSize(width, height);
-    this.camera.position.set(0, 0, (height / 3.464) * 3);
+    this.camera.position.set(0, 200, (height / 3.464) * 3);
     this.camera.aspect = width / height;
     const pos = this.getPos(width, height);
     pos.y -= this.config.initialLength;
@@ -85,9 +88,8 @@ export class TreeWGL {
     this.root.length = this.config.initialLength;
 
     this.generateBranches(this.config.initialWidth, this.root);
-
-    this.branchRotate(this.root.children[0]);
     this.state.maxDepth = this.getDepth(this.root.children[0]);
+    this.branchRotate(this.root.children[0], this.state.maxDepth);
     this.assignTargetRotations(
       this.root.children[0],
       1,
@@ -139,25 +141,40 @@ export class TreeWGL {
     if (lDepth > rDepth) return lDepth + 1;
     else return rDepth + 1;
   }
-  branchRotate(root) {
+  branchRotate(root, depth) {
     if (!root.children || root.children.length < 2) return;
 
-    let rotation = -rand(
+    const xRot = denormalize(
+      1 - normalize(depth, 0, this.state.maxDepth),
+      0,
+      this.config.xBranchRotation
+    );
+    const yRot = denormalize(
+      1 - normalize(depth, 0, this.state.maxDepth),
+      0,
+      this.config.yBranchRotation
+    );
+    let zRot = -rand(
       this.config.minBranchRotation,
       this.config.maxBranchRotation
     );
-    root.children[0].rotateZ(degToRad(rotation));
-    root.children[0].originalRotation = rotation;
-
-    rotation = rand(
-      this.config.minBranchRotation,
-      this.config.maxBranchRotation
+    root.children[0].rotation.set(
+      degToRad(rand(-xRot, xRot)),
+      degToRad(rand(-yRot, yRot)),
+      degToRad(zRot)
     );
-    root.children[1].rotateZ(degToRad(rotation));
-    root.children[1].originalRotation = rotation;
+    root.children[0].originalRotation = zRot;
 
-    this.branchRotate(root.children[0]);
-    this.branchRotate(root.children[1]);
+    zRot = rand(this.config.minBranchRotation, this.config.maxBranchRotation);
+    root.children[1].rotation.set(
+      degToRad(rand(-xRot, xRot)),
+      degToRad(rand(-yRot, yRot)),
+      degToRad(zRot)
+    );
+    root.children[1].originalRotation = zRot;
+
+    this.branchRotate(root.children[0], depth - 1);
+    this.branchRotate(root.children[1], depth - 1);
   }
   assignTargetRotations(root, depth, value) {
     if (!root.children || root.children.length < 2) return;
@@ -194,8 +211,8 @@ export class TreeWGL {
   sway(root) {
     if (!root.children || root.children.length < 2) return;
     root.children[0].rotation.set(
-      0,
-      0,
+      root.children[0].rotation.x,
+      root.children[0].rotation.y,
       degToRad(
         quadraticEase(
           this.state.step,
@@ -206,8 +223,8 @@ export class TreeWGL {
       )
     );
     root.children[1].rotation.set(
-      0,
-      0,
+      root.children[1].rotation.x,
+      root.children[1].rotation.y,
       degToRad(
         quadraticEase(
           this.state.step,
@@ -230,7 +247,8 @@ export class TreeWGL {
     this.onComplete();
   }
 
-  update() {
+  targetX = 800;
+  update(_time) {
     this.renderer.render(this.scene, this.camera);
     switch (this.state.animation) {
       case "idle": {
@@ -300,6 +318,20 @@ export class TreeWGL {
       }
       default:
         return;
+    }
+
+    if (Math.abs(this.targetX - this.camera.position.x) > 2) {
+      this.camera.position.lerp(
+        new THREE.Vector3(
+          this.targetX,
+          this.camera.position.y,
+          this.camera.position.z
+        ),
+        0.01
+      );
+    } else {
+      if (this.targetX > 0) this.targetX = 0;
+      else this.targetX = 800;
     }
   }
 }
