@@ -19,10 +19,7 @@ const SelfCover = () => {
     tree.current = new TreeWGL(
       "#selfcover",
       dimensions.current,
-      {
-        x: (dimensions.current.width / 2) * 0.45,
-        y: -dimensions.current.height / 2,
-      },
+      (width, height) => ({ x: (width / 2) * 0.45, y: -height / 2 }),
       {
         color: parseInt(
           getComputedStyle(document.querySelector("#App"))
@@ -30,10 +27,10 @@ const SelfCover = () => {
             .replace("#", ""),
           16
         ),
-        initialLength: 45,
+        initialLength: 75,
         initialWidth: 3,
-        minBranchLengthFactor: 0.675,
-        maxBranchLengthFactor: 0.75,
+        minBranchLengthFactor: 0.66,
+        maxBranchLengthFactor: 0.76,
         branchWidthFactor: 0.7,
         minBranchRotation: 5,
         maxBranchRotation: 35,

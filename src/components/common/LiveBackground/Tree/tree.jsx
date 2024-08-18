@@ -20,10 +20,7 @@ const Tree = (props) => {
     tree.current = new TreeWGL(
       "#landscape",
       dimensions.current,
-      {
-        x: (dimensions.current.width / 2) * 0.8,
-        y: -dimensions.current.height / 2,
-      },
+      (width, height) => ({ x: (width / 2) * 0.8, y: -height / 2 }),
       {
         color: parseInt(
           getComputedStyle(document.querySelector("#App"))
@@ -31,11 +28,11 @@ const Tree = (props) => {
             .replace("#", ""),
           16
         ),
-        initialLength: 60,
+        initialLength: 70,
         initialWidth: 3,
-        minBranchLengthFactor: 0.675,
-        maxBranchLengthFactor: 0.75,
-        branchWidthFactor: 0.7,
+        minBranchLengthFactor: 0.75,
+        maxBranchLengthFactor: 0.85,
+        branchWidthFactor: 0.8,
         minBranchRotation: 5,
         maxBranchRotation: 35,
       },
