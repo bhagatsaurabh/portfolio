@@ -1,5 +1,6 @@
 import { createRef, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import * as THREE from "three";
 import PropTypes from "prop-types";
 
 import styles from "./self-cover.module.css";
@@ -16,10 +17,25 @@ const SelfCover = () => {
     dimensions.current.width = container.current.clientWidth;
     dimensions.current.height = container.current.clientHeight;
 
+    const width = dimensions.current.width;
+    const height = dimensions.current.height;
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(width, height);
+    document.querySelector("#selfcover").appendChild(renderer.domElement);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+    camera.position.set(0, 200, (height / 3.464) * 3);
+    camera.lookAt(0, 0, 0);
+    camera.rotateX(0.102);
+    const scene = new THREE.Scene();
+    const update = (time) => {
+      renderer.render(scene, camera);
+      tree.current.update(time);
+    };
+    renderer.setAnimationLoop((time) => update(time));
+
     tree.current = new TreeWGL(
-      "#selfcover",
+      scene,
       dimensions.current,
-      (width, height) => ({ x: (width / 2) * 0.45, y: -height / 2 }),
       {
         color: parseInt(
           getComputedStyle(document.querySelector("#App"))
@@ -34,7 +50,8 @@ const SelfCover = () => {
         branchWidthFactor: 0.7,
         minBranchRotation: 5,
         maxBranchRotation: 35,
-      }
+      },
+      (width, height) => ({ x: (width / 2) * 0.45, y: -height / 2, z: 0 })
     );
 
     if (!container.current.querySelector("#selfcover")) {
@@ -42,7 +59,8 @@ const SelfCover = () => {
     }
 
     return () => {
-      tree.current.dispose();
+      scene.clear();
+      renderer.dispose();
     };
   }, []);
 
