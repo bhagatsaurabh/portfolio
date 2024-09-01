@@ -152,6 +152,7 @@ const App = () => {
             theme={theme}
             customStyle={{ zIndex: 1 }}
             windDirection={wind}
+            routeOrder={routeOrder[location.pathname]}
             blur={route?.globalBlur}
             onComplete={() => setWind(null)}
           />

@@ -11,10 +11,10 @@ export class TreeWGL {
     minBranchLengthFactor: 0.75,
     maxBranchLengthFactor: 0.8,
     branchWidthFactor: 0.7,
-    minBranchRotation: 5,
-    maxBranchRotation: 35,
-    xBranchRotation: 40,
-    yBranchRotation: 40,
+    zMinBranchRotation: 5,
+    zMaxBranchRotation: 35,
+    xBranchRotation: 30,
+    yBranchRotation: 30,
     stormDuration: 350,
     steps: 100,
     preStormStepDelta: 9,
@@ -22,6 +22,9 @@ export class TreeWGL {
     postStormStepDelta: 1,
     initialLength: 75,
     initialWidth: 5,
+    opacity: 1,
+    opacityNearBound: 0,
+    opacityFarBound: -500,
   };
   state = {
     animation: "idle",
@@ -43,48 +46,49 @@ export class TreeWGL {
   }
 
   constructor(
-    selector,
+    scene,
     { width, height },
-    getPos,
     config,
+    getPos = () => ({ x: 0, y: 0, z: 0 }),
     onComplete = () => {}
   ) {
-    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    this.renderer.setSize(width, height);
-    document.querySelector(selector).appendChild(this.renderer.domElement);
-
-    this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
-    this.camera.position.set(0, 200, (height / 3.464) * 3);
-    this.camera.lookAt(0, 0, 0);
-    this.camera.rotateX(0.102);
-
-    this.scene = new THREE.Scene();
-
-    this.renderer.setAnimationLoop((time) => this.update(time));
-
     this.config = { ...this.config, ...config };
-    this.onComplete = onComplete;
+    this.scene = scene;
     this.getPos = getPos;
+    this.onComplete = onComplete;
     this.setup(width, height);
   }
 
   resize({ width, height }) {
-    this.renderer.setSize(width, height);
-    this.camera.position.set(0, 200, (height / 3.464) * 3);
-    this.camera.aspect = width / height;
     const pos = this.getPos(width, height);
     pos.y -= this.config.initialLength;
-    this.root.position.set(pos.x, pos.y);
-    this.camera.updateProjectionMatrix();
-  }
-  dispose() {
-    this.scene.clear();
-    this.renderer.dispose();
+    this.root.position.set(pos.x, pos.y, pos.z);
+    this.config.opacity = denormalize(
+      1 -
+        normalize(
+          pos.z,
+          this.config.opacityNearBound,
+          this.config.opacityFarBound
+        ),
+      0.35,
+      1
+    );
+    this.setOpacity(this.root.children[0]);
   }
   setup(width, height) {
     this.root = new THREE.Group();
     const pos = this.getPos(width, height);
-    this.root.position.set(pos.x, pos.y - this.config.initialLength, 0);
+    this.config.opacity = denormalize(
+      1 -
+        normalize(
+          pos.z,
+          this.config.opacityNearBound,
+          this.config.opacityFarBound
+        ),
+      0.35,
+      1
+    );
+    this.root.position.set(pos.x, pos.y - this.config.initialLength, pos.z);
     this.root.length = this.config.initialLength;
 
     this.generateBranches(this.config.initialWidth, this.root);
@@ -115,6 +119,7 @@ export class TreeWGL {
       new LineMaterial({
         color: this.state.color,
         linewidth: width,
+        opacity: this.config.opacity,
       })
     );
     branch.computeLineDistances();
@@ -144,31 +149,41 @@ export class TreeWGL {
   branchRotate(root, depth) {
     if (!root.children || root.children.length < 2) return;
 
-    const xRot = denormalize(
+    let xRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
       this.config.xBranchRotation
     );
-    const yRot = denormalize(
+    let yRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
       this.config.yBranchRotation
     );
     let zRot = -rand(
-      this.config.minBranchRotation,
-      this.config.maxBranchRotation
+      this.config.zMinBranchRotation,
+      this.config.zMaxBranchRotation
     );
     root.children[0].rotation.set(
-      degToRad(rand(-xRot, xRot)),
-      degToRad(rand(-yRot, yRot)),
+      degToRad(rand(-xRot, xRot) * 1.5),
+      degToRad(rand(-yRot, yRot) * 1.5),
       degToRad(zRot)
     );
     root.children[0].originalRotation = zRot;
 
-    zRot = rand(this.config.minBranchRotation, this.config.maxBranchRotation);
+    xRot = denormalize(
+      1 - normalize(depth, 0, this.state.maxDepth),
+      0,
+      this.config.xBranchRotation
+    );
+    yRot = denormalize(
+      1 - normalize(depth, 0, this.state.maxDepth),
+      0,
+      this.config.yBranchRotation
+    );
+    zRot = rand(this.config.zMinBranchRotation, this.config.zMaxBranchRotation);
     root.children[1].rotation.set(
-      degToRad(rand(-xRot, xRot)),
-      degToRad(rand(-yRot, yRot)),
+      degToRad(rand(-xRot, xRot) * 1.5),
+      degToRad(rand(-yRot, yRot) * 1.5),
       degToRad(zRot)
     );
     root.children[1].originalRotation = zRot;
@@ -207,6 +222,12 @@ export class TreeWGL {
     root.material.color = new THREE.Color(this.state.color);
     root.material.needsUpdate = true;
     root.children.forEach((child) => this.setColor(child));
+  }
+  setOpacity(root) {
+    if (!root) return;
+    root.material.opacity = this.config.opacity;
+    root.material.needsUpdate = true;
+    root.children.forEach((child) => this.setOpacity(child));
   }
   sway(root) {
     if (!root.children || root.children.length < 2) return;
@@ -247,9 +268,7 @@ export class TreeWGL {
     this.onComplete();
   }
 
-  targetX = 800;
   update(_time) {
-    this.renderer.render(this.scene, this.camera);
     switch (this.state.animation) {
       case "idle": {
         this.sway(this.root.children[0]);
@@ -319,19 +338,5 @@ export class TreeWGL {
       default:
         return;
     }
-
-    /* if (Math.abs(this.targetX - this.camera.position.x) > 2) {
-      this.camera.position.lerp(
-        new THREE.Vector3(
-          this.targetX,
-          this.camera.position.y,
-          this.camera.position.z
-        ),
-        0.01
-      );
-    } else {
-      if (this.targetX > 0) this.targetX = 0;
-      else this.targetX = 800;
-    } */
   }
 }
