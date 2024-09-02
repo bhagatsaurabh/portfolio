@@ -93,6 +93,8 @@
   font-size: 0.75rem;
   color: var(--text-3);
   transition: color var(--theme-transition-duration) linear;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 .MeContainer {
   text-align: center;

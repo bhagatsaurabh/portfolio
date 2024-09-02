@@ -2,7 +2,7 @@ import { createRef, useEffect, useRef } from "react";
 import * as THREE from "three";
 import PropTypes from "prop-types";
 
-import classes from "./tree.module.css";
+import classes from "./trees.module.css";
 import { TreeWGL } from "@/utils/tree-wgl";
 import { throttle } from "@/utils";
 import usePrevious from "@/hooks/usePrevious";
@@ -16,6 +16,9 @@ const Tree = (props) => {
   const container = createRef();
   const cameraRef = useRef(null);
   const targetX = useRef(0);
+  const mat = useRef(null);
+  const tex = useRef(null);
+  const texInv = useRef(null);
 
   useEffect(() => {
     dimensions.current.width = container.current.clientWidth;
@@ -31,12 +34,12 @@ const Tree = (props) => {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
     document.querySelector("#landscape").appendChild(renderer.domElement);
-    const camera = new THREE.PerspectiveCamera(60, width / height, 1, 2000);
+    const camera = new THREE.PerspectiveCamera(60, width / height, 1, 2500);
     cameraRef.current = camera;
-    camera.position.set(0, 0, (height / 3.464) * 3);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(0, -height / 2, (height / 3.464) * 3);
+    camera.lookAt(0, -height / 2, 0);
+    camera.setViewOffset(width, height, 0, -height / 2, width, height);
     camera.position.setX(targetX.current);
-    // camera.rotateX(-0.102);
     const scene = new THREE.Scene();
 
     const update = (time) => {
@@ -50,7 +53,7 @@ const Tree = (props) => {
             camera.position.y,
             camera.position.z
           ),
-          0.025
+          0.04
         );
       }
     };
@@ -79,7 +82,27 @@ const Tree = (props) => {
         onComplete
       )
     );
-    for (let i = 0; i < 50; i += 1) {
+
+    const map = new THREE.TextureLoader().load("./sprites/me-under-tree.png");
+    const mapInv = new THREE.TextureLoader().load(
+      "./sprites/me-under-tree-inv.png"
+    );
+    tex.current = map;
+    texInv.current = mapInv;
+    const material = new THREE.SpriteMaterial({ map });
+    mat.current = material;
+    material.map = props.theme === "Light" ? map : mapInv;
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(30 * 1.6879, 30, 1);
+    sprite.position.set((width / 2) * 0.8 + 26, -height / 2 + 15, 0);
+    scene.add(sprite);
+
+    const matchMedia = window.matchMedia("(min-width: 768px)");
+    let noOfTrees = 25;
+    if (matchMedia.matches) {
+      noOfTrees = 50;
+    }
+    for (let i = 0; i < noOfTrees; i += 1) {
       trees.current.push(
         new TreeWGL(
           scene,
@@ -91,20 +114,20 @@ const Tree = (props) => {
                 .replace("#", ""),
               16
             ),
-            initialLength: 35,
-            initialWidth: 2,
+            initialLength: rand(25, 40),
+            initialWidth: rand(1, 2),
             minBranchLengthFactor: 0.75,
             maxBranchLengthFactor: 0.85,
             branchWidthFactor: 0.8,
             minBranchRotation: 5,
             maxBranchRotation: 35,
             opacityNearBound: 0,
-            opacityFarBound: -500,
+            opacityFarBound: -1000,
           },
           (width, height) => ({
-            x: (width / 2) * rand(-1, 5),
+            x: (width / 2) * rand(-3, 3),
             y: -height / 2,
-            z: rand(0, -500),
+            z: rand(0, -1000),
           })
         )
       );
@@ -118,7 +141,7 @@ const Tree = (props) => {
         renderer.setSize(width, height);
         camera.position.set(
           denormalize(1 - normalize(routeOrder, 0, 4), 0, width * 0.8),
-          0,
+          -height / 2,
           (height / 3.464) * 3
         );
         camera.aspect = width / height;
@@ -152,6 +175,7 @@ const Tree = (props) => {
       );
     }
     if (props.theme !== prevProps?.theme) {
+      mat.current.map = props.theme === "Light" ? tex.current : texInv.current;
       trees.current.forEach(
         (tree) =>
           (tree.color = parseInt(
