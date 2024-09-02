@@ -49,7 +49,7 @@ export const routes = [
     element: <About />,
     nodeRef: createRef(),
     component: About,
-    globalBlur: true,
+    globalBlur: false,
   },
 ];
 
