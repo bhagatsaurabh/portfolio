@@ -88,6 +88,28 @@
   margin-right: 0.5rem;
 }
 
+.Titles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  opacity: 0.3;
+}
+.Title {
+  font-weight: lighter;
+  position: absolute;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  margin: 1rem 0 0 0;
+  transform: translateY(calc(-100% - 1rem)) rotateZ(180deg);
+  transition: transform var(--theme-transition-duration)
+    cubic-bezier(0.33, 0.03, 0.35, 0.97);
+  user-select: none;
+}
+.Title.active {
+  transform: translateY(0) rotateZ(180deg);
+}
+
 @keyframes slidein {
   0% {
     transform: translateY(-150%);

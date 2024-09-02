@@ -15,7 +15,7 @@ export class TreeWGL {
     zMaxBranchRotation: 35,
     xBranchRotation: 30,
     yBranchRotation: 30,
-    stormDuration: 350,
+    stormDuration: 450,
     steps: 100,
     preStormStepDelta: 9,
     stormStepDelta: 40,
