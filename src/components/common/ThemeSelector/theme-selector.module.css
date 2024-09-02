@@ -16,6 +16,7 @@ button.theme-button {
   opacity: 0;
   transition: opacity var(--theme-transition-duration) linear,
     transform var(--theme-transition-duration) linear;
+  width: 2rem !important;
 }
 
 img.theme-icon:first-child {
@@ -30,4 +31,10 @@ img.theme-icon:not(:first-child) {
 .theme-icon.active {
   opacity: 1;
   transform: rotateZ(360deg);
+}
+
+@media (min-width: 768px) {
+  .theme-icon {
+    width: 1.5rem !important;
+  }
 }

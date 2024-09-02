@@ -24,7 +24,7 @@ export class TreeWGL {
     initialWidth: 5,
     opacity: 1,
     opacityNearBound: 0,
-    opacityFarBound: -500,
+    opacityFarBound: -1000,
   };
   state = {
     animation: "idle",
@@ -43,6 +43,7 @@ export class TreeWGL {
   set color(c) {
     this.state.color = c;
     this.setColor(this.root.children[0]);
+    this.setOpacity(this.root.children[0]);
   }
 
   constructor(
