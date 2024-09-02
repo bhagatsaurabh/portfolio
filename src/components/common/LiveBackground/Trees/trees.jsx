@@ -7,6 +7,7 @@ import { TreeWGL } from "@/utils/tree-wgl";
 import { throttle } from "@/utils";
 import usePrevious from "@/hooks/usePrevious";
 import { denormalize, normalize, rand } from "@/utils/graphics";
+import { degToRad } from "three/src/math/MathUtils";
 
 const Tree = (props) => {
   const { onComplete, routeOrder } = props;
@@ -16,6 +17,7 @@ const Tree = (props) => {
   const container = createRef();
   const cameraRef = useRef(null);
   const targetX = useRef(0);
+  const targetRY = useRef(0);
   const mat = useRef(null);
   const tex = useRef(null);
   const texInv = useRef(null);
@@ -27,6 +29,11 @@ const Tree = (props) => {
       1 - normalize(routeOrder, 0, 4),
       0,
       dimensions.current.width * 0.8
+    );
+    targetRY.current = denormalize(
+      1 - normalize(routeOrder, 0, 4),
+      -degToRad(5),
+      0
     );
 
     const width = dimensions.current.width;
@@ -56,6 +63,14 @@ const Tree = (props) => {
           0.04
         );
       }
+
+      camera.quaternion.slerp(
+        new THREE.Quaternion().setFromAxisAngle(
+          new THREE.Vector3(0, 1, 0),
+          targetRY.current
+        ),
+        0.04
+      );
     };
     renderer.setAnimationLoop((time) => update(time));
 
@@ -172,6 +187,11 @@ const Tree = (props) => {
         1 - normalize(routeOrder, 0, 4),
         0,
         dimensions.current.width * 0.8
+      );
+      targetRY.current = denormalize(
+        1 - normalize(routeOrder, 0, 4),
+        -degToRad(5),
+        0
       );
     }
     if (props.theme !== prevProps?.theme) {

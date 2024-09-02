@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import styles from "./navigator.module.css";
@@ -10,6 +11,7 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
   const sectionTitleListEl = useRef(null);
   const switchEl = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     let handle = -1;
@@ -66,6 +68,19 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
           ))}
         </div>
       </nav>
+      <div className={styles.Titles}>
+        {checkpoints.map((checkpoint) => (
+          <h1
+            key={checkpoint.name}
+            className={[
+              styles.Title,
+              checkpoint.path === location.pathname ? styles.active : "",
+            ].join(" ")}
+          >
+            {checkpoint.path === "/" ? "" : checkpoint.title}
+          </h1>
+        ))}
+      </div>
       <div className={styles.NavigationButtons}>
         <button
           onClick={() => handleClick(0, -1)}
