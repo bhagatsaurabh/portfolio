@@ -15,7 +15,7 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(cleanup, (state) => {
       Object.values(state).forEach((objectUrl) =>
-        URL.revokeObjectURL(objectUrl)
+        URL.revokeObjectURL(objectUrl),
       );
       return {};
     })

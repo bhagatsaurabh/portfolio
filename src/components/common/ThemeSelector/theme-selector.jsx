@@ -19,7 +19,7 @@ const ThemeSelector = () => {
 
   const handleClick = () => {
     dispatch(
-      setTheme({ theme: theme === themes.LIGHT ? themes.DARK : themes.LIGHT })
+      setTheme({ theme: theme === themes.LIGHT ? themes.DARK : themes.LIGHT }),
     );
   };
 

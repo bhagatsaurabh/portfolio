@@ -20,7 +20,7 @@ const Snow = (props) => {
     canvasEl.current.height = container.current.clientHeight;
     snow.current = new SnowC(canvasEl.current, {
       color: getComputedStyle(document.querySelector("#App")).getPropertyValue(
-        "--snowColor"
+        "--snowColor",
       ),
     });
 
@@ -52,7 +52,7 @@ const Snow = (props) => {
     }
     if (props.theme !== prevProps?.theme) {
       snow.current.color = getComputedStyle(
-        document.querySelector("#App")
+        document.querySelector("#App"),
       ).getPropertyValue("--snowColor");
     }
   }, [props]);

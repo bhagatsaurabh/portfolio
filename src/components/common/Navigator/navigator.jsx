@@ -50,7 +50,7 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
         <div
           ref={sectionTitleListEl}
           className={[styles.SectionTitleList, isOpen ? styles.open : ""].join(
-            " "
+            " ",
           )}
         >
           {checkpoints.map((checkpoint, idx) => (

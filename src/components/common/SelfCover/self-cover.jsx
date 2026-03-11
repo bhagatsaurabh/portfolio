@@ -41,7 +41,7 @@ const SelfCover = () => {
           getComputedStyle(document.querySelector("#App"))
             .getPropertyValue("--treeColor")
             .replace("#", ""),
-          16
+          16,
         ),
         initialLength: 75,
         initialWidth: 3,
@@ -51,7 +51,7 @@ const SelfCover = () => {
         minBranchRotation: 5,
         maxBranchRotation: 35,
       },
-      (width, height) => ({ x: (width / 2) * 0.45, y: -height / 2, z: 0 })
+      (width, height) => ({ x: (width / 2) * 0.45, y: -height / 2, z: 0 }),
     );
 
     if (!container.current.querySelector("#selfcover")) {
@@ -69,7 +69,7 @@ const SelfCover = () => {
       getComputedStyle(document.querySelector("#App"))
         .getPropertyValue("--treeColorInverse")
         .replace("#", ""),
-      16
+      16,
     );
   }, [theme]);
 

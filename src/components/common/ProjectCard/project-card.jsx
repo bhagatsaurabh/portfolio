@@ -10,7 +10,7 @@ import SelfCover from "../SelfCover/self-cover";
 
 const ProjectCard = ({ project }) => {
   const mediaSource = useSelector(
-    (state) => state.preloader[project.mediaLink]
+    (state) => state.preloader[project.mediaLink],
   );
   const dispatch = useDispatch();
 

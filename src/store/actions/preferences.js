@@ -12,7 +12,7 @@ const loadPreferences = createAsyncThunk(
     const prefs = JSON.parse(localStorage.getItem("preferences")) ?? {};
     await dispatch(setTheme({ theme: sanitizePrefs(prefs).theme, init: true }));
     return sanitizePrefs(prefs);
-  }
+  },
 );
 
 export { loadPreferences, setTheme };

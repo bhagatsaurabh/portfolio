@@ -24,7 +24,7 @@ const preload = createAsyncThunk(
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 );
 
 export { preload, cleanup, lock };

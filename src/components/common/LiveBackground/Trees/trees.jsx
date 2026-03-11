@@ -28,12 +28,12 @@ const Tree = (props) => {
     targetX.current = denormalize(
       1 - normalize(routeOrder, 0, 4),
       0,
-      dimensions.current.width * 0.8
+      dimensions.current.width * 0.8,
     );
     targetRY.current = denormalize(
       1 - normalize(routeOrder, 0, 4),
       -degToRad(5),
-      0
+      0,
     );
 
     const width = dimensions.current.width;
@@ -58,18 +58,18 @@ const Tree = (props) => {
           new THREE.Vector3(
             targetX.current,
             camera.position.y,
-            camera.position.z
+            camera.position.z,
           ),
-          0.04
+          0.04,
         );
       }
 
       camera.quaternion.slerp(
         new THREE.Quaternion().setFromAxisAngle(
           new THREE.Vector3(0, 1, 0),
-          targetRY.current
+          targetRY.current,
         ),
-        0.04
+        0.04,
       );
     };
     renderer.setAnimationLoop((time) => update(time));
@@ -83,7 +83,7 @@ const Tree = (props) => {
             getComputedStyle(document.querySelector("#App"))
               .getPropertyValue("--treeColor")
               .replace("#", ""),
-            16
+            16,
           ),
           initialLength: 70,
           initialWidth: 3,
@@ -94,13 +94,13 @@ const Tree = (props) => {
           maxBranchRotation: 35,
         },
         (width, height) => ({ x: (width / 2) * 0.8, y: -height / 2, z: 0 }),
-        onComplete
-      )
+        onComplete,
+      ),
     );
 
     const map = new THREE.TextureLoader().load("./sprites/me-under-tree.png");
     const mapInv = new THREE.TextureLoader().load(
-      "./sprites/me-under-tree-inv.png"
+      "./sprites/me-under-tree-inv.png",
     );
     tex.current = map;
     texInv.current = mapInv;
@@ -127,7 +127,7 @@ const Tree = (props) => {
               getComputedStyle(document.querySelector("#App"))
                 .getPropertyValue("--treeColor")
                 .replace("#", ""),
-              16
+              16,
             ),
             initialLength: rand(25, 40),
             initialWidth: rand(1, 2),
@@ -143,8 +143,8 @@ const Tree = (props) => {
             x: (width / 2) * rand(-3, 3),
             y: -height / 2,
             z: rand(0, -1000),
-          })
-        )
+          }),
+        ),
       );
     }
 
@@ -157,7 +157,7 @@ const Tree = (props) => {
         camera.position.set(
           denormalize(1 - normalize(routeOrder, 0, 4), 0, width * 0.8),
           -height / 2,
-          (height / 3.464) * 3
+          (height / 3.464) * 3,
         );
         camera.aspect = width / height;
 
@@ -186,12 +186,12 @@ const Tree = (props) => {
       targetX.current = denormalize(
         1 - normalize(routeOrder, 0, 4),
         0,
-        dimensions.current.width * 0.8
+        dimensions.current.width * 0.8,
       );
       targetRY.current = denormalize(
         1 - normalize(routeOrder, 0, 4),
         -degToRad(5),
-        0
+        0,
       );
     }
     if (props.theme !== prevProps?.theme) {
@@ -202,8 +202,8 @@ const Tree = (props) => {
             getComputedStyle(document.querySelector("#App"))
               .getPropertyValue("--treeColor")
               .replace("#", ""),
-            16
-          ))
+            16,
+          )),
       );
     }
   }, [props]);

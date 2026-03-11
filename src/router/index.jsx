@@ -20,4 +20,4 @@ export const router = createBrowserRouter([
   },
 ]);
 
-export * from "./routes";
+export { routes, routeOrder } from "./routes";

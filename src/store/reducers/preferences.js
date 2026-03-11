@@ -20,7 +20,7 @@ const reducer = createReducer(initialState, (builder) => {
       if (Object.values(themes).includes(theme)) {
         const themeClass = getThemeClass(
           theme === themes.SYSTEM ? currSystemTheme() : theme,
-          state.userTheme
+          state.userTheme,
         );
         const docRoot = document.documentElement;
         docRoot.dataset.theme = themeClass;
@@ -33,7 +33,7 @@ const reducer = createReducer(initialState, (builder) => {
           } else {
             docRoot.classList.replace(
               getThemeClass(null, state.userTheme),
-              themeClass
+              themeClass,
             );
           }
         }
@@ -48,7 +48,7 @@ const reducer = createReducer(initialState, (builder) => {
                 state.userTheme === themes.SYSTEM
                   ? currSystemTheme()
                   : state.userTheme,
-            })
+            }),
           );
         }
       }
