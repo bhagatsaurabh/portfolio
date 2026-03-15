@@ -177,12 +177,16 @@ const Tree = (props) => {
   }, []);
 
   useEffect(() => {
+    const windDirection =
+      props.windDirection !== 0 ? props.windDirection < 0 : null;
+    const prevWindDirection =
+      prevProps.windDirection !== 0 ? prevProps.windDirection < 0 : null;
     if (
-      typeof props.windDirection === "boolean" &&
+      windDirection !== null &&
       prevProps &&
-      prevProps.windDirection !== props.windDirection
+      prevWindDirection !== windDirection
     ) {
-      trees.current.forEach((tree) => tree.storm(props.windDirection));
+      trees.current.forEach((tree) => tree.storm(windDirection));
       targetX.current = denormalize(
         1 - normalize(routeOrder, 0, 4),
         0,

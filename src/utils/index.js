@@ -14,9 +14,7 @@ export const getThemeClass = (inTheme, userTheme) => {
   return themeClasses[inTheme === themes.SYSTEM ? currSystemTheme() : inTheme];
 };
 export const sanitizePrefs = (prefs = {}) => {
-  prefs.theme = Object.values(themes).includes(prefs.theme)
-    ? prefs.theme
-    : themes.SYSTEM;
+  prefs.theme = Object.values(themes).includes(prefs.theme) ? prefs.theme : themes.SYSTEM;
   return prefs;
 };
 export const clamp = (value, min, max) =>

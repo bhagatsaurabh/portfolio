@@ -1,0 +1,11 @@
+.Weather {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(0px);
+  transition: filter 0.3s linear;
+  z-index: 1;
+}
+.Weather.blur {
+  filter: blur(3px);
+}

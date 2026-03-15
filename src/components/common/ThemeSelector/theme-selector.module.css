@@ -14,15 +14,16 @@ button.theme-button {
 
 .theme-icon {
   opacity: 0;
-  transition: opacity var(--theme-transition-duration) linear,
+  transition:
+    opacity var(--theme-transition-duration) linear,
     transform var(--theme-transition-duration) linear;
   width: 2rem !important;
 }
 
-img.theme-icon:first-child {
+svg.theme-icon:first-child {
   filter: brightness(0.75);
 }
-img.theme-icon:not(:first-child) {
+svg.theme-icon:not(:first-child) {
   position: absolute;
   left: 0;
   filter: invert(1) brightness(0.75);

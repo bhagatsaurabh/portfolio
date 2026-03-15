@@ -1,101 +1,94 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import styles from "./navigator.module.css";
+import classes from "./navigator.module.css";
 import { clamp } from "@/utils";
 import Icon from "../Icon/icon";
-import { routes } from "@/router";
+import classNames from "classnames";
 
-const Navigator = ({ checkpoints, index, onNavigate }) => {
+const Navigator = ({ routes, activeRoute, onNavigate }) => {
   const sectionTitleListEl = useRef(null);
   const switchEl = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
-    let handle = -1;
+    let handle;
     if (isOpen) {
       handle = setTimeout(() => {
-        sectionTitleListEl.current?.classList.remove(styles.open);
-        switchEl.current?.classList.remove(styles.open);
+        sectionTitleListEl.current?.classList.remove(classes.open);
+        switchEl.current?.classList.remove(classes.open);
         setIsOpen(false);
       }, 4000);
     }
     return () => clearTimeout(handle);
   }, [isOpen]);
 
-  const handleClick = (newIdx, direction) => {
-    if (direction) {
-      const newIdx = clamp(index + direction, 0, routes.length - 1);
-      if (newIdx === index) return;
-      onNavigate(newIdx);
-    } else {
-      newIdx = clamp(newIdx, 0, routes.length - 1);
-      if (newIdx === index) return;
-      onNavigate(newIdx);
+  const handleClick = (newRoute, direction = 0) => {
+    if (!newRoute) {
+      const newRouteOrder = clamp(activeRoute.handle.routeOrder + direction, 0, routes.length - 1);
+      newRoute = routes.find((r) => r.routeOrder === newRouteOrder);
     }
+    if (newRoute.path === activeRoute.path) return;
+    onNavigate(newRoute);
   };
 
   return (
     <>
-      <nav className={styles.Navigator}>
+      <nav className={classes.Navigator}>
         <button
           ref={switchEl}
-          className={[styles.Switch, isOpen ? styles.open : ""].join(" ")}
+          className={classNames(classes.Switch, { [classes.open]: isOpen })}
           onClick={() => setIsOpen(!isOpen)}
         >
           <Icon name="menu" size={1.5} />
         </button>
         <div
           ref={sectionTitleListEl}
-          className={[styles.SectionTitleList, isOpen ? styles.open : ""].join(
-            " ",
-          )}
+          className={classNames(classes.SectionTitleList, { [classes.open]: isOpen })}
         >
-          {checkpoints.map((checkpoint, idx) => (
+          {routes.map((route) => (
             <span
+              key={route.name}
               tabIndex={0}
-              onClick={() => handleClick(idx)}
-              key={checkpoint.name}
-              className={[
-                styles.SectionTitle,
-                idx === index ? styles.titleactive : "",
-              ].join(" ")}
+              onKeyDown={(e) => e.key === "Enter" && handleClick(route)}
+              onClick={() => handleClick(route)}
+              className={classNames(classes.SectionTitle, {
+                [classes.titleactive]: route.handle.routeOrder === activeRoute.handle.routeOrder,
+              })}
             >
-              {checkpoint.title}
+              {route.title}
             </span>
           ))}
         </div>
       </nav>
-      <div className={styles.Titles}>
-        {checkpoints.map((checkpoint) => (
+      <div className={classes.Titles}>
+        {routes.map((route) => (
           <h1
-            key={checkpoint.name}
-            className={[
-              styles.Title,
-              checkpoint.path === location.pathname ? styles.active : "",
-            ].join(" ")}
+            key={route.name}
+            className={classNames(classes.Title, {
+              [classes.active]: route.path === activeRoute.path,
+            })}
           >
-            {checkpoint.path === "/" ? "" : checkpoint.title}
+            {route.path === "/" ? "" : route.title}
           </h1>
         ))}
       </div>
-      <div className={styles.NavigationButtons}>
+      <div className={classes.NavigationButtons}>
         <button
-          onClick={() => handleClick(0, -1)}
-          className={[styles.Left, index === 0 ? styles.hidden : ""].join(" ")}
+          onClick={() => handleClick(null, -1)}
+          className={classNames(classes.Left, {
+            [classes.hidden]: activeRoute.handle.routeOrder === 0,
+          })}
         >
-          <Icon name="leftArrow" />
+          <Icon name="left-arrow" />
         </button>
         <button
-          onClick={() => handleClick(0, 1)}
-          className={[
-            styles.Right,
-            index === routes.length - 1 ? styles.hidden : "",
-          ].join(" ")}
+          onClick={() => handleClick(null, 1)}
+          className={classNames(classes.Right, {
+            [classes.hidden]: activeRoute.handle.routeOrder === routes.length - 1,
+          })}
         >
-          <Icon name="rightArrow" />
+          <Icon name="right-arrow" />
         </button>
       </div>
     </>
@@ -103,8 +96,8 @@ const Navigator = ({ checkpoints, index, onNavigate }) => {
 };
 
 Navigator.propTypes = {
-  index: PropTypes.number,
-  checkpoints: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+  activeRoute: PropTypes.shape({ name: PropTypes.string }),
+  routes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
   onNavigate: PropTypes.func,
 };
 

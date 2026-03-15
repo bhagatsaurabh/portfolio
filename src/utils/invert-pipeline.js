@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 
-export class InvertPipeline extends Phaser.Renderer.WebGL.Pipelines
-  .MultiPipeline {
+export class InvertPipeline extends Phaser.Renderer.WebGL.Pipelines.MultiPipeline {
   constructor(game) {
     super({
       game,

@@ -1,47 +1,34 @@
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
-import styles from "./icon.module.css";
-import * as icons from "@/assets/icons";
+import classes from "./icon.module.css";
 
-const Icon = ({
-  size,
-  adaptive = true,
-  name,
-  className,
-  onClick,
-  focusable,
-}) => {
+const Icon = ({ size, name, className, onClick, focusable, adaptive = true }) => {
   const iSize = size || 1;
-  const icon = icons[name] ?? icons["warning"];
-  const classes = [styles["icon"]];
-  if (adaptive) {
-    classes.push(styles["adaptive"]);
-  }
-  if (className) {
-    classes.push(className);
-  }
   const handleClick = (e) => onClick?.(e);
 
   return (
-    <img
+    <svg
       draggable="false"
+      width={`${iSize}rem`}
+      height={`${iSize}rem`}
+      aria-hidden={!focusable}
+      role={focusable ? "button" : undefined}
       onClick={handleClick}
-      style={{ width: `${iSize}rem` }}
-      src={icon}
-      className={classes.join(" ")}
-      alt={`${name}-icon`}
-      tabIndex={focusable ? 0 : null}
-    />
+      className={classNames(classes.icon, className, { [classes.adaptive]: adaptive })}
+      tabIndex={focusable ? 0 : undefined}
+    >
+      <use href={`/spritesheets/icons.svg#${name}`} />
+    </svg>
   );
 };
 
 Icon.propTypes = {
   size: PropTypes.number,
-  accent: PropTypes.string,
   name: PropTypes.string,
+  adaptive: PropTypes.bool,
   className: PropTypes.string,
   onClick: PropTypes.func,
   focusable: PropTypes.bool,
-  adaptive: PropTypes.bool,
 };
 export default Icon;

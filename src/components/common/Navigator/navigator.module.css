@@ -6,7 +6,9 @@
   width: 50%;
   max-width: 15rem;
   z-index: 100;
-  transition: opacity 0.1s linear, color var(--theme-transition-duration) linear;
+  transition:
+    opacity 0.1s linear,
+    color var(--theme-transition-duration) linear;
   color: var(--text-0);
   cursor: pointer;
   touch-action: none;
@@ -47,7 +49,8 @@
   cursor: pointer;
   color: var(--text-3);
   text-align: center;
-  transition: color var(--theme-transition-duration) linear,
+  transition:
+    color var(--theme-transition-duration) linear,
     font-size 0.3s cubic-bezier(0, 0, 0.4, 1);
   z-index: 1;
   font-size: 1rem;
@@ -66,7 +69,9 @@
   top: 50%;
   transform: translateY(-50%) scale(1);
   opacity: 1;
-  transition: opacity 0.5s linear, background-color 0.15s linear,
+  transition:
+    opacity 0.5s linear,
+    background-color 0.15s linear,
     transform 0.15s ease-out;
   padding: 0.5rem;
   font-size: 0;
@@ -102,8 +107,7 @@
   text-orientation: mixed;
   margin: 1rem 0 0 0;
   transform: translateY(calc(-100% - 1rem)) rotateZ(180deg);
-  transition: transform var(--theme-transition-duration)
-    cubic-bezier(0.33, 0.03, 0.35, 0.97);
+  transition: transform var(--theme-transition-duration) cubic-bezier(0.33, 0.03, 0.35, 0.97);
   user-select: none;
   color: var(--text-0);
 }

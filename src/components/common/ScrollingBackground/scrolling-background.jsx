@@ -1,17 +1,21 @@
 import PropTypes from "prop-types";
 
-import styles from "./scrolling-background.module.css";
+import classes from "./scrolling-background.module.css";
+import classNames from "classnames";
 
-const ScrollingBackground = (props) => {
-  const { position = 0 } = props;
-
-  let classNames = [styles.ScrollingBackground, styles["Position" + position]];
-
-  return <div className={classNames.join(" ")}></div>;
+const ScrollingBackground = ({ activeRoute }) => {
+  return (
+    <div
+      className={classNames(
+        classes.ScrollingBackground,
+        classes[`Position${activeRoute.handle.routeOrder}`],
+      )}
+    />
+  );
 };
 
 ScrollingBackground.propTypes = {
-  position: PropTypes.number,
+  activeRoute: PropTypes.object,
 };
 
 export default ScrollingBackground;

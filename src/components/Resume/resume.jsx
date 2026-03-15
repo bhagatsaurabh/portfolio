@@ -17,17 +17,13 @@ const Resume = () => {
         },
         metaData: { fileName: "Resume_SaurabhBhagat.pdf" },
       },
-      { embedMode: "IN_LINE" }
+      { embedMode: "IN_LINE" },
     );
   }, []);
 
   return (
     <div className={styles.Resume}>
-      <a
-        className={styles.Download}
-        href="/data/Resume_SaurabhBhagat.pdf"
-        download
-      >
+      <a className={styles.Download} href="/data/Resume_SaurabhBhagat.pdf" download>
         <FeedButton icon="download">Download PDF</FeedButton>
       </a>
       <div className={styles.Container}>

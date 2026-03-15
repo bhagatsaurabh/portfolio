@@ -51,7 +51,7 @@ export class TreeWGL {
     { width, height },
     config,
     getPos = () => ({ x: 0, y: 0, z: 0 }),
-    onComplete = () => {}
+    onComplete = () => {},
   ) {
     this.config = { ...this.config, ...config };
     this.scene = scene;
@@ -65,14 +65,9 @@ export class TreeWGL {
     pos.y -= this.config.initialLength;
     this.root.position.set(pos.x, pos.y, pos.z);
     this.config.opacity = denormalize(
-      1 -
-        normalize(
-          pos.z,
-          this.config.opacityNearBound,
-          this.config.opacityFarBound
-        ),
+      1 - normalize(pos.z, this.config.opacityNearBound, this.config.opacityFarBound),
       0.35,
-      1
+      1,
     );
     this.setOpacity(this.root.children[0]);
   }
@@ -80,14 +75,9 @@ export class TreeWGL {
     this.root = new THREE.Group();
     const pos = this.getPos(width, height);
     this.config.opacity = denormalize(
-      1 -
-        normalize(
-          pos.z,
-          this.config.opacityNearBound,
-          this.config.opacityFarBound
-        ),
+      1 - normalize(pos.z, this.config.opacityNearBound, this.config.opacityFarBound),
       0.35,
-      1
+      1,
     );
     this.root.position.set(pos.x, pos.y - this.config.initialLength, pos.z);
     this.root.length = this.config.initialLength;
@@ -98,7 +88,7 @@ export class TreeWGL {
     this.assignTargetRotations(
       this.root.children[0],
       1,
-      rand(this.config.minIdleSway, this.config.maxIdleSway)
+      rand(this.config.minIdleSway, this.config.maxIdleSway),
     );
     this.setColor(this.root.children[0]);
 
@@ -107,11 +97,7 @@ export class TreeWGL {
   generateBranches(width, parent) {
     // Slightly reduced length from parent
     const branchLength =
-      parent.length *
-      rand(
-        this.config.minBranchLengthFactor,
-        this.config.maxBranchLengthFactor
-      );
+      parent.length * rand(this.config.minBranchLengthFactor, this.config.maxBranchLengthFactor);
 
     const geometry = new LineGeometry();
     geometry.setPositions([0, 0, 0, 0, branchLength, 0]);
@@ -121,7 +107,7 @@ export class TreeWGL {
         color: this.state.color,
         linewidth: width,
         opacity: this.config.opacity,
-      })
+      }),
     );
     branch.computeLineDistances();
     branch.scale.set(1, 1, 1);
@@ -153,39 +139,36 @@ export class TreeWGL {
     let xRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
-      this.config.xBranchRotation
+      this.config.xBranchRotation,
     );
     let yRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
-      this.config.yBranchRotation
+      this.config.yBranchRotation,
     );
-    let zRot = -rand(
-      this.config.zMinBranchRotation,
-      this.config.zMaxBranchRotation
-    );
+    let zRot = -rand(this.config.zMinBranchRotation, this.config.zMaxBranchRotation);
     root.children[0].rotation.set(
       degToRad(rand(-xRot, xRot) * 1.5),
       degToRad(rand(-yRot, yRot) * 1.5),
-      degToRad(zRot)
+      degToRad(zRot),
     );
     root.children[0].originalRotation = zRot;
 
     xRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
-      this.config.xBranchRotation
+      this.config.xBranchRotation,
     );
     yRot = denormalize(
       1 - normalize(depth, 0, this.state.maxDepth),
       0,
-      this.config.yBranchRotation
+      this.config.yBranchRotation,
     );
     zRot = rand(this.config.zMinBranchRotation, this.config.zMaxBranchRotation);
     root.children[1].rotation.set(
       degToRad(rand(-xRot, xRot) * 1.5),
       degToRad(rand(-yRot, yRot) * 1.5),
-      degToRad(zRot)
+      degToRad(zRot),
     );
     root.children[1].originalRotation = zRot;
 
@@ -197,22 +180,14 @@ export class TreeWGL {
 
     root.children[0].initialRotation = radToDeg(root.children[0].rotation.z);
     root.children[1].initialRotation = radToDeg(root.children[1].rotation.z);
-    let targetRotation = denormalize(
-      normalize(depth, 0, this.state.maxDepth),
-      0,
-      value
-    );
+    let targetRotation = denormalize(normalize(depth, 0, this.state.maxDepth), 0, value);
 
     if (this.state.direction) {
-      root.children[0].targetRotation =
-        root.children[0].originalRotation + targetRotation;
-      root.children[1].targetRotation =
-        root.children[1].originalRotation + targetRotation;
+      root.children[0].targetRotation = root.children[0].originalRotation + targetRotation;
+      root.children[1].targetRotation = root.children[1].originalRotation + targetRotation;
     } else {
-      root.children[0].targetRotation =
-        root.children[0].originalRotation - targetRotation;
-      root.children[1].targetRotation =
-        root.children[1].originalRotation - targetRotation;
+      root.children[0].targetRotation = root.children[0].originalRotation - targetRotation;
+      root.children[1].targetRotation = root.children[1].originalRotation - targetRotation;
     }
 
     this.assignTargetRotations(root.children[0], depth + 1, value);
@@ -240,9 +215,9 @@ export class TreeWGL {
           this.state.step,
           root.children[0].initialRotation,
           root.children[0].targetRotation - root.children[0].initialRotation,
-          this.config.steps
-        )
-      )
+          this.config.steps,
+        ),
+      ),
     );
     root.children[1].rotation.set(
       root.children[1].rotation.x,
@@ -252,9 +227,9 @@ export class TreeWGL {
           this.state.step,
           root.children[1].initialRotation,
           root.children[1].targetRotation - root.children[1].initialRotation,
-          this.config.steps
-        )
-      )
+          this.config.steps,
+        ),
+      ),
     );
 
     this.sway(root.children[0]);
@@ -282,7 +257,7 @@ export class TreeWGL {
           this.assignTargetRotations(
             this.root.children[0],
             1,
-            rand(this.config.minIdleSway, this.config.maxIdleSway)
+            rand(this.config.minIdleSway, this.config.maxIdleSway),
           );
         }
         break;
@@ -305,8 +280,7 @@ export class TreeWGL {
       }
       case "storm": {
         this.sway(this.root.children[0], this.state, this.config);
-        if (this.state.step < this.config.steps)
-          this.state.step += this.state.stepDelta;
+        if (this.state.step < this.config.steps) this.state.step += this.state.stepDelta;
         else {
           this.state.step = 0;
           this.state.flip = !this.state.flip;
@@ -314,7 +288,7 @@ export class TreeWGL {
             this.root.children[0],
             1,
             this.state.flip ? rand(19.5, 20) : rand(17.5, 18),
-            this.state
+            this.state,
           );
         }
         break;
@@ -330,7 +304,7 @@ export class TreeWGL {
             this.root.children[0],
             1,
             rand(this.config.minIdleSway, this.config.maxIdleSway),
-            this.state
+            this.state,
           );
           this.state.animation = "idle";
         }

@@ -1,11 +1,12 @@
-img.icon {
+svg.icon {
   user-select: none;
-}
-img.adaptive {
-  filter: invert(0);
-  transition: filter var(--theme-transition-duration) linear;
+  transition: color var(--theme-transition-duration) linear;
 }
 
-html[data-theme="dark"] img.icon {
-  filter: invert(1);
+html[data-theme="dark"] svg.icon {
+  color: #ffffff;
+}
+
+svg.icon.adaptive {
+  color: unset;
 }

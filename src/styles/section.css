@@ -1,13 +1,13 @@
 section {
   position: absolute;
   overflow: auto;
-  transition: transform 0.75s cubic-bezier(0.33, 0.03, 0.35, 0.97),
-    opacity 0.8s cubic-bezier(0.33, 0.03, 0.35, 0.97);
   width: 100%;
-  z-index: 2;
-  opacity: 0;
   height: 100%;
+  inset: 0;
   scrollbar-width: none;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 .preload-left {
   transform: translateX(-40%);
@@ -20,7 +20,7 @@ section {
 section::-webkit-scrollbar {
   display: none;
 }
-.section-forward-appear {
+/* .section-forward-appear {
   opacity: 1;
 }
 .section-forward-enter {
@@ -75,3 +75,4 @@ section::-webkit-scrollbar {
   opacity: 0;
   z-index: 0;
 }
+ */

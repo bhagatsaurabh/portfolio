@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "canvas-percept": "^1.0.22",
+    "classnames": "^2.5.1",
     "motion": "^12.35.2",
     "phaser": "^3.90.0",
     "prop-types": "^15.8.1",

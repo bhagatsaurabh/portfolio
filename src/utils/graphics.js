@@ -1,4 +1,8 @@
-export const rand = (min, max) => Math.random() * (max - min) + min;
+export const rand = (min, max) => {
+  const buf = new Uint32Array(1);
+  window.crypto.getRandomValues(buf);
+  return denormalize(buf[0] / (0xffffffff + 1), min, max);
+};
 export const ease = (currProgress, start, distance, steps = 100) => {
   currProgress /= steps / 2;
   if (currProgress < 1) {
@@ -7,24 +11,14 @@ export const ease = (currProgress, start, distance, steps = 100) => {
   currProgress -= 2;
   return (distance / 2) * (Math.pow(currProgress, 3) + 2) + start;
 };
-export const quadraticEase = (
-  currentProgress,
-  start,
-  distance,
-  steps = 100
-) => {
+export const quadraticEase = (currentProgress, start, distance, steps = 100) => {
   currentProgress /= steps / 2;
   if (currentProgress <= 1) {
     return (distance / 2) * currentProgress * currentProgress + start;
   }
   currentProgress--;
-  return (
-    -1 * (distance / 2) * (currentProgress * (currentProgress - 2) - 1) + start
-  );
+  return -1 * (distance / 2) * (currentProgress * (currentProgress - 2) - 1) + start;
 };
-export const normalize = (value, min, max) => {
-  return (value - min) / (max - min);
-};
-export const denormalize = (value, min, max) => {
-  return value * (max - min) + min;
-};
+export const normalize = (value, min, max) => (value - min) / (max - min);
+export const denormalize = (value, min, max) => value * (max - min) + min;
+export const easeInOut = (t) => t * t * (3 - 2 * t);

@@ -1,8 +1,9 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "@/App";
 import { routes } from "./routes";
-import Resume from "@/components/Resume/resume";
+import App from "@/App";
+const Resume = lazy(() => import("@/components/Resume/resume"));
 
 export const router = createBrowserRouter([
   {
@@ -11,13 +12,14 @@ export const router = createBrowserRouter([
     children: routes.map((route) => ({
       index: route.path === "/",
       path: route.path === "/" ? undefined : route.path,
-      element: route.element,
+      Component: route.Component,
+      handle: route.handle,
     })),
   },
   {
     path: "/resume",
-    element: <Resume />,
+    Component: Resume,
   },
 ]);
 
-export { routes, routeOrder } from "./routes";
+export { routes } from "./routes";

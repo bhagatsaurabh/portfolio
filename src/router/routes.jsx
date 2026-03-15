@@ -1,62 +1,60 @@
-import Intro from "@/components/Intro/intro";
-import About from "@/components/About/about";
-import { createRef } from "react";
-import Projects from "@/components/Projects/projects";
-import Skills from "@/components/Skills/skills";
-import Experience from "@/components/Experience/experience";
+import { lazy } from "react";
+
+const Intro = lazy(() => import("@/components/Intro/intro"));
+const About = lazy(() => import("@/components/About/about"));
+const Projects = lazy(() => import("@/components/Projects/projects"));
+const Skills = lazy(() => import("@/components/Skills/skills"));
+const Experience = lazy(() => import("@/components/Experience/experience"));
 
 export const routes = [
   {
     path: "/",
-    name: "Intro",
-    title: "▢",
-    element: <Intro />,
-    nodeRef: createRef(),
-    component: Intro,
-    globalBlur: false,
+    Component: Intro,
+    handle: {
+      name: "Intro",
+      title: "▢",
+      globalBlur: false,
+      routeOrder: 0,
+    },
   },
   {
     path: "/projects",
-    name: "Projects",
-    title: "Projects",
-    element: <Projects />,
-    nodeRef: createRef(),
-    component: Projects,
-    globalBlur: true,
+    Component: Projects,
+    handle: {
+      name: "Projects",
+      title: "Projects",
+      globalBlur: true,
+      routeOrder: 1,
+    },
   },
   {
     path: "/skills",
-    name: "Skills",
-    title: "Skills",
-    element: <Skills />,
-    nodeRef: createRef(),
-    component: Skills,
-    globalBlur: true,
+    Component: Skills,
+    handle: {
+      name: "Skills",
+      title: "Skills",
+      globalBlur: true,
+      routeOrder: 2,
+    },
   },
   {
     path: "/work",
-    name: "Work",
-    title: "Experience",
-    element: <Experience />,
-    nodeRef: createRef(),
-    component: Experience,
-    globalBlur: true,
+    Component: Experience,
+    handle: {
+      name: "Work",
+      title: "Experience",
+      globalBlur: true,
+      routeOrder: 3,
+    },
   },
   {
     path: "/about",
-    name: "About",
-    title: "About",
-    element: <About />,
-    nodeRef: createRef(),
-    component: About,
-    globalBlur: false,
+    Component: About,
+    handle: {
+      name: "About",
+      title: "About",
+      globalBlur: false,
+      routeOrder: 4,
+    },
   },
 ];
-
-export const routeOrder = {
-  "/": 0,
-  "/projects": 1,
-  "/skills": 2,
-  "/work": 3,
-  "/about": 4,
-};

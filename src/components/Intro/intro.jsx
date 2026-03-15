@@ -1,34 +1,29 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollHint from "../common/ScrollHint/scroll-hint";
 import classes from "./intro.module.css";
-import { useEffect, useState } from "react";
 import { rand } from "@/utils/graphics";
+import classNames from "classnames";
+import { introTitles } from "@/utils/constants";
 
 const Intro = () => {
-  let nameClasses = [classes.Float, classes.IntroFloat];
   const showScrollHint = useSelector((state) => state.app.showScrollHint);
-  const [activeTitle, setActiveTitle] = useState(Math.round(rand(0, 2)));
+  const [activeIdx, setActiveIdx] = useState(Math.round(rand(0, introTitles.length - 1)));
 
-  const titles = [
-    "frontend enthusiast",
-    "software engineer",
-    "UI/UX designer",
-    "creative developer",
-  ];
   useEffect(() => {
     const handle = setInterval(
-      () => setActiveTitle((activeTitle + 1) % titles.length),
-      3500
+      () => setActiveIdx((prevIdx) => (prevIdx + 1) % introTitles.length),
+      3500,
     );
     return () => clearInterval(handle);
-  }, [activeTitle]);
+  }, []);
 
   return (
     <div className={classes.Intro}>
-      <div className={nameClasses.join(" ")}>
+      <div className={classNames(classes.Float, classes.IntroFloat)}>
         <div className={classes.Greeting}>
           <span>Hi</span>
-          <span>{", I'm"}</span>
+          <span>, I'm</span>
         </div>
         <div className={classes.Name}>
           <span className={classes.First}>Saurabh</span>
@@ -38,17 +33,13 @@ const Intro = () => {
           <h5>
             <span>a </span>
             <div>
-              {titles.map((title, idx) => (
+              {introTitles.map((title, idx) => (
                 <span
                   key={title}
-                  className={[
-                    classes.One,
-                    activeTitle === idx ? classes.active : "",
-                  ].join(" ")}
-                  style={{
-                    position: idx === 0 ? "relative" : "absolute",
-                    left: 0,
-                  }}
+                  className={classNames({
+                    [classes.active]: activeIdx === idx,
+                    [classes.relative]: idx === 0,
+                  })}
                 >
                   {title}
                 </span>

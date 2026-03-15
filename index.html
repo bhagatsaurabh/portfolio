@@ -8,18 +8,22 @@
     <meta name="description" content="Saurabh Bhagat's Portfolio" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="preload" href="/spritesheets/icons.svg" as="image" />
-    <script
-      defer
-      src="https://acrobatservices.adobe.com/view-sdk/viewer.js"
-    ></script>
+    <link rel="preload" href="/spritesheets/icons.svg" as="image" type="image/svg+xml" />
+    <script defer src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
     <script>
       document.addEventListener("adobe_dc_view_sdk.ready", () => {});
+    </script>
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme) {
+        document.documentElement.dataset.theme = theme;
+      }
     </script>
     <title>Saurabh Bhagat</title>
   </head>
   <body>
     <div id="root"></div>
+    <svg href=""></svg>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
