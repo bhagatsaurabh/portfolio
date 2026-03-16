@@ -77,8 +77,8 @@ const About = () => {
         </div>
         <FeedButton
           customStyle={{ alignSelf: "unset", marginTop: "1rem" }}
-          icon="resume"
-          onClick={() => router.navigate("/resume")}
+          icon="resumé"
+          onClick={() => router.navigate("/resumé")}
         >
           {"Résumé"}
         </FeedButton>

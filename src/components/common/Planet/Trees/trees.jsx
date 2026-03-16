@@ -30,11 +30,7 @@ const Tree = (props) => {
       0,
       dimensions.current.width * 0.8,
     );
-    targetRY.current = denormalize(
-      1 - normalize(routeOrder, 0, 4),
-      -degToRad(5),
-      0,
-    );
+    targetRY.current = denormalize(1 - normalize(routeOrder, 0, 4), -degToRad(5), 0);
 
     const width = dimensions.current.width;
     const height = dimensions.current.height;
@@ -55,20 +51,13 @@ const Tree = (props) => {
 
       if (Math.abs(targetX.current - camera.position.x) > 2) {
         camera.position.lerp(
-          new THREE.Vector3(
-            targetX.current,
-            camera.position.y,
-            camera.position.z,
-          ),
+          new THREE.Vector3(targetX.current, camera.position.y, camera.position.z),
           0.04,
         );
       }
 
       camera.quaternion.slerp(
-        new THREE.Quaternion().setFromAxisAngle(
-          new THREE.Vector3(0, 1, 0),
-          targetRY.current,
-        ),
+        new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), targetRY.current),
         0.04,
       );
     };
@@ -98,9 +87,11 @@ const Tree = (props) => {
       ),
     );
 
-    const map = new THREE.TextureLoader().load("./sprites/me-under-tree.png");
+    const map = new THREE.TextureLoader().load(
+      `${import.meta.env.VITE_SB_CDN_URL}/images/me-under-tree.webp`,
+    );
     const mapInv = new THREE.TextureLoader().load(
-      "./sprites/me-under-tree-inv.png",
+      `${import.meta.env.VITE_SB_CDN_URL}/images/me-under-tree-inv.webp`,
     );
     tex.current = map;
     texInv.current = mapInv;
@@ -177,26 +168,16 @@ const Tree = (props) => {
   }, []);
 
   useEffect(() => {
-    const windDirection =
-      props.windDirection !== 0 ? props.windDirection < 0 : null;
-    const prevWindDirection =
-      prevProps.windDirection !== 0 ? prevProps.windDirection < 0 : null;
-    if (
-      windDirection !== null &&
-      prevProps &&
-      prevWindDirection !== windDirection
-    ) {
+    const windDirection = props.windDirection !== 0 ? props.windDirection < 0 : null;
+    const prevWindDirection = prevProps.windDirection !== 0 ? prevProps.windDirection < 0 : null;
+    if (windDirection !== null && prevProps && prevWindDirection !== windDirection) {
       trees.current.forEach((tree) => tree.storm(windDirection));
       targetX.current = denormalize(
         1 - normalize(routeOrder, 0, 4),
         0,
         dimensions.current.width * 0.8,
       );
-      targetRY.current = denormalize(
-        1 - normalize(routeOrder, 0, 4),
-        -degToRad(5),
-        0,
-      );
+      targetRY.current = denormalize(1 - normalize(routeOrder, 0, 4), -degToRad(5), 0);
     }
     if (props.theme !== prevProps?.theme) {
       mat.current.map = props.theme === "Light" ? tex.current : texInv.current;

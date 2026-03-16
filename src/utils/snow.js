@@ -1,6 +1,6 @@
 import { Vector } from "canvas-percept";
 import { easeInOut, rand } from "@/utils/graphics";
-import { Tween } from "@/utils/world";
+import { Tween } from "@/utils/simulation";
 import { snowColors } from "@/utils/constants";
 import { Weather } from "@/utils/weather";
 

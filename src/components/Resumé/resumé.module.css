@@ -1,4 +1,4 @@
-.Resume {
+.Resumé {
   opacity: 1;
   position: absolute;
   top: 0;
@@ -15,7 +15,7 @@
   transform: translateX(-50%);
   top: 1.5rem;
 }
-.Resume a {
+.Resumé a {
   text-decoration: none;
   color: #6f6f6f;
   display: inline-flex;
@@ -23,10 +23,10 @@
   align-items: end;
   margin: 0.5rem;
 }
-.Resume a.Simple {
+.Resumé a.Simple {
   margin: 0;
 }
-.Resume a img {
+.Resumé a img {
   margin-right: 0.5rem;
   position: relative;
   top: -0.125rem;

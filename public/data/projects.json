@@ -5,7 +5,7 @@
     "description": "A highly-customizable library for creating node-based editors, graphs and diagrams.",
     "descriptionLong": null,
     "tags": ["typescript", "npm", "vue", "#vuepress", "#web-canvas"],
-    "image": "/covers/flow-connect.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/flow-connect.webp",
     "githubLink": "https://github.com/saurabh-prosoft/flow-connect",
     "liveLink": "https://flow-connect.saurabhagat.me"
   },
@@ -15,7 +15,7 @@
     "description": "HTML5 Canvas rendering engine",
     "descriptionLong": null,
     "tags": ["typescript", "npm", "#web-canvas", "react"],
-    "image": "/covers/percept.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/percept.webp",
     "githubLink": "https://github.com/saurabh-prosoft/percept",
     "liveLink": "https://percept.saurabhagat.me"
   },
@@ -25,7 +25,7 @@
     "description": "Simple and effective sound mixing and recording webapp.",
     "descriptionLong": null,
     "tags": ["react", "webaudio"],
-    "image": "/covers/mixbee.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/mixbee.webp",
     "githubLink": "https://github.com/saurabh-prosoft/mix-bee",
     "liveLink": "https://mix-bee.saurabhagat.me"
   },
@@ -35,7 +35,7 @@
     "description": "End-to-end encrypted messaging solution for the web.",
     "descriptionLong": null,
     "tags": ["vue", "firebase", "#indexed-db"],
-    "image": "/covers/openchat.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/openchat.webp",
     "githubLink": "https://github.com/saurabh-prosoft/openchat",
     "liveLink": "https://openchat.saurabhagat.me"
   },
@@ -45,7 +45,7 @@
     "description": "Online platform for project creation and development in teams with real-time collaborative tools.",
     "descriptionLong": null,
     "tags": ["angular", "typescript", "nodejs", "#web-socket", "#web-rtc"],
-    "image": "/covers/hide.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/h-ide.webp",
     "githubLink": null,
     "liveLink": null
   },
@@ -55,7 +55,7 @@
     "description": "Easy-to-use webapp for audio synthesis, processing and visualization.",
     "descriptionLong": null,
     "tags": ["react", "webaudio", "#web-canvas"],
-    "image": "/covers/vap.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/vap.webp",
     "githubLink": "https://github.com/saurabh-prosoft/vap",
     "liveLink": "https://vap.saurabhagat.me/"
   },
@@ -65,7 +65,7 @@
     "description": "Evaluate mathematical equations and visualize its 2D/3D representation in realtime !",
     "descriptionLong": null,
     "tags": ["android", "java"],
-    "image": "/covers/eqplot.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/eqplot.webp",
     "githubLink": "https://github.com/saurabh-prosoft/EqPlot",
     "liveLink": null
   },
@@ -75,10 +75,10 @@
     "description": "2D side-scrolling 'purr-former' starring a 'feline-tastic' hero on whisker-raising adventures !",
     "descriptionLong": null,
     "tags": ["typescript", "game", "_2d"],
-    "image": "/covers/catana-adventures.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/catana-adventures.webp",
     "githubLink": "https://github.com/saurabh-prosoft/catana-adventures",
     "liveLink": "https://catana-adventures.saurabhagat.me",
-    "mediaLink": "/media/catana-bg.mp4"
+    "mediaLink": "https://cdn.saurabhagat.me/portfolio/previews/catana-bg.mp4"
   },
   {
     "id": 2,
@@ -86,7 +86,7 @@
     "description": "Simple node-based editor for image processing.",
     "descriptionLong": null,
     "tags": ["javascript", "#web-canvas", "#web-worker"],
-    "image": "/covers/nodeip.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/nodeip.webp",
     "githubLink": "https://github.com/saurabh-prosoft/node-ip",
     "liveLink": "https://node-ip.saurabhagat.me/"
   },
@@ -96,10 +96,10 @@
     "description": "Multiplayer online PvP tank battle !",
     "descriptionLong": null,
     "tags": ["typescript", "webgl", "vue", "game", "_3d"],
-    "image": "/covers/tankme.png",
+    "image": "https://cdn.saurabhagat.me/portfolio/images/tankme.webp",
     "githubLink": "https://github.com/saurabh-prosoft/tank-me",
     "liveLink": "https://tankme.saurabhagat.me",
-    "mediaLink": "/media/tankme-bg.mp4"
+    "mediaLink": "https://cdn.saurabhagat.me/portfolio/previews/tankme-bg.mp4"
   },
   {
     "id": 8,

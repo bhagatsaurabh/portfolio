@@ -28,8 +28,17 @@ const App = () => {
   const theme = useSelector(selectCurrTheme);
   const prefsLoaded = useSelector(selectPrefsLoaded);
   const { currRoute, direction, navigate } = useRouteDirection(routes);
-  const swipeHandlers = useHorizontalSwipe({ onSwipe: moveSection });
   const { initPhaser } = usePhaser(theme);
+
+  const moveSection = (forward) => {
+    const nextRouteIdx = clamp(
+      currRoute.handle.routeOrder + (forward ? 1 : -1),
+      0,
+      routes.length - 1,
+    );
+    handleNavigate(nextRouteIdx);
+  };
+  const swipeHandlers = useHorizontalSwipe({ onSwipe: moveSection });
 
   /* useEffect(() => {
     const preload = async () => {
@@ -58,14 +67,6 @@ const App = () => {
     return () => dispatch(cleanup());
   }, [dispatch, initPhaser]);
 
-  const moveSection = (forward) => {
-    const nextRouteIdx = clamp(
-      currRoute.handle.routeOrder + (forward ? 1 : -1),
-      0,
-      routes.length - 1,
-    );
-    handleNavigate(nextRouteIdx);
-  };
   const handleNavigate = (route) => {
     dispatch(setShowScrollHint(false));
     navigate(route.path);

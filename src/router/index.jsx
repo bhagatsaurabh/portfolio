@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { routes } from "./routes";
 import App from "@/App";
-const Resume = lazy(() => import("@/components/Resume/resume"));
+const Resumé = lazy(() => import("@/components/Resumé/resumé"));
 
 export const router = createBrowserRouter([
   {
@@ -17,8 +17,8 @@ export const router = createBrowserRouter([
     })),
   },
   {
-    path: "/resume",
-    Component: Resume,
+    path: "/resumé",
+    Component: Resumé,
   },
 ]);
 

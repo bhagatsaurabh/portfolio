@@ -48,7 +48,7 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
         >
           {routes.map((route) => (
             <span
-              key={route.name}
+              key={route.handle.name}
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleClick(route)}
               onClick={() => handleClick(route)}
@@ -64,7 +64,7 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
       <div className={classes.Titles}>
         {routes.map((route) => (
           <h1
-            key={route.name}
+            key={route.handle.name}
             className={classNames(classes.Title, {
               [classes.active]: route.path === activeRoute.path,
             })}

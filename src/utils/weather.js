@@ -1,5 +1,5 @@
 import { Vector } from "canvas-percept";
-import { Simulation, TimeoutSchedule, Tween } from "./world";
+import { Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Snow } from "./snow";
 
 export class Weather extends Simulation {
@@ -72,7 +72,7 @@ export class WeatherController extends Simulation {
   }
 }
 
-export const mapWeatherType = (type) => {
+export const mapWeatherType = (/* type */) => {
   /* if (type === "sunny") return Sunny;
   if (type === "light_rain") return LightRain;
   if (type === "heavy_rain") return HeavyRain;
