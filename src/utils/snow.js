@@ -1,18 +1,17 @@
 import { Vector } from "canvas-percept";
 import { easeInOut, rand } from "@/utils/graphics";
 import { Tween } from "@/utils/simulation";
-import { snowColors } from "@/utils/constants";
 import { Weather } from "@/utils/weather";
 
 export class SnowFlake {
   position = new Vector(0, 0);
   radius = 1;
   velocity = new Vector(0, 0);
-  shrinkFactor = 72;
+  shrinkFactor = 80;
   windInfluence = 1;
-  windInfluenceRange = [0.75, 1.25];
-  vyDurationRange = [50, 100];
-  vyRange = [-240, 240];
+  windInfluenceRange = [0.65, 1.35];
+  vyDurationRange = [0.5, 0.7];
+  vyRange = [-180, 180];
   vyTween = null;
 
   constructor({ position, radius, velocity } = {}) {
@@ -21,22 +20,27 @@ export class SnowFlake {
     this.velocity = velocity ?? this.velocity;
 
     this.windInfluence = rand(...this.windInfluenceRange);
-    const targetVY = rand(...this.vyRange);
-    this.vyTween = new Tween(0, targetVY, rand(...this.vyDurationRange, easeInOut));
+    this.vyTween = new Tween(0, rand(...this.vyRange), rand(...this.vyDurationRange), easeInOut);
     this.vyTween.start();
   }
   update(dt) {
     const vyTweenRes = this.vyTween.update(dt);
     this.velocity.y = vyTweenRes.value;
     if (vyTweenRes.finished) {
-      const targetVY = rand(...this.vyRange);
-      this.vyTween = new Tween(this.velocity.y, targetVY, rand(50, 100), easeInOut);
+      this.vyTween = new Tween(
+        this.velocity.y,
+        rand(...this.vyRange),
+        rand(...this.vyDurationRange),
+        easeInOut,
+      );
       this.vyTween.start();
     }
 
-    this.position.x += this.velocity.x * this.windInfluence * dt;
-    this.position.y += this.velocity.y * dt;
-    const shrink = this.shrinkFactor / this.velocity.y;
+    const effectiveVX = this.velocity.x * this.windInfluence * dt;
+    const effectiveVY = this.velocity.y * dt;
+    this.position.x += effectiveVX;
+    this.position.y += effectiveVY;
+    const shrink = this.shrinkFactor / (Math.abs(this.velocity.x) * this.windInfluence);
     this.radius = Math.max(0.1, this.radius - shrink * dt);
   }
   render(ctx) {
@@ -48,10 +52,9 @@ export class SnowFlake {
 
 export class Snow extends Weather {
   state = {
-    color: "#000",
-    baseEmitInterval: 135,
-    minRadius: 0.1,
-    maxRadius: 0.2,
+    baseEmitInterval: 0.135,
+    minRadius: 1.2,
+    maxRadius: 1.8,
   };
   flakes = new Set();
   emitAccumulator = 0;
@@ -71,7 +74,7 @@ export class Snow extends Weather {
     }
 
     for (const flake of this.flakes) {
-      flake.config.velocity.x = this.world.weather.wind.x;
+      flake.velocity.x = this.world.weather.wind.x;
 
       if (this.isOutofBounds(flake)) {
         this.flakes.delete(flake);
@@ -97,14 +100,11 @@ export class Snow extends Weather {
     this.flakes.add(new SnowFlake({ position, radius, velocity }));
   }
   render(ctx) {
-    ctx.fillStyle = this.state.color;
+    ctx.fillStyle = this.color;
 
     for (const flake of this.flakes) {
       flake.render(ctx);
     }
-  }
-  sync() {
-    this.state.color = snowColors[this.world.state.theme];
   }
   destroy() {}
 }

@@ -12,9 +12,9 @@ export const themeClasses = Object.freeze({
   "High Contrast": "high-contrast",
 });
 
-export const snowColors = Object.freeze({
-  LIGHT: "#363537",
-  DARK: "#e7e7e7",
+export const weatherThemes = Object.freeze({
+  [themes.LIGHT]: "#363537",
+  [themes.DARK]: "#e7e7e7",
 });
 
 export const introTitles = Object.freeze([

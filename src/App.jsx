@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "motion/react";
 
@@ -22,6 +22,7 @@ import useRouteDirection from "@/hooks/useRouteDirection";
 import { useHorizontalSwipe } from "@/hooks/useHorizontalSwipe";
 import usePhaser from "./hooks/usePhaser";
 import Planet from "@/components/common/Planet/planet";
+import useIdlePreload from "./hooks/useIdlePreload";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const App = () => {
   const prefsLoaded = useSelector(selectPrefsLoaded);
   const { currRoute, direction, navigate } = useRouteDirection(routes);
   const { initPhaser } = usePhaser(theme);
-
   const moveSection = (forward) => {
     const nextRouteIdx = clamp(
       currRoute.handle.routeOrder + (forward ? 1 : -1),
@@ -39,25 +39,23 @@ const App = () => {
     handleNavigate(nextRouteIdx);
   };
   const swipeHandlers = useHorizontalSwipe({ onSwipe: moveSection });
+  const preloads = useMemo(
+    () => [
+      () => import("@/components/Projects/projects"),
+      () => import("@/components/Skills/skills"),
+      () => import("@/components/Experience/experience"),
+      () => import("@/components/About/about"),
+    ],
+    [],
+  );
+  useIdlePreload(preloads);
 
-  /* useEffect(() => {
-    const preload = async () => {
-      await import("@/components/Projects/projects");
-      await import("@/components/Skills/skills");
-      await import("@/components/Experience/experience");
-      await import("@/components/About/about");
-    };
-    const handlerId = requestIdleCallback(preload);
-
-    return () => cancelIdleCallback(handlerId);
-  }, []); */
   useEffect(() => {
     const appInit = async () => {
       const tasks = [];
       tasks.push(dispatch(loadPreferences()).unwrap());
       tasks.push(dispatch(loadContact()).unwrap());
       tasks.push(dispatch(loadProjects()).unwrap());
-
       const results = await Promise.all(tasks);
       initPhaser(results[0].theme);
       dispatch(setPrefsLoaded(true));
@@ -94,7 +92,6 @@ const App = () => {
     const transition = {
       duration: 0.75,
       ease: [0.33, 0.03, 0.35, 0.97],
-      // ease: [0.22, 1, 0.36, 1],
     };
     return (
       <MotionSection
@@ -129,7 +126,7 @@ const App = () => {
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />
           <ScrollingBackground activeRoute={currRoute} />
-          <Suspense fallback={<span>{"Loading..."}</span>}>{routes.map(mapRoute)}</Suspense>
+          <Suspense fallback={<span>{"..."}</span>}>{routes.map(mapRoute)}</Suspense>
         </>
       )}
     </div>

@@ -1,9 +1,10 @@
+import { themes } from "./constants";
 import { WeatherController } from "./weather";
 
 export class SimulatedWorld {
   #width = 0;
   #height = 0;
-  #state = { theme: "#000" };
+  #state = { theme: themes.LIGHT };
   #weather = null;
 
   // To avoid large frame gaps causing sim explosion
@@ -59,18 +60,21 @@ export class SimulatedWorld {
   }
   resize() {
     const rect = this.canvas.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
     const dpr = window.devicePixelRatio || 1;
-    const width = rect.width * dpr;
-    const height = rect.height * dpr;
-    if (this.canvas.width === width && this.canvas.height === height) {
+    const dprWidth = rect.width * dpr;
+    const dprHeight = rect.height * dpr;
+    if (this.canvas.width === dprWidth && this.canvas.height === dprHeight) {
       return;
     }
+    this.canvas.width = dprWidth;
+    this.canvas.height = dprHeight;
+    this.context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     this.#width = width;
     this.#height = height;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.context.setTransform(dpr, 0, 0, dpr, 0, 0);
     for (const simulation of this.simulations) {
       simulation.resize?.(this.width, this.height);
     }

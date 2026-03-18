@@ -1,10 +1,19 @@
 import { Vector } from "canvas-percept";
-import { Simulation, TimeoutSchedule, Tween } from "./simulation";
+import { ColorTween, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Snow } from "./snow";
+import { weatherThemes } from "./constants";
+import { easeInOut } from "motion";
 
 export class Weather extends Simulation {
   weight = 0;
   tween = null;
+  color = "#363537";
+  colorTween = null;
+
+  constructor(world) {
+    super(world);
+    this.color = weatherThemes[world.state.theme];
+  }
 
   fadeTo(target, duration) {
     this.tween = new Tween(this.weight, target, duration);
@@ -18,14 +27,30 @@ export class Weather extends Simulation {
         this.tween = null;
       }
     }
+    if (this.colorTween) {
+      const colorTweenRes = this.colorTween.update(dt);
+      this.color = colorTweenRes.value;
+      if (colorTweenRes.finished) {
+        this.colorTween = null;
+      }
+    }
     this.step?.(dt);
+  }
+  sync() {
+    this.colorTween = new ColorTween(
+      this.color,
+      weatherThemes[this.world.state.theme],
+      0.75,
+      easeInOut,
+    );
+    this.colorTween.start();
   }
 }
 
 export class WeatherController extends Simulation {
   weathers = [];
-  wind = new Vector(240, 0);
-  gustTimeout = new TimeoutSchedule(750);
+  wind = new Vector(-180, 0);
+  gustTimeout = new TimeoutSchedule(0.75);
 
   constructor(world) {
     super(world);
@@ -48,8 +73,13 @@ export class WeatherController extends Simulation {
     }
   }
   render(ctx) {
-    for (const weather of this.weather) {
+    for (const weather of this.weathers) {
       weather.render?.(ctx);
+    }
+  }
+  sync() {
+    for (const weather of this.weathers) {
+      weather.sync?.();
     }
   }
   transitionTo(WeatherClass, duration = 3) {
@@ -64,11 +94,12 @@ export class WeatherController extends Simulation {
     }
   }
   gust(direction) {
+    console.log("gust");
     this.wind = new Vector(direction * 480, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {
-    this.wind = new Vector(240, 0);
+    this.wind = new Vector(-180, 0);
   }
 }
 

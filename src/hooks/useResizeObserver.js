@@ -28,10 +28,7 @@ export const useResizeObserver = (callback, throttleMs = 150) => {
   callbackRef.current = callback;
 
   useEffect(() => {
-    return subscribe(
-      (width, height) => callbackRef.current(width, height),
-      throttleMs,
-    );
+    return subscribe((width, height) => callbackRef.current(width, height), throttleMs);
   }, [throttleMs]);
 };
 

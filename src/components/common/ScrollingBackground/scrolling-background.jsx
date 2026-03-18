@@ -10,6 +10,9 @@ const ScrollingBackground = ({ activeRoute }) => {
         classes.ScrollingBackground,
         classes[`Position${activeRoute.handle.routeOrder}`],
       )}
+      style={{
+        background: `url("${import.meta.env.VITE_SB_CDN_URL}/textures/cardboard-flat.webp") var(--background-0)`,
+      }}
     />
   );
 };

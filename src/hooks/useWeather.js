@@ -1,4 +1,4 @@
-import { Snow } from "@/utils/snow";
+import "@/utils/snow";
 import { useEffect, useState } from "react";
 
 const mapWeatherCode = (code) => {
@@ -19,10 +19,8 @@ export const useWeather = () => {
 
   useEffect(() => {
     const cached = localStorage.getItem(CACHE_KEY);
-
     if (cached) {
       const { weather, timestamp } = JSON.parse(cached);
-
       if (Date.now() - timestamp < CACHE_TIME) {
         setWeather(weather);
         setPending(false);

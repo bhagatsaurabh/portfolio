@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import PropTypes from "prop-types";
 
 import classes from "./navigator.module.css";
@@ -7,47 +7,27 @@ import Icon from "../Icon/icon";
 import classNames from "classnames";
 
 const Navigator = ({ routes, activeRoute, onNavigate }) => {
-  const sectionTitleListEl = useRef(null);
-  const switchEl = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    let handle;
-    if (isOpen) {
-      handle = setTimeout(() => {
-        sectionTitleListEl.current?.classList.remove(classes.open);
-        switchEl.current?.classList.remove(classes.open);
-        setIsOpen(false);
-      }, 4000);
-    }
-    return () => clearTimeout(handle);
-  }, [isOpen]);
+  const navigatorEl = useRef(null);
 
   const handleClick = (newRoute, direction = 0) => {
     if (!newRoute) {
       const newRouteOrder = clamp(activeRoute.handle.routeOrder + direction, 0, routes.length - 1);
-      newRoute = routes.find((r) => r.routeOrder === newRouteOrder);
+      newRoute = routes.find((r) => r.handle.routeOrder === newRouteOrder);
     }
     if (newRoute.path === activeRoute.path) return;
+    document.activeElement?.blur?.();
     onNavigate(newRoute);
   };
 
   return (
     <>
-      <nav className={classes.Navigator}>
-        <button
-          ref={switchEl}
-          className={classNames(classes.Switch, { [classes.open]: isOpen })}
-          onClick={() => setIsOpen(!isOpen)}
-        >
+      <nav className={classes.Navigator} ref={navigatorEl}>
+        <button className={classes.Switch}>
           <Icon name="menu" size={1.5} />
         </button>
-        <div
-          ref={sectionTitleListEl}
-          className={classNames(classes.SectionTitleList, { [classes.open]: isOpen })}
-        >
+        <div className={classes.SectionTitleList}>
           {routes.map((route) => (
-            <span
+            <button
               key={route.handle.name}
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleClick(route)}
@@ -56,8 +36,8 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
                 [classes.titleactive]: route.handle.routeOrder === activeRoute.handle.routeOrder,
               })}
             >
-              {route.title}
-            </span>
+              {route.handle.title}
+            </button>
           ))}
         </div>
       </nav>
@@ -69,7 +49,7 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
               [classes.active]: route.path === activeRoute.path,
             })}
           >
-            {route.path === "/" ? "" : route.title}
+            {route.path === "/" ? "" : route.handle.title}
           </h1>
         ))}
       </div>
@@ -80,7 +60,7 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
             [classes.hidden]: activeRoute.handle.routeOrder === 0,
           })}
         >
-          <Icon name="left-arrow" />
+          <Icon name="left-arrow" size={1.25} />
         </button>
         <button
           onClick={() => handleClick(null, 1)}
@@ -88,7 +68,7 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
             [classes.hidden]: activeRoute.handle.routeOrder === routes.length - 1,
           })}
         >
-          <Icon name="right-arrow" />
+          <Icon name="right-arrow" size={1.25} />
         </button>
       </div>
     </>

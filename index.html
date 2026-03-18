@@ -8,7 +8,17 @@
     <meta name="description" content="Saurabh Bhagat's Portfolio" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="preload" href="/spritesheets/icons.svg" as="image" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="image"
+      href="https://cdn.saurabhagat.me/portfolio/textures/cardboard-flat.webp"
+      type="image/webp"
+    />
+    <script type="module">
+      fetch("%VITE_SB_CDN_URL_ICONS%/spritesheets/icons.svg", { priority: "high" }).catch(
+        () => {},
+      );
+    </script>
     <script defer src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
     <script>
       document.addEventListener("adobe_dc_view_sdk.ready", () => {});
@@ -23,7 +33,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <svg href=""></svg>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

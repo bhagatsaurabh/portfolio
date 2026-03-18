@@ -53,6 +53,7 @@
     color var(--theme-transition-duration) linear,
     font-size 0.3s cubic-bezier(0, 0, 0.4, 1);
   z-index: 1;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 100;
 }
@@ -68,7 +69,7 @@
   z-index: 50;
   top: 50%;
   transform: translateY(-50%) scale(1);
-  opacity: 1;
+  opacity: 0.6;
   transition:
     opacity 0.5s linear,
     background-color 0.15s linear,
@@ -137,19 +138,21 @@
     max-width: 15rem;
   }
 }
-@media (hover: none) {
-  .Navigator:focus .SectionTitleList,
-  .Navigator:focus-within .SectionTitleList {
-    transform: translateY(0);
-  }
+.Switch:focus {
+  outline: none;
 }
-@media (hover: none) and (min-width: 1024px) {
+
+.Navigator:focus .SectionTitleList,
+.Navigator:focus-within .SectionTitleList {
+  transform: translateY(0);
+}
+@media (min-width: 1024px) {
   .Navigator:focus .Switch,
   .Navigator:focus-within .Switch {
     transform: translate(-50%, -150%);
   }
 }
-@media (hover: none) and (max-width: 1024px) {
+@media (max-width: 1024px) {
   .Navigator:focus .Switch,
   .Navigator:focus-within .Switch {
     transform: translate(-50%, 150%);

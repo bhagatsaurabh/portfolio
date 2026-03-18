@@ -12,12 +12,12 @@ button.theme-button {
   opacity: 0.55;
 }
 
-.theme-icon {
+svg.theme-icon {
   opacity: 0;
+  width: 2rem !important;
   transition:
     opacity var(--theme-transition-duration) linear,
-    transform var(--theme-transition-duration) linear;
-  width: 2rem !important;
+    transform var(--theme-transition-duration) linear !important;
 }
 
 svg.theme-icon:first-child {
@@ -26,10 +26,9 @@ svg.theme-icon:first-child {
 svg.theme-icon:not(:first-child) {
   position: absolute;
   left: 0;
-  filter: invert(1) brightness(0.75);
 }
 
-.theme-icon.active {
+svg.theme-icon.active {
   opacity: 1;
   transform: rotateZ(360deg);
 }

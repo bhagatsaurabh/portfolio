@@ -18,7 +18,7 @@ const Icon = ({ size, name, className, onClick, focusable, adaptive = true }) =>
       className={classNames(classes.icon, className, { [classes.adaptive]: adaptive })}
       tabIndex={focusable ? 0 : undefined}
     >
-      <use href={`/spritesheets/icons.svg#${name}`} />
+      <use href={`${import.meta.env.VITE_SB_CDN_URL_ICONS}/spritesheets/icons.svg#${name}`} />
     </svg>
   );
 };

@@ -19,8 +19,8 @@ const ThemeSelector = () => {
 
   return (
     <button onClick={handleClick} className={classes["theme-button"]} aria-label="Toggle theme">
-      <Icon adaptive={false} name="themeLight" size={1.5} className={lightClasses.join(" ")} />
-      <Icon adaptive={false} name="themeDark" size={1.5} className={darkClasses.join(" ")} />
+      <Icon adaptive={false} name="theme-light" size={1.5} className={lightClasses.join(" ")} />
+      <Icon adaptive={false} name="theme-dark" size={1.5} className={darkClasses.join(" ")} />
     </button>
   );
 };

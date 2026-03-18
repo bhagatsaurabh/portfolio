@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
-import classes from "./weather.module.css";
+import classes from "./atmosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useWeather from "@/hooks/useWeather";
 import { mapWeatherType } from "@/utils/weather";
 import useWorld from "@/hooks/useWorld";
 import classNames from "classnames";
 
-const Atmosphere = (props) => {
+const Atmosphere = ({ theme, routeDirection, blur }) => {
   const canvasEl = useRef(null);
-  const { world } = useWorld(canvasEl, props.theme);
+  const { world } = useWorld(canvasEl, theme);
   const { weather: currWeather, pending } = useWeather();
   useResizeObserver(() => world.current?.resize());
 
@@ -27,12 +27,17 @@ const Atmosphere = (props) => {
     }
   }, [currWeather, pending, world]);
   useEffect(() => {
-    world.current?.weather.gust(Math.abs(props.routeDirection));
-  }, [props.routeDirection, world]);
+    if (routeDirection !== 0) {
+      world.current?.weather.gust(Math.abs(routeDirection));
+    }
+  }, [routeDirection, world]);
 
   return (
-    <div className={classNames(classes.Weather, { [classes.blur]: props.blur })}>
-      <canvas ref={(element) => element && (canvasEl.current = element)}></canvas>
+    <div className={classNames(classes.Atmosphere, { [classes.blur]: blur })}>
+      <canvas
+        className={classes.canvas}
+        ref={(element) => element && (canvasEl.current = element)}
+      ></canvas>
     </div>
   );
 };

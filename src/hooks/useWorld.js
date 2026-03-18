@@ -10,6 +10,7 @@ export const useWorld = (canvasEl, theme) => {
     }
     if (!world.current) {
       world.current = new SimulatedWorld(canvasEl.current, { theme });
+      world.current.start();
     }
     if (world.current.state.theme !== theme) {
       world.current.state = { ...world.current.state, theme };

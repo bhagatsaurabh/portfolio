@@ -4,12 +4,14 @@ import { loadConfig, optimize } from "svgo";
 
 export default function svgSpriteSheet() {
   async function generateIconSprite() {
+    console.log("Generating SVG sprite sheet...");
     const iconsDir = path.join(process.cwd(), "public", "icons");
-    const files = await fs.readdir(iconsDir);
+    let files = await fs.readdir(iconsDir);
     let symbols = "";
+    files = files.filter((file) => file.endsWith(".svg"));
+    console.log(`Found ${files.length} SVG files in ${iconsDir}`);
 
     for (const file of files) {
-      if (!file.endsWith(".svg")) continue;
       let svgContent = await fs.readFile(path.join(iconsDir, file), "utf8");
       const id = file.replace(".svg", "");
       svgContent = svgContent
@@ -20,14 +22,11 @@ export default function svgSpriteSheet() {
     }
 
     const spritesheet = `<svg width="0" height="0" style="display: none">\n\n${symbols}</svg>`;
-
-    const svgoConfig = await loadConfig();
-    const result = optimize(spritesheet, svgoConfig);
-    const optimizedSpritesheet = result.data;
+    console.log("SVG spritesheet size:", spritesheet.length);
 
     await fs.writeFile(
       path.join(process.cwd(), "public", "spritesheets", "icons.svg"),
-      optimizedSpritesheet,
+      spritesheet,
     );
   }
 
