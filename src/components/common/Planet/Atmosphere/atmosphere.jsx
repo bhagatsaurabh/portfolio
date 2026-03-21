@@ -1,14 +1,14 @@
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
 import classes from "./atmosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useWeather from "@/hooks/useWeather";
-import { mapWeatherType } from "@/utils/weather";
 import useWorld from "@/hooks/useWorld";
-import classNames from "classnames";
+import { mapWeatherType } from "@/utils/weather";
 
-const Atmosphere = ({ theme, routeDirection, blur }) => {
+const Atmosphere = ({ theme, routeDirection, currRoute }) => {
   const canvasEl = useRef(null);
   const { world } = useWorld(canvasEl, theme);
   const { weather: currWeather, pending } = useWeather();
@@ -33,7 +33,9 @@ const Atmosphere = ({ theme, routeDirection, blur }) => {
   }, [routeDirection, world]);
 
   return (
-    <div className={classNames(classes.Atmosphere, { [classes.blur]: blur })}>
+    <div
+      className={classNames(classes.Atmosphere, { [classes.blur]: currRoute?.handle.globalBlur })}
+    >
       <canvas
         className={classes.canvas}
         ref={(element) => element && (canvasEl.current = element)}
@@ -43,10 +45,9 @@ const Atmosphere = ({ theme, routeDirection, blur }) => {
 };
 
 Atmosphere.propTypes = {
-  customStyle: PropTypes.any,
   routedDirection: PropTypes.number,
   theme: PropTypes.string,
-  blur: PropTypes.bool,
+  currRoute: PropTypes.object,
 };
 
 export default Atmosphere;

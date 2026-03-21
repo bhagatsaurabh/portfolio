@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import styles from "./self-cover.module.css";
 import { currTheme } from "@/store/preferences";
-import { TreeWGL } from "@/utils/tree-wgl";
+import { TreeWGL } from "@/utils/tree";
 
 const SelfCover = () => {
   const dimensions = useRef({ width: 0, height: 0 });

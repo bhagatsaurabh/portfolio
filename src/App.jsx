@@ -113,16 +113,8 @@ const App = () => {
       <div id="selfcover"></div>
       {prefsLoaded && (
         <>
-          <Planet.Atmosphere
-            theme={theme}
-            routeDirection={direction}
-            blur={currRoute?.handle.globalBlur}
-          />
-          {/* <LiveBackground.Tree
-            theme={theme}
-            routeDirection={direction}
-            blur={currRoute?.handle.globalBlur}
-          /> */}
+          <Planet.Atmosphere theme={theme} routeDirection={direction} currRoute={currRoute} />
+          <Planet.Lithosphere theme={theme} routeDirection={direction} currRoute={currRoute} />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />
           <ScrollingBackground activeRoute={currRoute} />

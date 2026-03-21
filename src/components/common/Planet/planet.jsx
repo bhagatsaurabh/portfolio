@@ -1,7 +1,7 @@
 import Atmosphere from "./Atmosphere/atmosphere";
-// import Tree from "./Trees/trees";
+import Lithosphere from "./Lithosphere/lithosphere";
 
 export default class Planet {
   static Atmosphere = Atmosphere;
-  // static Tree = Tree;
+  static Lithosphere = Lithosphere;
 }

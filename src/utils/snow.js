@@ -7,7 +7,7 @@ export class SnowFlake {
   position = new Vector(0, 0);
   radius = 1;
   velocity = new Vector(0, 0);
-  shrinkFactor = 80;
+  shrinkFactor = 60;
   windInfluence = 1;
   windInfluenceRange = [0.65, 1.35];
   vyDurationRange = [0.5, 0.7];
