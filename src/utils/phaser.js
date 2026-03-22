@@ -18,7 +18,6 @@ class Preloader extends Phaser.Scene {
   }
   init() {}
   preload() {
-    this.load.setPath("spritesheets");
     this.load.spritesheet("bird", `${import.meta.env.VITE_SB_CDN_URL}/spritesheets/bird.webp`, {
       frameWidth: 56,
       frameHeight: 56,

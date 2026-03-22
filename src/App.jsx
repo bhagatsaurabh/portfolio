@@ -114,7 +114,12 @@ const App = () => {
       {prefsLoaded && (
         <>
           <Planet.Atmosphere theme={theme} routeDirection={direction} currRoute={currRoute} />
-          <Planet.Lithosphere theme={theme} routeDirection={direction} currRoute={currRoute} />
+          <Planet.Lithosphere
+            theme={theme}
+            routeDirection={direction}
+            currRoute={currRoute}
+            noOfRoutes={routes.length}
+          />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />
           <ScrollingBackground activeRoute={currRoute} />

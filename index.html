@@ -11,13 +11,11 @@
     <link
       rel="preload"
       as="image"
-      href="https://cdn.saurabhagat.me/portfolio/textures/cardboard-flat.webp"
+      href="%VITE_SB_CDN_URL%/textures/cardboard-flat.webp"
       type="image/webp"
     />
     <script type="module">
-      fetch("%VITE_SB_CDN_URL_ICONS%/spritesheets/icons.svg", { priority: "high" }).catch(
-        () => {},
-      );
+      fetch("%VITE_SB_CDN_URL_ICONS%/spritesheets/icons.svg", { priority: "high" }).catch(() => {});
     </script>
     <script defer src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
     <script>

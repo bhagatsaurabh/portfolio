@@ -16,6 +16,10 @@ export const weatherThemes = Object.freeze({
   [themes.LIGHT]: "#363537",
   [themes.DARK]: "#e7e7e7",
 });
+export const landscapeThemes = Object.freeze({
+  [themes.LIGHT]: "#363537",
+  [themes.DARK]: "#e7e7e7",
+});
 
 export const introTitles = Object.freeze([
   "frontend enthusiast",

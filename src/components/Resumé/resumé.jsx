@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import FeedButton from "../common/FeedButton/feed-button";
 import classes from "./resumé.module.css";
-import usePdfPreview from "@/hooks/usePDFPreview";
+import usePdfPreview from "@/hooks/usePdfPreview";
 
 const Resumé = () => {
   const file = useMemo(

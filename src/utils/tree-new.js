@@ -1,13 +1,12 @@
+import { Color, Group } from "three";
 import { Line2, LineGeometry, LineMaterial } from "three/examples/jsm/Addons";
 import { degToRad, radToDeg } from "three/src/math/MathUtils";
+
 import { denormalize, normalize, rand } from "./graphics";
-import { Color, Group, Vector3 } from "three";
 
 export class TreeNew {
   params = {
-    wind: {
-      strength: 1,
-    },
+    wind: { strength: 1 },
     physics: {
       windInfluence: 3,
       stiffnessBase: 4,
@@ -19,10 +18,7 @@ export class TreeNew {
       energyFloor: 0.15,
       energyPush: 0.1,
     },
-    limits: {
-      maxBend: 1.2,
-      softClampForce: 10,
-    },
+    limits: { maxBend: 1.2, softClampForce: 10 },
     flutter: {
       ampBase: 0.8,
       ampWindScale: 1.2,
@@ -31,7 +27,6 @@ export class TreeNew {
       freqWindScale: 10,
       depthExponent: 2.5,
       microScale: 0.3,
-
       layers: [
         { mul: 1.0, weight: 0.4 },
         { mul: 1.7, weight: 0.3 },
@@ -39,15 +34,13 @@ export class TreeNew {
         { mul: 3.1, weight: 0.1 },
       ],
     },
-    visual: {
-      swayScale: 4,
-    },
+    visual: { swayScale: 4 },
     generation: {
       initialLength: 1.4,
       initialWidth: 2.5,
       branchLengthThreshold: 0.2,
-      branchLengthFactor: [0.75, 0.8],
-      branchWidthFactor: 0.7,
+      branchLengthFactor: [0.75, 0.85],
+      branchWidthFactor: 0.8,
       zBranchRotation: [5, 35],
       xBranchRotation: 45,
       yBranchRotation: 45,
@@ -55,11 +48,10 @@ export class TreeNew {
     },
   };
 
-  opacity = 1;
   #color = "#000";
+  opacity = 1;
   maxDepth = 0;
-  time = 0;
-
+  at = 0; // accumulated
   root = null;
   trunk = null;
 
@@ -74,28 +66,17 @@ export class TreeNew {
   set color(c) {
     this.#color = c;
     this.setColor(this.trunk);
-    this.setOpacity(this.trunk);
   }
 
-  constructor(world, config = {}) {
-    this.world = world;
+  constructor(pos, config = {}) {
     Object.assign(this.params.generation, config);
-    this.setup();
+    this.setup(pos);
   }
 
-  setup() {
+  setup(pos) {
     this.root = new Group();
-
-    // positio
-    const ndc = new Vector3(-0.8, -1, 0.5);
-    ndc.unproject(this.world.camera);
-    const dir = ndc.sub(this.world.camera.position).normalize();
-    const pos = this.world.camera.position.clone().add(dir.multiplyScalar(15));
-
     const [near, far] = this.params.generation.opacityBound;
-
     this.opacity = denormalize(1 - normalize(Math.abs(pos.z), near, far), 0.1, 1);
-
     this.root.position.copy(pos);
 
     // gen
@@ -112,7 +93,6 @@ export class TreeNew {
     this.spreadBranches(this.trunk);
 
     this.setColor(this.trunk);
-    this.world.scene.add(this.root);
   }
   generateBranches(width, depth, parent) {
     const p = this.params.generation;
@@ -198,13 +178,8 @@ export class TreeNew {
     node.material.color = new Color(this.color);
     node.children.forEach((c) => this.setColor(c));
   }
-  setOpacity(node) {
-    if (!node) return;
-    node.material.opacity = this.opacity;
-    node.children.forEach((c) => this.setOpacity(c));
-  }
   update(dt) {
-    this.time += dt;
+    this.at += dt;
     this.applyWind(this.trunk, this.wind.angle, dt);
   }
   applyWind(node, wind, dt) {
@@ -230,7 +205,7 @@ export class TreeNew {
     const forceDamp = -p.physics.damping * dyn.velocity;
 
     const turbulence =
-      Math.sin(this.time * 3 + seed) * 0.6 + Math.sin(this.time * 1.7 + seed * 2) * 0.4;
+      Math.sin(this.at * 3 + seed) * 0.6 + Math.sin(this.at * 1.7 + seed * 2) * 0.4;
 
     const accel = forceWind + forceRestore + forceDamp + turbulence;
 
@@ -265,7 +240,7 @@ export class TreeNew {
 
     for (const layer of fp.layers) {
       flutterSignal +=
-        Math.sin(this.time * flutterFreq * layer.mul + seed * layer.mul) * layer.weight;
+        Math.sin(this.at * flutterFreq * layer.mul + seed * layer.mul) * layer.weight;
     }
 
     const micro = (Math.random() - 0.5) * leafFactor * windStrength * fp.microScale;
@@ -281,6 +256,6 @@ export class TreeNew {
       this.applyWind(child, wind, dt);
     }
   }
-
+  gust() {}
   resize() {}
 }

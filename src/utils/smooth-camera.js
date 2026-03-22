@@ -1,11 +1,13 @@
-import { Euler, Quaternion } from "three";
+import { Euler, Quaternion, Vector3 } from "three";
+import { Tween } from "./simulation";
+import { easeOutCubic } from "./graphics";
 
 export class SmoothCamera {
   camera = null;
-  lambda = 8; // higher = faster response
+  tween = new Tween(0, 1, /* 1.5 */ 4, easeOutCubic);
+  targetPos = null;
   #targetQuat = null;
 
-  targetPos = null;
   get targetRot() {
     return new Euler().setFromQuaternion(this.#targetQuat);
   }
@@ -14,7 +16,7 @@ export class SmoothCamera {
     this.#targetQuat = new Quaternion().setFromEuler(euler);
   }
 
-  constructor(camera, startPos, startRot) {
+  constructor(camera, startPos = new Vector3(0, 0, 0), startRot = new Vector3(0, 0, 0)) {
     this.camera = camera;
     this.reset(startPos, startRot);
   }
@@ -30,17 +32,23 @@ export class SmoothCamera {
       this.#targetQuat.w,
     );
   }
+  startPos = new Vector3();
+  startQuat = new Quaternion();
   update(dt) {
-    const alpha = 1 - Math.exp(-this.lambda * dt);
-
     const distance = this.camera.position.distanceTo(this.targetPos);
-    if (Math.abs(distance) > 2) {
-      this.camera.position.lerp(this.targetPos, alpha);
+    const angle = this.camera.quaternion.angleTo(this.#targetQuat);
+
+    if (!this.tween.running && (Math.abs(distance) > 0.1 || Math.abs(angle) > 0.1)) {
+      this.tween.start();
+      this.startPos.copy(this.camera.position);
+      this.startQuat.copy(this.camera.quaternion);
     }
 
-    const angle = this.camera.quaternion.angleTo(this.#targetQuat);
-    if (Math.abs(angle) > 0.1) {
-      this.camera.quaternion.slerp(this.#targetQuat, alpha);
+    if (this.tween.running) {
+      const tweenRes = this.tween.update(dt);
+      const alpha = tweenRes.value;
+      this.camera.position.lerpVectors(this.startPos, this.targetPos, alpha);
+      this.camera.quaternion.slerpQuaternions(this.startQuat, this.#targetQuat, alpha);
     }
   }
 }

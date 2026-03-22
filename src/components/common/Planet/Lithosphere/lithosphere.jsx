@@ -6,15 +6,15 @@ import classes from "./lithosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useThree from "@/hooks/useThree";
 
-const Lithosphere = ({ theme, routeDirection, currRoute }) => {
+const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes }) => {
   const containerEl = createRef();
 
-  const { resize, pan } = useThree(containerEl, theme, currRoute.handle.routeOrder);
+  const { resize, pan } = useThree(containerEl, theme, currRoute.handle.routeOrder, noOfRoutes);
   useResizeObserver((width, height) => resize(width, height));
 
   useEffect(() => {
     if (routeDirection !== 0) {
-      pan();
+      pan(routeDirection);
     }
   }, [pan, routeDirection]);
 
@@ -30,6 +30,7 @@ Lithosphere.propTypes = {
   routeDirection: PropTypes.bool,
   theme: PropTypes.string,
   blur: PropTypes.bool,
+  noOfRoutes: PropTypes.number,
 };
 
 export default Lithosphere;

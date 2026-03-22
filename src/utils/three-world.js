@@ -8,6 +8,7 @@ export class SimulatedThreeWorld {
   scene = null;
   timer = new Timer();
   MAX_DT = 0.015;
+  simulations = [];
 
   get width() {
     return this.renderer.getSize().x;
@@ -56,17 +57,28 @@ export class SimulatedThreeWorld {
     const dt = Math.min(this.timer.getDelta(), this.MAX_DT);
 
     this.update(dt);
+    for (const simulation of this.simulations) {
+      simulation.update?.(dt);
+    }
     this.renderer.render(this.scene, this.camera);
   }
   resize(width, height) {
     this.renderer.setSize(width, height);
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
+    for (const simulation of this.simulations) {
+      simulation.resize?.(width, height);
+    }
   }
   sync() {
-    /*  */
+    for (const simulation of this.simulations) {
+      simulation.sync?.();
+    }
   }
   destroy() {
+    for (const simulation of this.simulations) {
+      simulation.destroy?.();
+    }
     this.scene.clear();
     this.renderer.dispose();
   }

@@ -101,6 +101,7 @@ export class ColorTween {
   }
 
   start() {
+    if (this.fromHex === this.toHex) return;
     this.elapsed = 0;
     this.running = true;
   }
