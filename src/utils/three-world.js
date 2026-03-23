@@ -1,5 +1,6 @@
 import { PerspectiveCamera, Scene, Timer, WebGLRenderer } from "three";
 import { themes } from "./constants";
+import { PerfMonitor } from "./monitor";
 
 export class SimulatedThreeWorld {
   #state = { theme: themes.LIGHT };
@@ -9,6 +10,9 @@ export class SimulatedThreeWorld {
   timer = new Timer();
   MAX_DT = 0.015;
   simulations = [];
+  perf = true;
+  monitor = null;
+  metrics = {};
 
   get width() {
     return this.renderer.getSize().x;
@@ -32,9 +36,12 @@ export class SimulatedThreeWorld {
     this.sync();
   }
 
-  constructor(container, update = () => {}) {
+  constructor(container, update = () => {}, perfEl) {
     this.setup(container);
     this.update = update;
+    if (perfEl) {
+      this.monitor = new PerfMonitor(this, perfEl);
+    }
   }
   setup(container) {
     let width = container.clientWidth;
@@ -61,6 +68,10 @@ export class SimulatedThreeWorld {
       simulation.update?.(dt);
     }
     this.renderer.render(this.scene, this.camera);
+
+    if (this.perf) {
+      this.monitor.update(dt, this.metrics);
+    }
   }
   resize(width, height) {
     this.renderer.setSize(width, height);

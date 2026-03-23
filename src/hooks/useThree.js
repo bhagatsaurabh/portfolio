@@ -6,7 +6,7 @@ import { SimulatedThreeWorld } from "@/utils/three-world";
 import { SmoothCamera } from "@/utils/smooth-camera";
 import { Landscape } from "@/utils/landscape";
 
-export const useThree = (containerEl, theme, routeOrder, noOfRoutes) => {
+export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => {
   const world = useRef(null);
   const smoothCamera = useRef(null);
   const landscape = useRef(null);
@@ -42,9 +42,13 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes) => {
     }
 
     if (!world.current) {
-      const wrld = new SimulatedThreeWorld(containerEl.current, (dt) => {
-        smoothCamera.current.update(dt);
-      });
+      const wrld = new SimulatedThreeWorld(
+        containerEl.current,
+        (dt) => {
+          smoothCamera.current.update(dt);
+        },
+        perfEl.current,
+      );
       world.current = wrld;
 
       smoothCamera.current = new SmoothCamera(wrld.camera);
@@ -52,6 +56,12 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes) => {
       const sandbox = landscape.current.sandbox;
       cameraDelta.current = (sandbox.nearWidth - sandbox.orgNearWidth) / (noOfRoutes - 1);
       resetSmoothCamera(routeOrder);
+
+      /* setTimeout(() => {
+        smoothCamera.current.targetRot = new Vector3(-90, 0, 0);
+        smoothCamera.current.targetPos.setY(200);
+        smoothCamera.current.targetPos.setZ(-100);
+      }, 4000); */
 
       wrld.simulations.push(landscape.current);
       wrld.sync();
@@ -61,7 +71,7 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes) => {
     if (world.current.state.theme !== theme) {
       world.current.state = { ...world.current.state, theme };
     }
-  }, [containerEl, noOfRoutes, resetSmoothCamera, routeOrder, theme]);
+  }, [containerEl, noOfRoutes, perfEl, resetSmoothCamera, routeOrder, theme]);
   useEffect(() => () => world.current?.destroy(), []);
 
   return { world, resize, pan };

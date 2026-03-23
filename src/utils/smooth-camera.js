@@ -1,10 +1,10 @@
 import { Euler, Quaternion, Vector3 } from "three";
 import { Tween } from "./simulation";
-import { easeOutCubic } from "./graphics";
+import { cubicBezier } from "./graphics";
 
 export class SmoothCamera {
   camera = null;
-  tween = new Tween(0, 1, /* 1.5 */ 4, easeOutCubic);
+  tween = new Tween(0, 1, 1.25, cubicBezier(0.33, 0.03, 0.35, 0.97));
   targetPos = null;
   #targetQuat = null;
 

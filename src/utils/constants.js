@@ -28,3 +28,4 @@ export const introTitles = Object.freeze([
   "creative developer",
   "full-stack engineer",
 ]);
+export const RAD = Math.PI / 180;

@@ -1,4 +1,4 @@
-import { createRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
@@ -7,9 +7,16 @@ import useResizeObserver from "@/hooks/useResizeObserver";
 import useThree from "@/hooks/useThree";
 
 const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes }) => {
-  const containerEl = createRef();
+  const containerEl = useRef();
+  const perfEl = useRef(document.createElement("div"));
 
-  const { resize, pan } = useThree(containerEl, theme, currRoute.handle.routeOrder, noOfRoutes);
+  const { resize, pan } = useThree(
+    containerEl,
+    theme,
+    currRoute.handle.routeOrder,
+    noOfRoutes,
+    perfEl,
+  );
   useResizeObserver((width, height) => resize(width, height));
 
   useEffect(() => {

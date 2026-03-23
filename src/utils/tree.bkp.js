@@ -5,7 +5,7 @@ import { biasRand, denormalize, normalize, rand } from "./graphics";
 
 export class Tree {
   params = {
-    wind: { sensitivity: 1 },
+    wind: { strength: 1 },
     physics: {
       windInfluence: 3,
       stiffnessBase: 4,
@@ -280,9 +280,8 @@ export class Tree {
   }
   applyWind(wind, dt) {
     // physics... 😵🔫
+    const windStrength = Math.abs(wind);
     const p = this.params;
-    const effectiveWind = wind * p.wind.sensitivity;
-    const windStrength = Math.abs(effectiveWind);
     const maxBend = p.limits.maxBend;
     const fp = p.flutter;
     const {
@@ -298,7 +297,7 @@ export class Tree {
     } = p.physics;
     const t = this.at;
 
-    const kWindEffectiveInfluence = windInfluence;
+    const kWindEffectiveInfluence = windInfluence * p.wind.strength;
     const fatigueRange = fatigueMax - fatigueMin;
     const equilibriumWind = wind * equilibrium;
     const scaledSoftClampForce = p.limits.softClampForce * dt;

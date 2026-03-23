@@ -29,6 +29,7 @@ code {
   --preview-initial-top: 0;
   --preview-initial-left: 0;
   --scroll-timing-fn: cubic-bezier(0.33, 0.03, 0.35, 0.97);
+  --global-blur: 0px;
 }
 .light {
   --background-nav: #00000014;
@@ -43,8 +44,6 @@ code {
   --text-4: #b2b2b2;
   --iconColor: none;
   --backgroundFilter: none;
-  --treeColor: #363537;
-  --treeColorInverse: #b2b2b2;
 }
 .dark {
   --background-nav: #ffffff14;
@@ -59,8 +58,6 @@ code {
   --text-4: #898989;
   --iconColor: #ffffff;
   --backgroundFilter: brightness(0.7);
-  --treeColor: #b2b2b2;
-  --treeColorInverse: #363537;
 }
 
 @media (hover: hover) {

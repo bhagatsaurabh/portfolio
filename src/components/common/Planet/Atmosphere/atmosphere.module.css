@@ -7,7 +7,7 @@
   z-index: 1;
 }
 .Atmosphere.blur {
-  filter: blur(3px);
+  filter: blur(var(--global-blur));
 }
 .canvas {
   width: 100%;

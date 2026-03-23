@@ -1,9 +1,31 @@
 import { clamp } from "./index";
 
+// Need to optimize this, not suitable for hot loops
 export const rand = (min, max) => {
   const buf = new Uint32Array(1);
   window.crypto.getRandomValues(buf);
   return denormalize(buf[0] / (0xffffffff + 1), min, max);
+  // return Math.random() * (max - min) + min;
+};
+
+export const biasRand = (min, max, norm, type, strength = 10) => {
+  if (type === "sig") {
+    // sigmoid
+    const t = rand(0, 1);
+    const bias = (norm - 0.5) * strength;
+    const biased = 1 / (1 + Math.exp(-bias * (t - 0.5)));
+    return min + (max - min) * biased;
+  } else if (type === "pow") {
+    // power curve
+    const t = rand(0, 1);
+    const k = 1 - norm;
+    const exponent = Math.pow(2, (k - 0.5) * strength);
+    const biased = Math.pow(t, exponent);
+    return min + (max - min) * biased;
+  } else {
+    // no bias
+    return rand(0, 1);
+  }
 };
 export const ease = (currProgress, start, distance, steps = 100) => {
   currProgress /= steps / 2;

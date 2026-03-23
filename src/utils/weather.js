@@ -1,8 +1,8 @@
-import { Vector } from "canvas-percept";
 import { ColorTween, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Snow } from "./snow";
 import { weatherThemes } from "./constants";
 import { easeInOut } from "motion";
+import { Vector2 } from "three";
 
 export class Weather extends Simulation {
   weight = 0;
@@ -49,7 +49,7 @@ export class Weather extends Simulation {
 
 export class WeatherController extends Simulation {
   weathers = [];
-  wind = new Vector(-180, 0);
+  wind = new Vector2(-180, 0);
   gustTimeout = new TimeoutSchedule(0.75);
 
   constructor(world) {
@@ -94,12 +94,11 @@ export class WeatherController extends Simulation {
     }
   }
   gust(direction) {
-    console.log("gust");
-    this.wind = new Vector(direction * 480, 0);
+    this.wind = new Vector2(direction * 480, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {
-    this.wind = new Vector(-180, 0);
+    this.wind = new Vector2(-180, 0);
   }
 }
 

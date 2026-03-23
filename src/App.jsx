@@ -20,7 +20,6 @@ import { loadContact } from "@/store/contact";
 import { loadProjects } from "@/store/projects";
 import useRouteDirection from "@/hooks/useRouteDirection";
 import { useHorizontalSwipe } from "@/hooks/useHorizontalSwipe";
-import usePhaser from "./hooks/usePhaser";
 import Planet from "@/components/common/Planet/planet";
 import useIdlePreload from "./hooks/useIdlePreload";
 
@@ -29,7 +28,6 @@ const App = () => {
   const theme = useSelector(selectCurrTheme);
   const prefsLoaded = useSelector(selectPrefsLoaded);
   const { currRoute, direction, navigate } = useRouteDirection(routes);
-  const { initPhaser } = usePhaser(theme);
   const moveSection = (forward) => {
     const nextRouteIdx = clamp(
       currRoute.handle.routeOrder + (forward ? 1 : -1),
@@ -56,14 +54,13 @@ const App = () => {
       tasks.push(dispatch(loadPreferences()).unwrap());
       tasks.push(dispatch(loadContact()).unwrap());
       tasks.push(dispatch(loadProjects()).unwrap());
-      const results = await Promise.all(tasks);
-      initPhaser(results[0].theme);
+      await Promise.all(tasks);
       dispatch(setPrefsLoaded(true));
     };
     appInit();
 
     return () => dispatch(cleanup());
-  }, [dispatch, initPhaser]);
+  }, [dispatch]);
 
   const handleNavigate = (route) => {
     dispatch(setShowScrollHint(false));
