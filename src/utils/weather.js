@@ -94,7 +94,7 @@ export class WeatherController extends Simulation {
     }
   }
   gust(direction) {
-    this.wind = new Vector2(direction * 480, 0);
+    this.wind = new Vector2(-direction * 480, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {

@@ -27,14 +27,6 @@ export const biasRand = (min, max, norm, type, strength = 10) => {
     return rand(0, 1);
   }
 };
-export const ease = (currProgress, start, distance, steps = 100) => {
-  currProgress /= steps / 2;
-  if (currProgress < 1) {
-    return (distance / 2) * Math.pow(currProgress, 3) + start;
-  }
-  currProgress -= 2;
-  return (distance / 2) * (Math.pow(currProgress, 3) + 2) + start;
-};
 export const quadraticEase = (currentProgress, start, distance, steps = 100) => {
   currentProgress /= steps / 2;
   if (currentProgress <= 1) {

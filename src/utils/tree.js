@@ -1,7 +1,18 @@
-import { BufferAttribute, BufferGeometry, Color, DoubleSide, Mesh, MeshBasicMaterial } from "three";
+import {
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  InstancedMesh,
+  Matrix4,
+  Mesh,
+  MeshBasicMaterial,
+  Quaternion,
+  Vector3,
+} from "three";
 import { degToRad } from "three/src/math/MathUtils";
 
-import { biasRand, denormalize, normalize, rand } from "./graphics";
+import { biasRand, rand } from "./graphics";
 
 export class Tree {
   params = {
@@ -28,7 +39,7 @@ export class Tree {
       microScale: 0.3,
       freqScale: [0.1, 0.3],
     },
-    visual: { swayScale: 0.1, opacity: [0.3, 1] },
+    visual: { swayScale: 0.1 },
     generation: {
       initialLength: 1.4,
       initialWidth: 2.5,
@@ -38,7 +49,6 @@ export class Tree {
       zBranchRotation: [5, 35],
       xBranchRotation: 45,
       yBranchRotation: 45,
-      opacityBound: [0, 200],
       lod: 1,
     },
     spread: {
@@ -53,6 +63,8 @@ export class Tree {
   maxCrownReach = 0;
   widthScaleFactor = 0.0075; // constant for now, controls default line thickness
   sandbox = null;
+  perspectiveScale = 1;
+  minWidth = 0.0015;
 
   get color() {
     return this.material.color.getHexString();
@@ -60,22 +72,16 @@ export class Tree {
   set color(hex) {
     this.material.color = new Color(hex);
   }
-  get opacity() {
-    return this.material.opacity;
-  }
-  set opacity(v) {
-    this.material.opacity = v;
-  }
 
-  constructor(sandbox, pos, color, config = {}) {
+  constructor(sandbox, pos, instances, color, config = {}) {
     this.sandbox = sandbox;
     Object.assign(this.params.generation, config);
     this.setup(pos, color);
+    this.setupInstances(instances);
   }
 
   setup(pos, color) {
-    const { opacityBound, initialLength, initialWidth, branchLengthFactor, _lod } =
-      this.params.generation;
+    const { initialLength, initialWidth, branchLengthFactor, _lod } = this.params.generation;
 
     this.root = {
       length: initialLength,
@@ -95,16 +101,33 @@ export class Tree {
     this.spreadBranch();
     this.maxCrownReach = this.computeCrownReach(branchLengthFactor[1]);
 
-    const [minO, maxO] = this.params.visual.opacity;
+    const dist = pos.distanceTo(this.sandbox.world.camera.position);
+    this.perspectiveScale = dist * 0.07094;
+
     this.geometry = this.buildGeometry();
     this.material = new MeshBasicMaterial({
       color: new Color(color),
       transparent: true,
-      opacity: denormalize(1 - normalize(Math.abs(pos.z), ...opacityBound), minO, maxO),
       side: DoubleSide,
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.copy(pos);
+  }
+  setupInstances(count) {
+    const instanced = new InstancedMesh(this.geometry, this.material, count);
+
+    const matrix = new Matrix4();
+    for (let i = 0; i < count; i++) {
+      const position = this.sandbox.getRandomPoint();
+      const scale = rand(0.6, 1.4);
+      matrix.compose(
+        new Vector3(position.x, this.mesh.position.y, this.mesh.position.z),
+        new Quaternion(),
+        new Vector3(scale, scale, scale),
+      );
+      instanced.setMatrixAt(i, matrix);
+    }
+    this.sandbox.world.scene.add(instanced);
   }
   growBranch(width, depth, parent) {
     const p = this.params.generation;
@@ -146,7 +169,8 @@ export class Tree {
     let v = 0;
     let i = 0;
     for (let s = 0; s < this.branches.length; s++) {
-      const data = this.computeQuad(s);
+      this.branches[s].width *= this.widthScaleFactor;
+      const data = this.computeQuad(s, this.branches[s].width);
       positions.set(data, v);
       const base = s * 4;
       indices.set([base, base + 1, base + 2, base + 2, base + 1, base + 3], i);
@@ -158,9 +182,9 @@ export class Tree {
     geometry.setIndex(new BufferAttribute(indices, 1));
     return geometry;
   }
-  computeQuad(branchIdx) {
+  computeQuad(branchIdx, w) {
     const branch = this.branches[branchIdx];
-    const { worldStart: start, worldEnd: end, width } = branch;
+    const { worldStart: start, worldEnd: end } = branch;
     // root offset
     const { x: ox, y: oy, z: oz } = this.root.position;
     const sx = start.x + ox;
@@ -176,7 +200,7 @@ export class Tree {
     len = len > 0 ? Math.sqrt(len) : 1;
     const nx = -dy / len;
     const ny = dx / len;
-    const w = width * this.widthScaleFactor;
+    w *= this.perspectiveScale;
     const ax = sx + nx * w;
     const ay = sy + ny * w;
     const bx = sx - nx * w;
@@ -202,15 +226,17 @@ export class Tree {
     return max;
   }
   computeCrownReach(maxBranchLengthFactor) {
-    let maxCrownReach = this.trunk.length;
+    let maxCrownReach = this.params.generation.initialLength;
     for (let i = 0; i < this.maxDepth; i++) {
       this.maxCrownReach += maxCrownReach;
       maxCrownReach *= maxBranchLengthFactor;
     }
-    return maxCrownReach;
+    return this.maxCrownReach;
   }
   setProps() {
     const depthExponent = this.params.flutter.depthExponent;
+    const [minFS, maxFS] = this.params.flutter.freqScale;
+
     for (let i = 0; i < this.branches.length; i++) {
       const branch = this.branches[i];
       const normDepth = branch.depth / (this.maxDepth - 1);
@@ -221,6 +247,7 @@ export class Tree {
         dyn: { angle: 0, velocity: 0 },
         kWindBase: 0.5 + normDepth * 0.5,
         leafFactor: Math.pow(normDepth, depthExponent),
+        flutterScale: rand(minFS, maxFS),
       };
     }
   }
@@ -270,6 +297,9 @@ export class Tree {
   update(dt) {
     this.at += dt;
 
+    const dist = this.mesh.position.distanceTo(this.sandbox.world.camera.position);
+    this.perspectiveScale = dist * 0.07094;
+
     this.applyWind(this.sandbox.wind.x, dt);
     let v = 0;
     for (let i = 0; i < this.branches.length; i++) {
@@ -310,7 +340,7 @@ export class Tree {
 
     for (let i = 0; i < this.branches.length; i++) {
       const node = this.branches[i];
-      const { normDepth, dyn, seed, kWindBase, leafFactor } = node.props;
+      const { normDepth, dyn, seed, kWindBase, leafFactor, flutterScale } = node.props;
 
       // wind's influence and counter force
       const kWind = kWindBase * kWindEffectiveInfluence;
@@ -342,8 +372,7 @@ export class Tree {
       const micro = baseMicro * Math.sin(this.at * 20 + seed * 13.37) * leafFactor;
       const finalFlutter = flutterSignal * flutterAmp + micro;
       // final rotation
-      const [minFS, maxFS] = fp.freqScale;
-      node.angle = (dyn.angle + finalFlutter * normDepth * rand(minFS, maxFS)) * p.visual.swayScale;
+      node.angle = (dyn.angle + finalFlutter * normDepth * flutterScale) * p.visual.swayScale;
     }
   }
   updateWorldTransforms(branchIdx) {
@@ -406,7 +435,7 @@ export class Tree {
   updateGeometry(branchIdx, v) {
     const positions = this.geometry.attributes.position.array;
 
-    const data = this.computeQuad(branchIdx);
+    const data = this.computeQuad(branchIdx, this.branches[branchIdx].width);
 
     positions[v++] = data[0];
     positions[v++] = data[1];

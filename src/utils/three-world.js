@@ -1,4 +1,5 @@
-import { PerspectiveCamera, Scene, Timer, WebGLRenderer } from "three";
+import { Fog, PerspectiveCamera, Scene, Timer, WebGLRenderer } from "three";
+
 import { themes } from "./constants";
 import { PerfMonitor } from "./monitor";
 
@@ -50,10 +51,12 @@ export class SimulatedThreeWorld {
     const renderer = new WebGLRenderer({ alpha: true, antialias: true });
     this.renderer = renderer;
     renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
     const camera = new PerspectiveCamera(60, width / height, 1, 2500);
     this.camera = camera;
     const scene = new Scene();
+    scene.fog = new Fog(0xcccccc, 10, 100);
     this.scene = scene;
   }
   start() {

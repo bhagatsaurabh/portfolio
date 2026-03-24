@@ -1,17 +1,24 @@
 import { Vector2, Vector3 } from "three";
 import { landscapeThemes } from "./constants";
 import { easeInOut, rand, rescale } from "./graphics";
-import { ColorTween, Simulation } from "./simulation";
+import { ColorTween, IntervalSchedule, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Tree } from "./tree";
 import { Sprite } from "./sprite";
 
 export class Landscape extends Simulation {
   color = "#363537";
   colorTween = null;
-  originTree = null;
-  meself = null;
-  noOfTrees = 20;
-  trees = [];
+  gustTimeout = new TimeoutSchedule(0.75);
+  windInterval = new IntervalSchedule(rand(3, 10));
+  windTween = new Tween(1, 1, 2, easeInOut);
+
+  props = {
+    originTree: null,
+    noOfTrees: 30,
+    noOfInstances: 2,
+    trees: [],
+    meself: null,
+  };
   sandbox = {
     extensionFactor: 1.25,
     bounds: {
@@ -48,23 +55,25 @@ export class Landscape extends Simulation {
       leftNear.clone().lerp(rightNear, 0.5).z,
       leftFar.clone().lerp(rightFar, 0.5).z,
     ];
+    this.world.scene.fog.near = Math.abs(nearZ);
+    this.world.scene.fog.far = Math.abs(farZ);
 
     const pos = this.sandbox.bounds.leftNear.clone();
     pos.x = -(0.8 * (this.sandbox.orgNearWidth / 2));
-    // pos.x = -(0.5 * (this.sandbox.orgNearWidth / 2));
-    this.originTree = new Tree(this, pos, this.color);
-    this.originTree.opacity = rescale(pos.z, farZ, nearZ, 0.4, 1);
-    this.world.scene.add(this.originTree.mesh);
-    this.trees.push(this.originTree);
+    this.props.originTree = new Tree(this, pos, 0, this.color);
+    this.world.scene.add(this.props.originTree.mesh);
+    this.props.trees.push(this.props.originTree);
 
     this.generateFoliage(nearZ, farZ);
     this.generateMeself();
+
+    this.windInterval.start();
   }
   generateFoliage(nearZ, farZ) {
-    for (let i = 0; i < this.noOfTrees; i += 1) {
+    for (let i = 0; i < this.props.noOfTrees; i += 1) {
       const pos = this.getRandomPoint();
       const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
-      const tree = new Tree(this, pos, this.color, {
+      const tree = new Tree(this, pos, this.props.noOfInstances, this.color, {
         initialLength: rand(0.4, 1),
         initialWidth: rand(1.2, 1.7),
         branchLengthThreshold: rand(0.25, 0.35),
@@ -72,17 +81,16 @@ export class Landscape extends Simulation {
         branchWidthFactor: 0.8,
         lod,
       });
-      tree.opacity = rescale(pos.z, farZ, nearZ, 0.4, 1);
-      this.trees.push(tree);
+      this.props.trees.push(tree);
       this.world.scene.add(tree.mesh);
     }
   }
   generateMeself() {
-    this.meself = new Sprite(
+    this.props.meself = new Sprite(
       `${import.meta.env.VITE_SB_CDN_URL}/images/me-under-tree-inv.webp`,
-      this.originTree.mesh.position.clone(),
+      this.props.originTree.mesh.position.clone(),
     );
-    this.world.scene.add(this.meself.sprite);
+    this.world.scene.add(this.props.meself.sprite);
   }
   calcBounds() {
     // normalized device coords
@@ -133,12 +141,22 @@ export class Landscape extends Simulation {
     const right = this.sandbox.bounds.rightFar.clone().lerp(this.sandbox.bounds.rightNear, t);
     return left.lerp(right, rand(0, 1));
   }
-  gust(direction) {
-    for (const tree of this.trees) {
-      tree.gust(direction);
-    }
-  }
   update(dt) {
+    if (this.windTween.running) {
+      const tweenRes = this.windTween.update(dt);
+      this.wind.x = tweenRes.value;
+      if (tweenRes.finished) {
+        this.windInterval = new IntervalSchedule(rand(3, 10));
+        this.windInterval.start();
+      }
+    }
+    if (this.gustTimeout.update(dt)) {
+      this.onGustTimeout();
+    }
+    if (this.windInterval.update(dt)) {
+      this.onWindInterval();
+    }
+
     const currCamPosX = this.world.camera.position.x;
     const { leftNear, leftFar } = this.sandbox.bounds;
     this.sandbox.currBound = {
@@ -151,33 +169,55 @@ export class Landscape extends Simulation {
     if (this.colorTween) {
       const colorTweenRes = this.colorTween.update(dt);
       this.color = colorTweenRes.value;
-      this.trees.forEach((tree) => (tree.color = this.color));
-      this.meself.color = this.color;
+      this.props.trees.forEach((tree) => (tree.color = this.color));
+      this.props.meself.color = this.color;
       if (colorTweenRes.finished) {
         this.colorTween = null;
       }
     }
 
-    let noOfTrees = 0;
-    for (const tree of this.trees) {
+    // console.log(this.wind.x);
+    let simulatedTrees = 0;
+    for (const tree of this.props.trees) {
       if (this.isTreeVisible(tree)) {
-        noOfTrees += 1;
+        simulatedTrees += 1;
         tree.update(dt);
       }
     }
-    this.world.metrics.noOfTrees = noOfTrees;
+    this.world.metrics.noOfTrees = simulatedTrees;
   }
-  isTreeVisible(tree) {
-    const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.currBound;
+  isTreeVisible(/* tree */) {
+    // culling with instancing is not working with random positions
+    //eed to clusterize trees locally
+    return true;
 
-    const pos = tree.root.position;
+    /* const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.currBound;
+
+    const pos = tree.mesh.position;
     const maxCrownReachHalf = tree.maxCrownReach / 2;
 
     const z = pos.z;
     const t = (z - leftNear.z) / (leftFar.z - leftNear.z);
     const leftX = leftNear.x + (leftFar.x - leftNear.x) * t;
     const rightX = rightNear.x + (rightFar.x - rightNear.x) * t;
-    return pos.x + maxCrownReachHalf >= leftX && pos.x - maxCrownReachHalf <= rightX;
+    return pos.x + maxCrownReachHalf >= leftX && pos.x - maxCrownReachHalf <= rightX; */
+  }
+  gust(direction) {
+    this.gustTimeout.stop();
+    this.windInterval.stop();
+    this.windTween.stop();
+
+    this.wind = new Vector2(-direction * 2, 0);
+    this.gustTimeout.start();
+  }
+  onGustTimeout() {
+    this.wind.x = -Math.sign(this.wind.x) * 1;
+    this.windInterval.start();
+  }
+  onWindInterval() {
+    this.windInterval.stop();
+    this.windTween = new Tween(this.wind.x, -this.wind.x, 5, easeInOut);
+    this.windTween.start();
   }
   sync() {
     this.colorTween = new ColorTween(
@@ -189,7 +229,7 @@ export class Landscape extends Simulation {
     this.colorTween.start();
   }
   resize(width, height) {
-    for (const tree of this.trees) {
+    for (const tree of this.props.trees) {
       tree.resize({ width, height });
     }
   }

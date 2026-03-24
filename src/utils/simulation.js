@@ -74,6 +74,10 @@ export class Tween {
     this.elapsed = 0;
     this.running = true;
   }
+  stop() {
+    this.elapsed = 0;
+    this.running = false;
+  }
   update(dt) {
     if (!this.running) return { value: this.to, finished: false };
 

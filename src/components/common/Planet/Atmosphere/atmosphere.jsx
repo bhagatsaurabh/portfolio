@@ -28,9 +28,9 @@ const Atmosphere = ({ theme, routeDirection, currRoute }) => {
   }, [currWeather, pending, world]);
   useEffect(() => {
     if (routeDirection !== 0) {
-      world.current?.weather.gust(Math.abs(routeDirection));
+      world.current?.weather.gust(routeDirection);
     }
-  }, [routeDirection, world]);
+  }, [currRoute.handle.routeOrder, routeDirection, world]);
 
   return (
     <div
