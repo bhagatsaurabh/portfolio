@@ -5,9 +5,16 @@ import { cubicBezier } from "./graphics";
 export class SmoothCamera {
   camera = null;
   tween = new Tween(0, 1, 1.25, cubicBezier(0.33, 0.03, 0.35, 0.97));
-  targetPos = null;
+  #targetPos = null;
   #targetQuat = null;
 
+  get targetPos() {
+    return this.#targetPos;
+  }
+  set targetPos(pos) {
+    this.#targetPos = pos;
+    this.tween.stop();
+  }
   get targetRot() {
     return new Euler().setFromQuaternion(this.#targetQuat);
   }

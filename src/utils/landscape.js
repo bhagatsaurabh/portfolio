@@ -1,6 +1,6 @@
 import { Vector2, Vector3 } from "three";
 import { landscapeThemes } from "./constants";
-import { easeInOut, rand, rescale } from "./graphics";
+import { biasRand, easeInOut, normalize, rand, rescale } from "./graphics";
 import { ColorTween, IntervalSchedule, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Tree } from "./tree";
 import { Sprite } from "./sprite";
@@ -9,12 +9,12 @@ export class Landscape extends Simulation {
   color = "#363537";
   colorTween = null;
   gustTimeout = new TimeoutSchedule(0.75);
-  windInterval = new IntervalSchedule(rand(3, 10));
+  windInterval = new IntervalSchedule(rand(3, 15));
   windTween = new Tween(1, 1, 2, easeInOut);
 
   props = {
     originTree: null,
-    noOfTrees: 30,
+    noOfTrees: 25,
     noOfInstances: 2,
     trees: [],
     meself: null,
@@ -39,7 +39,7 @@ export class Landscape extends Simulation {
       rightFar: null,
     },
   };
-  wind = new Vector2(1, 0);
+  wind = new Vector2(0.75, 0);
 
   constructor(world) {
     super(world);
@@ -74,12 +74,14 @@ export class Landscape extends Simulation {
       const pos = this.getRandomPoint();
       const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
       const tree = new Tree(this, pos, this.props.noOfInstances, this.color, {
-        initialLength: rand(0.4, 1),
-        initialWidth: rand(1.2, 1.7),
-        branchLengthThreshold: rand(0.25, 0.35),
-        branchLengthFactor: [0.75, 0.85],
-        branchWidthFactor: 0.8,
-        lod,
+        generation: {
+          initialLength: rand(0.4, 1),
+          initialWidth: rand(1.2, 1.7),
+          branchLengthThreshold: rand(0.25, 0.35),
+          branchLengthFactor: [0.75, 0.85],
+          branchWidthFactor: 0.8,
+          lod,
+        },
       });
       this.props.trees.push(tree);
       this.world.scene.add(tree.mesh);
@@ -176,7 +178,6 @@ export class Landscape extends Simulation {
       }
     }
 
-    // console.log(this.wind.x);
     let simulatedTrees = 0;
     for (const tree of this.props.trees) {
       if (this.isTreeVisible(tree)) {
@@ -192,10 +193,8 @@ export class Landscape extends Simulation {
     return true;
 
     /* const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.currBound;
-
     const pos = tree.mesh.position;
     const maxCrownReachHalf = tree.maxCrownReach / 2;
-
     const z = pos.z;
     const t = (z - leftNear.z) / (leftFar.z - leftNear.z);
     const leftX = leftNear.x + (leftFar.x - leftNear.x) * t;
@@ -207,16 +206,23 @@ export class Landscape extends Simulation {
     this.windInterval.stop();
     this.windTween.stop();
 
-    this.wind = new Vector2(-direction * 2, 0);
+    this.wind = new Vector2(direction * 2, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {
-    this.wind.x = -Math.sign(this.wind.x) * 1;
+    // this.wind.x = -Math.sign(this.wind.x) * 1;
+    this.wind.x = Math.sign(this.wind.x) * 1;
     this.windInterval.start();
   }
   onWindInterval() {
     this.windInterval.stop();
-    this.windTween = new Tween(this.wind.x, -this.wind.x, 5, easeInOut);
+
+    this.windTween = new Tween(
+      this.wind.x,
+      biasRand(-0.75, 0.75, 1 - normalize(this.wind.x, -0.75, 0.75), "pow"),
+      5,
+      easeInOut,
+    );
     this.windTween.start();
   }
   sync() {

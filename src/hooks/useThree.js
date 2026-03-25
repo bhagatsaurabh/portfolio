@@ -30,7 +30,9 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
   const pan = useCallback(
     (routeDirection) => {
       landscape.current.gust(routeDirection);
-      smoothCamera.current.targetPos.setX(routeOrder * cameraDelta.current);
+      const currentPos = smoothCamera.current.targetPos.clone();
+      currentPos.setX(routeOrder * cameraDelta.current);
+      smoothCamera.current.targetPos = currentPos;
       // smoothCamera.current.targetRot.y = -rescale(routeOrder, 0, 4, 0, /* degToRad(5) */ 0.0872665);
     },
     [routeOrder],

@@ -3,6 +3,7 @@ import {
   BufferGeometry,
   Color,
   DoubleSide,
+  Euler,
   InstancedMesh,
   Matrix4,
   Mesh,
@@ -21,7 +22,7 @@ export class Tree {
       windInfluence: 3,
       stiffnessBase: 4,
       stiffnessScale: 6,
-      damping: 0.8,
+      damping: 1.5,
       fatigueMin: 0.6,
       fatigueMax: 1.0,
       equilibrium: 0.6,
@@ -30,16 +31,18 @@ export class Tree {
     },
     limits: { maxBend: 1.2, softClampForce: 10 },
     flutter: {
-      ampBase: 0.8,
+      ampBase: 0.4,
+      freqBase: 6,
       ampWindScale: 1.2,
-      freqBase: 8,
-      freqDepthScale: 20,
-      freqWindScale: 10,
+      freqWindScale: 8,
+      freqDepthScale: 3.5,
+      energyRise: 15, // reaction time to energy increase
+      energyDecay: 1.5, // reaction time to energy decrease
       depthExponent: 2.5, // non-dynamic
       microScale: 0.3,
-      freqScale: [0.1, 0.3],
+      freqScale: 0.2,
     },
-    visual: { swayScale: 0.1 },
+    visual: { swayScale: 0.2 },
     generation: {
       initialLength: 1.4,
       initialWidth: 2.5,
@@ -56,13 +59,13 @@ export class Tree {
     },
   };
   at = 0; // accumulated
+  sandbox = null;
   root = null;
   trunk = null;
   branches = [];
   maxDepth = 0;
   maxCrownReach = 0;
   widthScaleFactor = 0.0075; // constant for now, controls default line thickness
-  sandbox = null;
   perspectiveScale = 1;
   minWidth = 0.0015;
 
@@ -73,9 +76,12 @@ export class Tree {
     this.material.color = new Color(hex);
   }
 
-  constructor(sandbox, pos, instances, color, config = {}) {
+  constructor(sandbox, pos, instances, color, options = {}) {
     this.sandbox = sandbox;
-    Object.assign(this.params.generation, config);
+    for (const key in this.params) {
+      this.params[key] = { ...this.params[key], ...(options[key] ?? {}) };
+    }
+
     this.setup(pos, color);
     this.setupInstances(instances);
   }
@@ -92,6 +98,8 @@ export class Tree {
       totalAngle: 0,
       baseRot: { x: 0, y: 0, z: 0 },
       worldDir: { x: 0, y: 1, z: 0 },
+      baseQuat: new Quaternion(),
+      worldQuat: new Quaternion(),
     };
 
     this.growBranch(initialWidth, 0, this.root);
@@ -119,7 +127,7 @@ export class Tree {
     const matrix = new Matrix4();
     for (let i = 0; i < count; i++) {
       const position = this.sandbox.getRandomPoint();
-      const scale = rand(0.6, 1.4);
+      const scale = rand(0.8, 1.2);
       matrix.compose(
         new Vector3(position.x, this.mesh.position.y, this.mesh.position.z),
         new Quaternion(),
@@ -150,6 +158,8 @@ export class Tree {
       worldEnd: { ...end },
       worldDir: { x: 0, y: 1, z: 0 },
       baseRot: { x: 0, y: 0, z: 0 },
+      baseQuat: new Quaternion(),
+      worldQuat: new Quaternion(),
     };
     if (!parent.children) parent.children = [];
 
@@ -235,7 +245,6 @@ export class Tree {
   }
   setProps() {
     const depthExponent = this.params.flutter.depthExponent;
-    const [minFS, maxFS] = this.params.flutter.freqScale;
 
     for (let i = 0; i < this.branches.length; i++) {
       const branch = this.branches[i];
@@ -247,7 +256,11 @@ export class Tree {
         dyn: { angle: 0, velocity: 0 },
         kWindBase: 0.5 + normDepth * 0.5,
         leafFactor: Math.pow(normDepth, depthExponent),
-        flutterScale: rand(minFS, maxFS),
+        flutterScale: this.params.flutter.freqScale,
+        flutterEnergy: 0,
+        phaseOffset: 0,
+        phase: 0,
+        microPhase: 0,
       };
     }
   }
@@ -279,20 +292,17 @@ export class Tree {
     if (rand(0, 1) < anomalyChance) {
       const type = Math.floor(rand(0, 3));
       if (type === 0) {
-        zRot *= rand(1.8, 2.5);
+        zRot *= rand(1.3, 2);
       } else if (type === 1) {
         zRot *= rand(0.3, 0.6);
       } else {
-        xRot *= rand(1.1, 1.4);
-        yRot *= rand(1.1, 1.4);
+        xRot *= rand(1.1, 1.25);
+        yRot *= rand(1.1, 1.25);
       }
     }
 
-    branch.baseRot = {
-      x: xRot,
-      y: yRot,
-      z: zRot,
-    };
+    const q = new Quaternion().setFromEuler(new Euler(xRot, yRot, zRot, "XYZ"));
+    branch.baseQuat = q;
   }
   update(dt) {
     this.at += dt;
@@ -300,7 +310,10 @@ export class Tree {
     const dist = this.mesh.position.distanceTo(this.sandbox.world.camera.position);
     this.perspectiveScale = dist * 0.07094;
 
-    this.applyWind(this.sandbox.wind.x, dt);
+    // for spatial variations
+    const spatialWind =
+      this.sandbox.wind.x + Math.sin(this.mesh.position.x * 0.1 + this.at * 0.5) * 0.2;
+    this.applyWind(spatialWind, dt);
     let v = 0;
     for (let i = 0; i < this.branches.length; i++) {
       this.updateWorldTransforms(i);
@@ -333,14 +346,11 @@ export class Tree {
     const equilibriumWind = wind * equilibrium;
     const scaledSoftClampForce = p.limits.softClampForce * dt;
     const effectiveEnergy = energyFloor * energyPush;
-    const flutterBaseAmp = fp.ampBase + windStrength * fp.ampWindScale;
-    const flutterBaseFreq = windStrength * fp.freqWindScale + fp.freqBase;
-    const baseMicro = windStrength * fp.microScale;
     const windSign = Math.sign(wind);
 
     for (let i = 0; i < this.branches.length; i++) {
-      const node = this.branches[i];
-      const { normDepth, dyn, seed, kWindBase, leafFactor, flutterScale } = node.props;
+      const branch = this.branches[i];
+      const { normDepth, dyn, seed, kWindBase, leafFactor, flutterScale } = branch.props;
 
       // wind's influence and counter force
       const kWind = kWindBase * kWindEffectiveInfluence;
@@ -363,74 +373,51 @@ export class Tree {
         dyn.velocity += windSign * effectiveEnergy;
       }
       // fluttering
-      const flutterAmp = flutterBaseAmp * leafFactor;
-      const flutterFreq = flutterBaseFreq + leafFactor * fp.freqDepthScale;
-      const baseFreq = this.at * flutterFreq;
-      const f1 = Math.sin(baseFreq + seed);
-      const f2 = Math.sin(baseFreq * 2.1 + seed * 2);
-      let flutterSignal = f1 * 0.7 + f2 * 0.3;
-      const micro = baseMicro * Math.sin(this.at * 20 + seed * 13.37) * leafFactor;
+      const windTarget = windStrength;
+      if (windTarget > branch.props.flutterEnergy) {
+        branch.props.flutterEnergy +=
+          (windTarget - branch.props.flutterEnergy) * Math.min(1, fp.energyRise * dt);
+      } else {
+        branch.props.flutterEnergy +=
+          (windTarget - branch.props.flutterEnergy) * Math.min(1, fp.energyDecay * dt);
+      }
+      const energy = branch.props.flutterEnergy;
+      const flutterFreq =
+        fp.freqBase + energy * fp.freqWindScale + Math.pow(normDepth, 0.7) * fp.freqDepthScale;
+      branch.props.phase += flutterFreq * dt;
+      branch.props.phaseOffset += dt * 0.5;
+      const phase = branch.props.phase + seed + branch.props.phaseOffset;
+      const f1 = Math.sin(phase);
+      const f2 = Math.sin(phase * 2.3 + seed * 1.7);
+      const flutterSignal = f1 * 0.6 + f2 * 0.4;
+      branch.props.microPhase += dt * 25;
+      const micro = fp.microScale * leafFactor * Math.sin(branch.props.microPhase + seed * 13.37);
+      const flutterAmp = (fp.ampBase + energy * fp.ampWindScale) * leafFactor;
       const finalFlutter = flutterSignal * flutterAmp + micro;
       // final rotation
-      node.angle = (dyn.angle + finalFlutter * normDepth * flutterScale) * p.visual.swayScale;
+      branch.angle = (dyn.angle + finalFlutter * flutterScale) * p.visual.swayScale;
     }
   }
   updateWorldTransforms(branchIdx) {
     const branch = this.branches[branchIdx];
     const parent = branch.parent;
-    const start = parent.worldEnd;
 
+    const start = parent.worldEnd;
     branch.worldStart.x = start.x;
     branch.worldStart.y = start.y;
     branch.worldStart.z = start.z;
 
-    let dir = { ...branch.parent.worldDir }; // start from parent
-    const rot = branch.baseRot;
+    const parentQuat = parent.worldQuat;
+    const axis = new Vector3(0, 0, -1);
+    const angle = branch.angle * branch.props.normDepth;
+    const windQuat = new Quaternion().setFromAxisAngle(axis, angle);
+    const worldQuat = parentQuat.clone().multiply(branch.baseQuat).multiply(windQuat);
+    branch.worldQuat = worldQuat;
+    const dir = new Vector3(0, 1, 0).applyQuaternion(worldQuat);
 
-    let cy = Math.cos(rot.x),
-      sy = Math.sin(rot.x);
-    dir = {
-      x: dir.x,
-      y: dir.y * cy - dir.z * sy,
-      z: dir.y * sy + dir.z * cy,
-    };
-    let cx = Math.cos(rot.y),
-      sx = Math.sin(rot.y);
-    dir = {
-      x: dir.x * cx + dir.z * sx,
-      y: dir.y,
-      z: -dir.x * sx + dir.z * cx,
-    };
-    let cz = Math.cos(rot.z),
-      sz = Math.sin(rot.z);
-    dir = {
-      x: dir.x * cz - dir.y * sz,
-      y: dir.x * sz + dir.y * cz,
-      z: dir.z,
-    };
-
-    const len = Math.hypot(dir.x, dir.y, dir.z) || 1;
-    dir = { x: dir.x / len, y: dir.y / len, z: dir.z / len };
-    branch.worldDir = dir;
-
-    let dx = dir.x * branch.length;
-    let dy = dir.y * branch.length;
-    let dz = dir.z * branch.length;
-
-    const parentAngle = branch.parent.totalAngle || 0;
-    const totalAngle = parentAngle * 0.7 + (branch.angle || 0) * 0.8;
-    branch.totalAngle = totalAngle;
-    const cos = Math.cos(totalAngle);
-    const sin = Math.sin(totalAngle);
-
-    // rotate around Z only (wind)
-    const rx = dx * cos - dy * sin;
-    const ry = dx * sin + dy * cos;
-    const rz = dz;
-
-    branch.worldEnd.x = start.x + rx;
-    branch.worldEnd.y = start.y + ry;
-    branch.worldEnd.z = start.z + rz;
+    branch.worldEnd.x = start.x + dir.x * branch.length;
+    branch.worldEnd.y = start.y + dir.y * branch.length;
+    branch.worldEnd.z = start.z + dir.z * branch.length;
   }
   updateGeometry(branchIdx, v) {
     const positions = this.geometry.attributes.position.array;
