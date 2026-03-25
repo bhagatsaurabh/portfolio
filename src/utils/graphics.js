@@ -7,6 +7,9 @@ export const rand = (min, max) => {
   return denormalize(buf[0] / (0xffffffff + 1), min, max);
   // return Math.random() * (max - min) + min;
 };
+export const randInt = (min, max) => {
+  return Math.floor(rand(0, 1) * (max - min + 1)) + min;
+};
 
 export const biasRand = (min, max, norm, type, strength = 10) => {
   if (type === "sig") {

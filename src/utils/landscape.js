@@ -1,9 +1,10 @@
 import { Vector2, Vector3 } from "three";
 import { landscapeThemes } from "./constants";
-import { biasRand, easeInOut, normalize, rand, rescale } from "./graphics";
+import { biasRand, easeInOut, normalize, rand, randInt, rescale } from "./graphics";
 import { ColorTween, IntervalSchedule, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Tree } from "./tree";
 import { Sprite } from "./sprite";
+import { SPREAD_VARIETIES } from "./tree-utils";
 
 export class Landscape extends Simulation {
   color = "#363537";
@@ -71,21 +72,41 @@ export class Landscape extends Simulation {
   }
   generateFoliage(nearZ, farZ) {
     for (let i = 0; i < this.props.noOfTrees; i += 1) {
-      const pos = this.getRandomPoint();
-      const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
-      const tree = new Tree(this, pos, this.props.noOfInstances, this.color, {
-        generation: {
-          initialLength: rand(0.4, 1),
-          initialWidth: rand(1.2, 1.7),
-          branchLengthThreshold: rand(0.25, 0.35),
-          branchLengthFactor: [0.75, 0.85],
-          branchWidthFactor: 0.8,
-          lod,
-        },
-      });
+      const pos = this.getRandomPoint(nearZ, farZ);
+      const tree = new Tree(
+        this,
+        pos,
+        this.props.noOfInstances,
+        this.color,
+        this.randomizeTreeConfig(pos, nearZ, farZ),
+      );
       this.props.trees.push(tree);
       this.world.scene.add(tree.mesh);
     }
+  }
+  randomizeTreeConfig(pos, nearZ, farZ) {
+    const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
+
+    return {
+      wind: { sensitivity: rand(0.85, 1.3) },
+      visual: { swayScale: rand(0.15, 0.25) },
+      generation: {
+        initialLength: rand(0.4, 1),
+        initialWidth: rand(1.2, 1.7),
+        branchLengthThreshold: rand(0.25, 0.35),
+        branchLengthFactor: [0.75, 0.85],
+        branchWidthFactor: 0.8,
+        lod,
+      },
+      spread: this.selectTreeVariety(),
+    };
+  }
+  selectTreeVariety() {
+    const spreadVariety = SPREAD_VARIETIES[randInt(0, 3)];
+    if (typeof spreadVariety === "function") {
+      return spreadVariety();
+    }
+    return structuredClone(spreadVariety);
   }
   generateMeself() {
     this.props.meself = new Sprite(

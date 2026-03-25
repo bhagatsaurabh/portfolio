@@ -40,7 +40,7 @@ export class Tree {
       energyDecay: 1.5, // reaction time to energy decrease
       depthExponent: 2.5, // non-dynamic
       microScale: 0.3,
-      freqScale: 0.2,
+      freqScale: 0.25,
     },
     visual: { swayScale: 0.2 },
     generation: {
@@ -55,17 +55,26 @@ export class Tree {
       lod: 1,
     },
     spread: {
-      anomalyChance: [0.08, 0.3],
+      anomalyChance: {
+        increase: [0.08, 0.3],
+        decrease: [0.01, 0.02],
+        widen: [0.08, 0.3],
+      },
+      anomalyScale: {
+        increase: [1.2, 1.5],
+        decrease: [0.3, 0.6],
+        widen: [1.1, 1.25],
+      },
     },
   };
   at = 0; // accumulated
+  sandbox = null;
   root = null;
   trunk = null;
   branches = [];
   maxDepth = 0;
   maxCrownReach = 0;
   widthScaleFactor = 0.0075; // constant for now, controls default line thickness
-  sandbox = null;
   perspectiveScale = 1;
   minWidth = 0.0015;
 
@@ -76,9 +85,12 @@ export class Tree {
     this.material.color = new Color(hex);
   }
 
-  constructor(sandbox, pos, instances, color, config = {}) {
+  constructor(sandbox, pos, instances, color, options = {}) {
     this.sandbox = sandbox;
-    Object.assign(this.params.generation, config);
+    for (const key in this.params) {
+      this.params[key] = { ...this.params[key], ...(options[key] ?? {}) };
+    }
+
     this.setup(pos, color);
     this.setupInstances(instances);
   }
@@ -124,7 +136,7 @@ export class Tree {
     const matrix = new Matrix4();
     for (let i = 0; i < count; i++) {
       const position = this.sandbox.getRandomPoint();
-      const scale = rand(0.6, 1.4);
+      const scale = rand(0.8, 1.2);
       matrix.compose(
         new Vector3(position.x, this.mesh.position.y, this.mesh.position.z),
         new Quaternion(),
@@ -282,20 +294,29 @@ export class Tree {
     const [minZRot, maxZRot] = zBranchRotation;
     let zRot = degToRad(biasRand(minZRot, maxZRot, 1 - normDepth, "pow", 1) * direction);
 
-    const [minAC, maxAC] = this.params.spread.anomalyChance;
-    const anomalyChance = biasRand(minAC, maxAC, 1 - normDepth, "sig");
+    const {
+      increase: incChance,
+      decrease: decChance,
+      widen: widChance,
+    } = this.params.spread.anomalyChance;
+    const {
+      increase: incScale,
+      decrease: decScale,
+      widen: widScale,
+    } = this.params.spread.anomalyScale;
+    const incAC = biasRand(incChance[0], incChance[1], 1 - normDepth, "sig");
+    const decAC = biasRand(decChance[0], decChance[1], 1 - normDepth, "sig");
+    const widAC = biasRand(widChance[0], widChance[1], 1 - normDepth, "sig");
 
-    // need to parameterize this....
-    if (rand(0, 1) < anomalyChance) {
-      const type = Math.floor(rand(0, 3));
-      if (type === 0) {
-        zRot *= rand(1.3, 2);
-      } else if (type === 1) {
-        zRot *= rand(0.3, 0.6);
-      } else {
-        xRot *= rand(1.1, 1.25);
-        yRot *= rand(1.1, 1.25);
-      }
+    // either increased anomaly chance of spreading or shrinking, can't be both
+    if (rand(0, 1) < incAC) {
+      zRot *= rand(incScale[0], incScale[1]);
+    } else if (rand(0, 1) < decAC) {
+      zRot *= rand(decScale[0], decScale[1]);
+    }
+    if (rand(0, 1) < widAC) {
+      xRot *= rand(widScale[0], widScale[1]);
+      yRot *= rand(widScale[0], widScale[1]);
     }
 
     const q = new Quaternion().setFromEuler(new Euler(xRot, yRot, zRot, "XYZ"));
@@ -307,7 +328,10 @@ export class Tree {
     const dist = this.mesh.position.distanceTo(this.sandbox.world.camera.position);
     this.perspectiveScale = dist * 0.07094;
 
-    this.applyWind(this.sandbox.wind.x, dt);
+    // for spatial variations
+    const spatialWind =
+      this.sandbox.wind.x + Math.sin(this.mesh.position.x * 0.1 + this.at * 0.5) * 0.2;
+    this.applyWind(spatialWind, dt);
     let v = 0;
     for (let i = 0; i < this.branches.length; i++) {
       this.updateWorldTransforms(i);
@@ -433,6 +457,5 @@ export class Tree {
 
     return v;
   }
-  gust() {}
   resize() {}
 }
