@@ -74,6 +74,9 @@ export class Tween {
     this.elapsed = 0;
     this.running = true;
   }
+  reset() {
+    this.start();
+  }
   stop() {
     this.elapsed = 0;
     this.running = false;

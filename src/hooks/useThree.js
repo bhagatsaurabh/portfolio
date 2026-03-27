@@ -1,21 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Vector3 } from "three";
+import { AmbientLight, DirectionalLight, Euler, Quaternion, Vector3 } from "three";
 
 import { rescale } from "@/utils/graphics";
 import { SimulatedThreeWorld } from "@/utils/three-world";
-import { SmoothCamera } from "@/utils/smooth-camera";
 import { Landscape } from "@/utils/landscape";
 
 export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => {
   const world = useRef(null);
-  const smoothCamera = useRef(null);
   const landscape = useRef(null);
-  const cameraDelta = useRef(0);
+  const panDelta = useRef(0);
 
-  const resetSmoothCamera = useCallback((routeOrder) => {
-    smoothCamera.current.reset(
-      new Vector3(rescale(routeOrder, 0, 4, 0, 1000), 0, 0),
-      new Vector3(0, -rescale(routeOrder, 0, 4, 0, /* degToRad(5) */ 0), 0),
+  const resetPanPosition = useCallback((routeOrder) => {
+    landscape.current.resetWorldPos(
+      new Vector3(rescale(routeOrder, 0, 4, 0, 4 * panDelta.current), 0, 0),
     );
   }, []);
   const resize = useCallback(
@@ -23,17 +20,17 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
       const wrld = world.current;
       if (!wrld) return;
       wrld.resize(width, height);
-      resetSmoothCamera(routeOrder);
+      resetPanPosition(routeOrder);
     },
-    [resetSmoothCamera, routeOrder],
+    [resetPanPosition, routeOrder],
   );
   const pan = useCallback(
     (routeDirection) => {
+      let currentPos = landscape.current.targetPos.clone();
+      currentPos.setX(routeOrder * panDelta.current);
+      landscape.current.targetPos = currentPos;
+
       landscape.current.gust(routeDirection);
-      const currentPos = smoothCamera.current.targetPos.clone();
-      currentPos.setX(routeOrder * cameraDelta.current);
-      smoothCamera.current.targetPos = currentPos;
-      // smoothCamera.current.targetRot.y = -rescale(routeOrder, 0, 4, 0, /* degToRad(5) */ 0.0872665);
     },
     [routeOrder],
   );
@@ -44,26 +41,42 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
     }
 
     if (!world.current) {
-      const wrld = new SimulatedThreeWorld(
-        containerEl.current,
-        (dt) => {
-          smoothCamera.current.update(dt);
-        },
-        perfEl.current,
-      );
+      const wrld = new SimulatedThreeWorld(containerEl.current, () => {}, perfEl.current);
       world.current = wrld;
 
-      smoothCamera.current = new SmoothCamera(wrld.camera);
       landscape.current = new Landscape(wrld);
-      const sandbox = landscape.current.sandbox;
-      cameraDelta.current = (sandbox.nearWidth - sandbox.orgNearWidth) / (noOfRoutes - 1);
-      resetSmoothCamera(routeOrder);
+      panDelta.current = landscape.current.maxWorldX / (noOfRoutes - 1);
+      resetPanPosition(routeOrder);
 
-      /* setTimeout(() => {
-        smoothCamera.current.targetRot = new Vector3(-90, 0, 0);
-        smoothCamera.current.targetPos.setY(200);
-        smoothCamera.current.targetPos.setZ(-100);
-      }, 4000); */
+      const ambient = new AmbientLight(0xffffff, 0.5);
+      wrld.scene.add(ambient);
+
+      const dirLight = new DirectionalLight(0xffffff, 0.85);
+      dirLight.position.set(-1, 1, 1);
+      wrld.scene.add(dirLight);
+
+      setTimeout(() => {
+        /* wrld.activeCamera = wrld.debugCam;
+        wrld.debugCam.quaternion.copy(new Quaternion().setFromEuler(new Euler(-90, 0, 0)));
+        wrld.debugCam.position.y += 70;
+        wrld.debugCam.position.z = -90; */
+
+        /* landscape.current.props.trees.forEach((tree) => {
+          const rBox = new Mesh(
+            new BoxGeometry(1, 1, 1),
+            new LineBasicMaterial({ color: 0xff0000 }),
+          );
+          rBox.position.copy(tree.mesh.position);
+          wrld.scene.add(rBox);
+
+          const rBoxDyn = new Mesh(
+            new BoxGeometry(5, 5, 5),
+            new LineBasicMaterial({ color: 0x0000ff }),
+          );
+          rBox.position.copy(tree.mesh.position);
+          tree.mesh.add(rBoxDyn);
+        }); */
+      }, 4000);
 
       wrld.simulations.push(landscape.current);
       wrld.sync();
@@ -73,7 +86,7 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
     if (world.current.state.theme !== theme) {
       world.current.state = { ...world.current.state, theme };
     }
-  }, [containerEl, noOfRoutes, perfEl, resetSmoothCamera, routeOrder, theme]);
+  }, [containerEl, noOfRoutes, perfEl, resetPanPosition, routeOrder, theme]);
   useEffect(() => () => world.current?.destroy(), []);
 
   return { world, resize, pan };

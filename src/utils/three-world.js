@@ -1,12 +1,22 @@
-import { Fog, PerspectiveCamera, Scene, Timer, WebGLRenderer } from "three";
+import {
+  OrthographicCamera,
+  PerspectiveCamera,
+  Scene,
+  TextureLoader,
+  Timer,
+  WebGLRenderer,
+} from "three";
 
 import { themes } from "./constants";
 import { PerfMonitor } from "./monitor";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export class SimulatedThreeWorld {
   #state = { theme: themes.LIGHT };
   renderer = null;
-  camera = null;
+  orthoCam = null;
+  debugCam = null;
+  aspect = 1;
   scene = null;
   timer = new Timer();
   MAX_DT = 0.015;
@@ -14,6 +24,9 @@ export class SimulatedThreeWorld {
   perf = true;
   monitor = null;
   metrics = {};
+  gltfLoader = null;
+  texLoader = null;
+  activeCamera = null;
 
   get width() {
     return this.renderer.getSize().x;
@@ -45,6 +58,9 @@ export class SimulatedThreeWorld {
     }
   }
   setup(container) {
+    this.gltfLoader = new GLTFLoader();
+    this.texLoader = new TextureLoader();
+
     let width = container.clientWidth;
     let height = container.clientHeight;
 
@@ -53,11 +69,12 @@ export class SimulatedThreeWorld {
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
-    const camera = new PerspectiveCamera(60, width / height, 1, 2500);
-    this.camera = camera;
+    this.debugCam = new PerspectiveCamera(60, width / height, 1, 2500);
     const scene = new Scene();
-    scene.fog = new Fog(0xcccccc, 10, 100);
     this.scene = scene;
+    this.aspect = window.innerWidth / window.innerHeight;
+    this.orthoCam = new OrthographicCamera(-this.aspect, this.aspect, 1, -1, 0.1, 100);
+    this.activeCamera = this.orthoCam;
   }
   start() {
     this.renderer.setAnimationLoop(this.loop.bind(this));
@@ -70,7 +87,8 @@ export class SimulatedThreeWorld {
     for (const simulation of this.simulations) {
       simulation.update?.(dt);
     }
-    this.renderer.render(this.scene, this.camera);
+
+    this.renderer.render(this.scene, this.activeCamera);
 
     if (this.perf) {
       this.monitor.update(dt, this.metrics);
@@ -78,8 +96,15 @@ export class SimulatedThreeWorld {
   }
   resize(width, height) {
     this.renderer.setSize(width, height);
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
+
+    this.aspect = width / height;
+    this.orthoCam.left = -this.aspect;
+    this.orthoCam.right = this.aspect;
+    this.orthoCam.updateProjectionMatrix();
+
+    this.debugCam.aspect = width / height;
+    this.debugCam.updateProjectionMatrix();
+
     for (const simulation of this.simulations) {
       simulation.resize?.(width, height);
     }

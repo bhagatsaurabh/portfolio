@@ -13,7 +13,7 @@ import {
 } from "three";
 import { degToRad } from "three/src/math/MathUtils";
 
-import { biasRand, rand } from "./graphics";
+import { biasRand, normalize, rand } from "./graphics";
 
 export class Tree {
   params = {
@@ -70,13 +70,17 @@ export class Tree {
   at = 0; // accumulated
   sandbox = null;
   root = null;
+  mesh = null;
   trunk = null;
   branches = [];
   maxDepth = 0;
   maxCrownReach = 0;
   widthScaleFactor = 0.0075; // constant for now, controls default line thickness
-  perspectiveScale = 1;
+  maxZWidthScale = 1;
   minWidth = 0.0015;
+  baseScale = 0.16;
+  instances = [];
+  instancedMesh = null;
 
   get color() {
     return this.material.color.getHexString();
@@ -85,14 +89,15 @@ export class Tree {
     this.material.color = new Color(hex);
   }
 
-  constructor(sandbox, pos, instances, color, options = {}) {
-    this.sandbox = sandbox;
+  constructor(landscape, pos, instanceCount, color, options = {}) {
+    this.landscape = landscape;
+    this.sandbox = landscape.sandbox;
     for (const key in this.params) {
       this.params[key] = { ...this.params[key], ...(options[key] ?? {}) };
     }
 
     this.setup(pos, color);
-    this.setupInstances(instances);
+    this.setupInstances(instanceCount);
   }
 
   setup(pos, color) {
@@ -118,9 +123,6 @@ export class Tree {
     this.spreadBranch();
     this.maxCrownReach = this.computeCrownReach(branchLengthFactor[1]);
 
-    const dist = pos.distanceTo(this.sandbox.world.camera.position);
-    this.perspectiveScale = dist * 0.07094;
-
     this.geometry = this.buildGeometry();
     this.material = new MeshBasicMaterial({
       color: new Color(color),
@@ -129,22 +131,43 @@ export class Tree {
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.copy(pos);
+    if (this.landscape.props.originTree) {
+      this.mesh.position.y = this.landscape.props.originTree.mesh.position.y;
+    }
+    this.mesh.scale.setScalar(this.baseScale);
+
+    const [nearZ, farZ] = this.sandbox.bounds.z;
+    const normZ = normalize(this.mesh.position.z, nearZ, farZ);
+    this.maxZWidthScale = 1 + Math.abs(normZ) * 2;
   }
   setupInstances(count) {
-    const instanced = new InstancedMesh(this.geometry, this.material, count);
-
     const matrix = new Matrix4();
+    const [nearZ, farZ] = this.sandbox.bounds.z;
+    const normZ = normalize(this.mesh.position.z, nearZ, farZ);
+
+    // const materialR = new MeshBasicMaterial({ color: 0xff0000 });
+    this.instancedMesh = new InstancedMesh(this.geometry, this.material /*  materialR */, count);
+
     for (let i = 0; i < count; i++) {
-      const position = this.sandbox.getRandomPoint();
-      const scale = rand(0.8, 1.2);
+      const position = this.landscape.getRandomPoint(undefined, normZ);
+      const scale = rand(0.8, 1.2) * this.baseScale;
+
+      this.instances.push({
+        baseX: position.x,
+        z: position.z,
+        baseScale: scale,
+      });
+
       matrix.compose(
         new Vector3(position.x, this.mesh.position.y, this.mesh.position.z),
         new Quaternion(),
         new Vector3(scale, scale, scale),
       );
-      instanced.setMatrixAt(i, matrix);
+      this.instancedMesh.setMatrixAt(i, matrix);
     }
-    this.sandbox.world.scene.add(instanced);
+
+    this.instancedMesh.frustumCulled = false;
+    this.landscape.world.scene.add(this.instancedMesh);
   }
   growBranch(width, length, depth, parent) {
     const p = this.params.generation;
@@ -230,7 +253,7 @@ export class Tree {
     len = len > 0 ? Math.sqrt(len) : 1;
     const nx = -dy / len;
     const ny = dx / len;
-    w *= this.perspectiveScale;
+    w *= this.maxZWidthScale;
     const ax = sx + nx * w;
     const ay = sy + ny * w;
     const bx = sx - nx * w;
@@ -336,12 +359,9 @@ export class Tree {
   update(dt) {
     this.at += dt;
 
-    const dist = this.mesh.position.distanceTo(this.sandbox.world.camera.position);
-    this.perspectiveScale = dist * 0.07094;
-
     // for spatial variations
     const spatialWind =
-      this.sandbox.wind.x + Math.sin(this.mesh.position.x * 0.1 + this.at * 0.5) * 0.2;
+      this.landscape.wind.x + Math.sin(this.mesh.position.x * 0.1 + this.at * 0.5) * 0.2;
     this.applyWind(spatialWind, dt);
     let v = 0;
     for (let i = 0; i < this.branches.length; i++) {
@@ -349,6 +369,27 @@ export class Tree {
       v = this.updateGeometry(i, v);
     }
     this.geometry.attributes.position.needsUpdate = true;
+    this.updateInstances();
+  }
+  updateInstances() {
+    const matrix = new Matrix4();
+
+    for (let i = 0; i < this.instances.length; i++) {
+      const inst = this.instances[i];
+      const [pX, pScale] = this.landscape.perspectiveXAndScale(
+        { baseX: inst.baseX, baseScale: inst.baseScale },
+        inst.z,
+      );
+
+      matrix.compose(
+        new Vector3(pX, this.mesh.position.y, inst.z),
+        new Quaternion(),
+        new Vector3(pScale, pScale, pScale),
+      );
+      this.instancedMesh.setMatrixAt(i, matrix);
+    }
+
+    this.instancedMesh.instanceMatrix.needsUpdate = true;
   }
   applyWind(wind, dt) {
     // physics... 😵🔫
