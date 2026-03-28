@@ -1,7 +1,8 @@
 import {
+  AmbientLight,
   BoxGeometry,
   BufferGeometry,
-  Fog,
+  DirectionalLight,
   LineBasicMaterial,
   LineSegments,
   Mesh,
@@ -13,7 +14,7 @@ import {
   biasRand,
   cubicBezier,
   easeInOut,
-  normalize,
+  norm,
   rand,
   randInt,
   randPick,
@@ -26,6 +27,7 @@ import { SPREAD_VARIETIES } from "./tree-utils";
 import { House } from "./house";
 import { lerp } from "three/src/math/MathUtils";
 import { Windmill } from "./windmill";
+import { ReedCluster } from "./reed-cluster";
 
 export class Landscape extends Simulation {
   color = "#363537";
@@ -37,6 +39,8 @@ export class Landscape extends Simulation {
   props = {
     originTree: null,
     noOfTrees: 20,
+    noOfReedClusters: 1,
+    reedClusters: [],
     noOfInstances: 2,
     trees: [],
     house: null,
@@ -44,7 +48,7 @@ export class Landscape extends Simulation {
     meself: null,
   };
   sandbox = {
-    widthScale: 1.5,
+    widthScale: 1.75,
     bounds: {
       leftNear: null,
       leftFar: null,
@@ -57,8 +61,6 @@ export class Landscape extends Simulation {
     orgNearWidth: 0,
     orgFarWidth: 0,
   };
-  enableFog = true;
-  fog = new Fog(0x999999, 10, 100);
   wind = new Vector2(randPick(-0.75, 0.75), 0);
   position = new Vector3();
   #targetPos = null;
@@ -66,7 +68,11 @@ export class Landscape extends Simulation {
   minPaxFactor = 0.2;
   minDepthScale = 0.2;
   maxWorldX = 0;
-  dbg = [];
+  center = new Vector3();
+  lights = {
+    ambient: null,
+    sun: null,
+  };
 
   get targetPos() {
     return this.#targetPos;
@@ -89,25 +95,35 @@ export class Landscape extends Simulation {
     this.resetWorldPos(this.position);
     this.calcBounds();
 
-    if (this.enableFog) {
-      this.fog.near = Math.abs(this.sandbox.bounds.z[0] - 10);
-      this.fog.far = Math.abs(this.sandbox.bounds.z[1] + 10);
-      this.world.scene.fog = this.fog;
-    }
+    this.setupGlobalLights();
 
-    // this.debugGroundTrapezium(leftNear, leftFar, rightNear, rightFar);
+    // this.debugGroundTrapezoid();
 
-    this.generateHeroTree();
-    this.generateFoliage();
-    this.generateMeself();
-    this.generateHouse();
-    this.generateWindmill();
+    this.spawnHeroTree();
+    this.spawnFoliage();
+    this.spawnMeself();
+    this.spawnHouse();
+    this.spawnWindmill();
+    this.spawnReedClusters();
 
     this.windInterval.start();
   }
   resetWorldPos(startPos) {
     this.targetPos = startPos;
     this.position.copy(this.targetPos);
+  }
+  setupGlobalLights() {
+    this.lights.ambient = new AmbientLight(0xffffff, 0.5);
+
+    this.lights.sun = new DirectionalLight(0xffffff, 0.85);
+    const pos = this.center.clone();
+    pos.x -= 30;
+    pos.y += 30;
+    pos.z = -30;
+    this.lights.sun.position.copy(pos);
+    this.lights.sun.target.position.copy(this.center);
+
+    this.world.scene.add(this.lights.ambient, this.lights.sun, this.lights.sun.target);
   }
   calcBounds() {
     const cam = this.world.orthoCam;
@@ -137,16 +153,28 @@ export class Landscape extends Simulation {
     this.sandbox.orgFarWidth = orgWidth;
     this.sandbox.nearWidth = nearWidth;
     this.sandbox.farWidth = farWidth;
+
+    const left = this.sandbox.bounds.leftNear.clone().lerp(this.sandbox.bounds.leftFar, 0.5);
+    const right = this.sandbox.bounds.rightNear.clone().lerp(this.sandbox.bounds.rightFar, 0.5);
+    this.center = left.lerp(right, 0.5);
   }
-  generateHeroTree() {
+  spawnReedClusters() {
     const pos = this.sandbox.bounds.leftNear.clone();
-    pos.x = -(0.8 * (this.sandbox.orgNearWidth / 2));
+    pos.x = -(0.1 * (this.sandbox.orgNearWidth / 2));
+    const cluster = new ReedCluster(this, pos, 10);
+    cluster.baseX = pos.x;
+    this.world.scene.add(cluster.mesh);
+    this.props.reedClusters.push(cluster);
+  }
+  spawnHeroTree() {
+    const pos = this.sandbox.bounds.leftNear.clone();
+    pos.x = -(0.75 * (this.sandbox.orgNearWidth / 2));
     this.props.originTree = new Tree(this, pos, 0, this.color);
     this.props.originTree.baseX = pos.x;
     this.world.scene.add(this.props.originTree.mesh);
     this.props.trees.push(this.props.originTree);
   }
-  generateFoliage() {
+  spawnFoliage() {
     const [nearZ, farZ] = this.sandbox.bounds.z;
     for (let i = 0; i < this.props.noOfTrees; i += 1) {
       const pos = this.getRandomPoint();
@@ -186,7 +214,7 @@ export class Landscape extends Simulation {
     }
     return structuredClone(spreadVariety);
   }
-  generateMeself() {
+  spawnMeself() {
     const pos = this.props.originTree.mesh.position.clone();
     this.props.meself = new Sprite(
       this.world.texLoader,
@@ -198,13 +226,13 @@ export class Landscape extends Simulation {
       },
     );
   }
-  generateHouse() {
-    const pos = this.getRandomPoint(0.5, 0.3);
+  spawnHouse() {
+    const pos = this.getRandomPoint(0.9, 0.3);
     this.props.house = new House(this, pos, (obj) => this.world.scene.add(obj));
     this.props.house.baseX = pos.x;
   }
-  generateWindmill() {
-    const pos = this.getRandomPoint(0.9, 0.5);
+  spawnWindmill() {
+    const pos = this.getRandomPoint(0.5, 0.5);
     this.props.windmill = new Windmill(this, pos, (obj) => this.world.scene.add(obj));
     this.props.windmill.baseX = pos.x;
   }
@@ -218,12 +246,13 @@ export class Landscape extends Simulation {
 
     return left.lerp(right, xN);
   }
-  debugGroundTrapezium(leftNear, leftFar, rightNear, rightFar) {
+  debugGroundTrapezoid() {
+    const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.bounds;
     const materialR = new LineBasicMaterial({ color: 0xff0000 });
     const materialB = new LineBasicMaterial({ color: 0x0000ff });
     let lines = new LineSegments(
       new BufferGeometry().setFromPoints([
-        leftNear.clone().setX(leftNear.x + (rightNear.x - leftNear.x) / 2),
+        leftNear.clone(),
         rightNear.clone(),
         rightNear.clone(),
         rightFar.clone(),
@@ -234,7 +263,7 @@ export class Landscape extends Simulation {
     lines.baseX = lines.position.x;
     lines = new LineSegments(
       new BufferGeometry().setFromPoints([
-        rightFar.clone().setX(rightFar.x - (rightFar.x - leftFar.x) / 2),
+        rightFar.clone(),
         leftFar.clone(),
         leftFar.clone(),
         leftNear.clone(),
@@ -243,22 +272,22 @@ export class Landscape extends Simulation {
     );
     this.world.scene.add(lines);
     lines.baseX = lines.position.x;
-    const boxNF = new Mesh(new BoxGeometry(5, 5, 5), materialB);
-    boxNF.position.copy(leftFar);
-    const boxNL = new Mesh(new BoxGeometry(0.6, 0.6, 0.6), materialR);
-    boxNL.position.copy(leftNear);
+    const boxLF = new Mesh(new BoxGeometry(5, 5, 5), materialB);
+    boxLF.position.copy(leftFar);
+    const boxLN = new Mesh(new BoxGeometry(0.6, 0.6, 0.6), materialR);
+    boxLN.position.copy(leftNear);
     const boxRF = new Mesh(new BoxGeometry(5, 5, 5), materialR);
     boxRF.position.copy(rightFar);
     const boxRN = new Mesh(new BoxGeometry(0.6, 0.6, 0.6), materialB);
     boxRN.position.copy(rightNear);
-    this.world.scene.add(boxNF);
-    this.world.scene.add(boxNL);
-    this.world.scene.add(boxRF);
-    this.world.scene.add(boxRN);
-    boxNF.baseX = boxNF.position.x;
-    boxNL.baseX = boxNF.position.x;
-    boxRF.baseX = boxNF.position.x;
-    boxRN.baseX = boxNF.position.x;
+    // this.world.scene.add(boxLF);
+    // this.world.scene.add(boxLN);
+    // this.world.scene.add(boxRF);
+    // this.world.scene.add(boxRN);
+    boxLF.baseX = boxLF.position.x;
+    boxLN.baseX = boxLF.position.x;
+    boxRF.baseX = boxLF.position.x;
+    boxRN.baseX = boxLF.position.x;
   }
   update(dt) {
     this.updateWorldPosition(dt);
@@ -286,6 +315,7 @@ export class Landscape extends Simulation {
       if (colorTweenRes.finished) {
         this.colorTween = null;
       }
+      this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
     }
 
     for (const tree of this.props.trees) {
@@ -296,7 +326,7 @@ export class Landscape extends Simulation {
     }
 
     const house = this.props.house;
-    if (house.mesh) {
+    if (house?.mesh) {
       const [pX, pScale] = this.perspectiveXAndScale(house, house.mesh.position.z);
       house.mesh.position.x = pX;
       house.mesh.scale.setScalar(pScale);
@@ -304,7 +334,7 @@ export class Landscape extends Simulation {
     }
 
     const windmill = this.props.windmill;
-    if (windmill.mesh) {
+    if (windmill?.mesh) {
       const [pX, pScale] = this.perspectiveXAndScale(windmill, windmill.mesh.position.z);
       windmill.mesh.position.x = pX;
       windmill.mesh.scale.setScalar(pScale);
@@ -312,10 +342,18 @@ export class Landscape extends Simulation {
     }
 
     const meself = this.props.meself;
-    if (meself.sprite) {
+    if (meself?.sprite) {
       const [pX, _] = this.perspectiveXAndScale(meself, meself.sprite.position.z);
       meself.sprite.position.x = pX;
       this.props.meself?.update(dt);
+    }
+
+    for (let i = 0; i < this.props.reedClusters.length; i++) {
+      const reedCluster = this.props.reedClusters[i];
+      const [pX, pScale] = this.perspectiveXAndScale(reedCluster, reedCluster.mesh.position.z);
+      reedCluster.mesh.position.x = pX;
+      reedCluster.mesh.scale.setScalar(pScale);
+      reedCluster?.update(dt);
     }
   }
   perspectiveXAndScale(prop, z, scaleEased = false) {
@@ -359,10 +397,10 @@ export class Landscape extends Simulation {
   onWindInterval() {
     this.windInterval.stop();
 
-    const calmnessChance = 0.25;
+    const calmnessChance = 0.2;
     let newWind;
     if (rand(0, 1) < calmnessChance) {
-      newWind = biasRand(-0.75, 0.75, 1 - normalize(this.wind.x, -0.75, 0.75), "pow");
+      newWind = biasRand(-0.75, 0.75, 1 - norm(this.wind.x, -0.75, 0.75), "pow");
     } else {
       newWind = rand(-0.2, 0.2);
     }

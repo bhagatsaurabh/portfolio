@@ -1,4 +1,5 @@
-import { Color, SpriteMaterial, Sprite as ThreeSprite } from "three";
+import { Color, DoubleSide, Sprite as ThreeSprite } from "three";
+import SpriteNodeMaterial from "three/src/materials/nodes/SpriteNodeMaterial";
 
 export class Sprite {
   sprite = null;
@@ -31,10 +32,12 @@ export class Sprite {
     );
   }
   onLoad(tex, pos) {
-    this.material = new SpriteMaterial({
+    this.material = new SpriteNodeMaterial({
       map: tex,
       transparent: true,
       color: new Color(this.color),
+      side: DoubleSide,
+      depthWrite: false,
     });
 
     const sprite = new ThreeSprite(this.material);

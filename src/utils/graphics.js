@@ -4,7 +4,7 @@ import { clamp } from "./index";
 export const rand = (min, max) => {
   const buf = new Uint32Array(1);
   window.crypto.getRandomValues(buf);
-  return denormalize(buf[0] / (0xffffffff + 1), min, max);
+  return denorm(buf[0] / (0xffffffff + 1), min, max);
   // return Math.random() * (max - min) + min;
 };
 export const randInt = (min, max) => {
@@ -39,10 +39,10 @@ export const quadraticEase = (currentProgress, start, distance, steps = 100) => 
   currentProgress--;
   return -1 * (distance / 2) * (currentProgress * (currentProgress - 2) - 1) + start;
 };
-export const normalize = (value, min, max) => (clamp(value, min, max) - min) / (max - min);
-export const denormalize = (value, min, max) => clamp(value * (max - min) + min, min, max);
+export const norm = (value, min, max) => (clamp(value, min, max) - min) / (max - min);
+export const denorm = (value, min, max) => clamp(value * (max - min) + min, min, max);
 export const rescale = (value, normMin, normMax, denormMin, denormMax) =>
-  denormalize(normalize(value, normMin, normMax), denormMin, denormMax);
+  denorm(norm(value, normMin, normMax), denormMin, denormMax);
 export const easeInOut = (t) => t * t * (3 - 2 * t);
 export const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
 export const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { AmbientLight, DirectionalLight, Euler, Quaternion, Vector3 } from "three";
+import { Vector3 } from "three";
 
 import { rescale } from "@/utils/graphics";
 import { SimulatedThreeWorld } from "@/utils/three-world";
@@ -48,19 +48,13 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
       panDelta.current = landscape.current.maxWorldX / (noOfRoutes - 1);
       resetPanPosition(routeOrder);
 
-      const ambient = new AmbientLight(0xffffff, 0.5);
-      wrld.scene.add(ambient);
-
-      const dirLight = new DirectionalLight(0xffffff, 0.85);
-      dirLight.position.set(-1, 1, 1);
-      wrld.scene.add(dirLight);
-
       setTimeout(() => {
-        /* wrld.activeCamera = wrld.debugCam;
-        wrld.debugCam.quaternion.copy(new Quaternion().setFromEuler(new Euler(-90, 0, 0)));
-        wrld.debugCam.position.y += 70;
-        wrld.debugCam.position.z = -90; */
-
+        // wrld.activeCamera = wrld.debugCam;
+        // wrld.debugCam.position.copy(landscape.current.props.windmill.mesh.position);
+        // // wrld.debugCam.position.y += 10;
+        // // wrld.debugCam.position.x = 0;
+        // wrld.debugCam.position.x += 10;
+        // wrld.debugCam.quaternion.copy(new Quaternion().setFromEuler(new Euler(0, 90, 0)));
         /* landscape.current.props.trees.forEach((tree) => {
           const rBox = new Mesh(
             new BoxGeometry(1, 1, 1),
@@ -76,7 +70,7 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
           rBox.position.copy(tree.mesh.position);
           tree.mesh.add(rBoxDyn);
         }); */
-      }, 4000);
+      }, 2000);
 
       wrld.simulations.push(landscape.current);
       wrld.sync();

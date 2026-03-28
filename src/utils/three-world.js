@@ -1,15 +1,19 @@
 import {
+  AmbientLight,
+  DirectionalLight,
   OrthographicCamera,
   PerspectiveCamera,
+  PointLight,
   Scene,
   TextureLoader,
   Timer,
-  WebGLRenderer,
 } from "three";
+import WebGPURenderer from "three/src/renderers/webgpu/WebGPURenderer";
 
 import { themes } from "./constants";
 import { PerfMonitor } from "./monitor";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { AmbientLightNode, DirectionalLightNode, PointLightNode } from "three/src/nodes/Nodes";
 
 export class SimulatedThreeWorld {
   #state = { theme: themes.LIGHT };
@@ -64,7 +68,15 @@ export class SimulatedThreeWorld {
     let width = container.clientWidth;
     let height = container.clientHeight;
 
-    const renderer = new WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new WebGPURenderer({ alpha: true, antialias: true });
+
+    // might be a bug
+    renderer.library.addLight(DirectionalLightNode, DirectionalLight);
+    renderer.library.addLight(AmbientLightNode, AmbientLight);
+    renderer.library.addLight(PointLightNode, PointLight);
+
+    renderer.shadowMap.enabled = true;
+
     this.renderer = renderer;
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -72,7 +84,7 @@ export class SimulatedThreeWorld {
     this.debugCam = new PerspectiveCamera(60, width / height, 1, 2500);
     const scene = new Scene();
     this.scene = scene;
-    this.aspect = window.innerWidth / window.innerHeight;
+    this.aspect = width / height;
     this.orthoCam = new OrthographicCamera(-this.aspect, this.aspect, 1, -1, 0.1, 100);
     this.activeCamera = this.orthoCam;
   }

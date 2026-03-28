@@ -7,13 +7,14 @@ import {
   InstancedMesh,
   Matrix4,
   Mesh,
-  MeshBasicMaterial,
   Quaternion,
   Vector3,
 } from "three";
 import { degToRad } from "three/src/math/MathUtils";
+import MeshBasicNodeMaterial from "three/src/materials/nodes/MeshBasicNodeMaterial";
+import { positionLocal, uniform } from "three/src/Three.TSL";
 
-import { biasRand, normalize, rand } from "./graphics";
+import { biasRand, denorm, norm, rand } from "./graphics";
 
 export class Tree {
   params = {
@@ -42,7 +43,7 @@ export class Tree {
       microScale: 0.3,
       freqScale: 0.25,
     },
-    visual: { swayScale: 0.2 },
+    visual: { swayScale: 0.25 },
     generation: {
       initialLength: 1.4,
       initialWidth: 2.5,
@@ -124,11 +125,14 @@ export class Tree {
     this.maxCrownReach = this.computeCrownReach(branchLengthFactor[1]);
 
     this.geometry = this.buildGeometry();
-    this.material = new MeshBasicMaterial({
+    this.material = new MeshBasicNodeMaterial({
       color: new Color(color),
       transparent: true,
       side: DoubleSide,
+      lights: false,
     });
+    this.material.positionNode = positionLocal.add(uniform(0));
+
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.copy(pos);
     if (this.landscape.props.originTree) {
@@ -137,15 +141,20 @@ export class Tree {
     this.mesh.scale.setScalar(this.baseScale);
 
     const [nearZ, farZ] = this.sandbox.bounds.z;
-    const normZ = normalize(this.mesh.position.z, nearZ, farZ);
-    this.maxZWidthScale = 1 + Math.abs(normZ) * 2;
+    const normZ = norm(this.mesh.position.z, nearZ, farZ);
+    this.maxZWidthScale = 1 + Math.pow(Math.abs(normZ), 1 / 1.5) * 2;
+    this.material.opacity = denorm(1 - normZ, 0.325, 1);
   }
   setupInstances(count) {
+    if (count === 0) {
+      return;
+    }
+
     const matrix = new Matrix4();
     const [nearZ, farZ] = this.sandbox.bounds.z;
-    const normZ = normalize(this.mesh.position.z, nearZ, farZ);
+    const normZ = norm(this.mesh.position.z, nearZ, farZ);
 
-    // const materialR = new MeshBasicMaterial({ color: 0xff0000 });
+    // const materialR = new MeshBasicNodeMaterial({ color: 0xff0000 });
     this.instancedMesh = new InstancedMesh(this.geometry, this.material /*  materialR */, count);
 
     for (let i = 0; i < count; i++) {
@@ -369,7 +378,9 @@ export class Tree {
       v = this.updateGeometry(i, v);
     }
     this.geometry.attributes.position.needsUpdate = true;
-    this.updateInstances();
+    if (this.instances.length) {
+      this.updateInstances();
+    }
   }
   updateInstances() {
     const matrix = new Matrix4();
