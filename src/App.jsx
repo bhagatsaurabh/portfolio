@@ -119,7 +119,7 @@ const App = () => {
           />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />
-          <ScrollingBackground activeRoute={currRoute} />
+          <ScrollingBackground activeRoute={currRoute} disabled={true} />
           <Suspense fallback={<span>{"..."}</span>}>{routes.map(mapRoute)}</Suspense>
         </>
       )}

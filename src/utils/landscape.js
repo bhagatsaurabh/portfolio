@@ -14,6 +14,7 @@ import {
   biasRand,
   cubicBezier,
   easeInOut,
+  fbm,
   norm,
   rand,
   randInt,
@@ -39,10 +40,9 @@ export class Landscape extends Simulation {
   props = {
     originTree: null,
     noOfTrees: 20,
-    noOfReedClusters: 1,
-    reedClusters: [],
-    noOfInstances: 2,
+    treeInstanceCount: 2,
     trees: [],
+    reedClusters: [],
     house: null,
     windmill: null,
     meself: null,
@@ -62,6 +62,10 @@ export class Landscape extends Simulation {
     orgFarWidth: 0,
   };
   wind = new Vector2(randPick(-0.75, 0.75), 0);
+  // wind = new Vector2(0, 0);
+  gustWindAmp = 2;
+  calmWindAmp = 0.2;
+  normalWindAmp = 0.75;
   position = new Vector3();
   #targetPos = null;
   startPos = new Vector3();
@@ -97,8 +101,6 @@ export class Landscape extends Simulation {
 
     this.setupGlobalLights();
 
-    // this.debugGroundTrapezoid();
-
     this.spawnHeroTree();
     this.spawnFoliage();
     this.spawnMeself();
@@ -107,6 +109,8 @@ export class Landscape extends Simulation {
     this.spawnReedClusters();
 
     this.windInterval.start();
+
+    // this.debugGroundTrapezoid();
   }
   resetWorldPos(startPos) {
     this.targetPos = startPos;
@@ -159,9 +163,26 @@ export class Landscape extends Simulation {
     this.center = left.lerp(right, 0.5);
   }
   spawnReedClusters() {
-    const pos = this.sandbox.bounds.leftNear.clone();
-    pos.x = -(0.1 * (this.sandbox.orgNearWidth / 2));
-    const cluster = new ReedCluster(this, pos, 10);
+    const minX = this.sandbox.bounds.leftNear.x;
+    const maxX = this.sandbox.bounds.rightNear.x;
+
+    const step = 0.05;
+    const denseT = 0.25;
+
+    const seed = rand(0, 100);
+    for (let x = minX; x < maxX; x += step) {
+      const density = fbm(x + seed);
+      if (density > denseT) {
+        this.spawnReedCluster(x);
+      }
+    }
+    console.log(this.props.reedClusters.length);
+  }
+  spawnReedCluster(x) {
+    const pos = new Vector3(x, -1, this.sandbox.bounds.z[0]);
+    const cluster = new ReedCluster(this, pos, rand(0.2, 0.25), randInt(15, 35), this.color, {
+      clusterSpread: 3,
+    });
     cluster.baseX = pos.x;
     this.world.scene.add(cluster.mesh);
     this.props.reedClusters.push(cluster);
@@ -181,7 +202,7 @@ export class Landscape extends Simulation {
       const tree = new Tree(
         this,
         pos,
-        this.props.noOfInstances,
+        this.props.treeInstanceCount,
         this.color,
         this.randomizeTreeConfig(pos, nearZ, farZ),
       );
@@ -387,11 +408,11 @@ export class Landscape extends Simulation {
     this.windInterval.stop();
     this.windTween.stop();
 
-    this.wind = new Vector2(direction * 2, 0);
+    this.wind = new Vector2(direction * this.gustWindAmp, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {
-    this.wind.x = Math.sign(this.wind.x) * 1;
+    this.wind.x = Math.sign(this.wind.x) * this.normalWindAmp;
     this.windInterval.start();
   }
   onWindInterval() {
@@ -400,9 +421,14 @@ export class Landscape extends Simulation {
     const calmnessChance = 0.2;
     let newWind;
     if (rand(0, 1) < calmnessChance) {
-      newWind = biasRand(-0.75, 0.75, 1 - norm(this.wind.x, -0.75, 0.75), "pow");
+      newWind = biasRand(
+        -this.normalWindAmp,
+        this.normalWindAmp,
+        1 - norm(this.wind.x, -this.normalWindAmp, this.normalWindAmp),
+        "pow",
+      );
     } else {
-      newWind = rand(-0.2, 0.2);
+      newWind = rand(-this.calmWindAmp, this.calmWindAmp);
     }
     this.windTween = new Tween(this.wind.x, newWind, 5, easeInOut);
     this.windTween.start();

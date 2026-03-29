@@ -19,8 +19,9 @@ export class PerfMonitor {
   }
 
   at = 0;
+  lastCalls = 0;
   update(dt, metrics) {
-    this.frames++;
+    this.frames += 1;
     this.at += dt;
 
     if (this.at >= 1) {
@@ -28,11 +29,13 @@ export class PerfMonitor {
       this.frames = 0;
       this.at = 0;
 
+      const currCalls = this.world.renderer.info.render.calls;
       this.el.innerText = `
         FPS:          ${this.fps}
         No. of Trees: ${metrics.noOfTrees ?? "-"}
-        Calls:        ${this.world.renderer.info.render.calls ?? "-"}
+        Calls:        ${(currCalls ?? 0) - this.lastCalls}
       `;
+      this.lastCalls = currCalls;
     }
   }
 }

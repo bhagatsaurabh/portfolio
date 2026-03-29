@@ -20,7 +20,7 @@ const Intro = () => {
 
   return (
     <div className={classes.Intro}>
-      <div className={classNames(classes.Float, classes.IntroFloat)}>
+      {/* <div className={classNames(classes.Float, classes.IntroFloat)}>
         <div className={classes.Greeting}>
           <span>Hi</span>
           <span>, I'm</span>
@@ -48,7 +48,7 @@ const Intro = () => {
           </h5>
         </div>
       </div>
-      <ScrollHint show={showScrollHint} />
+      <ScrollHint show={showScrollHint} /> */}
     </div>
   );
 };

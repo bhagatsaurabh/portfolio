@@ -86,3 +86,14 @@ export function cubicBezier(x1, y1, x2, y2) {
     return sampleCurveY(solveCurveX(x));
   };
 }
+export const noise1D = (x) => (Math.sin(x * 12.9898) * 43758.5453) % 1;
+export const fbm = (x) => {
+  let v = 0;
+  let a = 0.5;
+  v += noise1D(x * 0.3) * a;
+  a *= 0.5;
+  v += noise1D(x * 0.7) * a;
+  a *= 0.5;
+  v += noise1D(x * 1.5) * a;
+  return v;
+};
