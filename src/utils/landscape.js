@@ -23,12 +23,14 @@ import {
 } from "./graphics";
 import { ColorTween, IntervalSchedule, Simulation, TimeoutSchedule, Tween } from "./simulation";
 import { Tree } from "./tree";
-import { Sprite } from "./sprite";
+import { MeSprite } from "./me.sprite";
 import { SPREAD_VARIETIES } from "./tree-utils";
 import { House } from "./house";
 import { lerp } from "three/src/math/MathUtils";
 import { Windmill } from "./windmill";
 import { ReedCluster } from "./reed-cluster";
+import { Birb } from "./birb.sprite";
+import { Flock } from "./flock";
 
 export class Landscape extends Simulation {
   color = "#363537";
@@ -43,6 +45,9 @@ export class Landscape extends Simulation {
     treeInstanceCount: 2,
     trees: [],
     reedClusters: [],
+    noOfBirbs: 1,
+    birbs: [],
+    flock: null,
     house: null,
     windmill: null,
     meself: null,
@@ -107,6 +112,7 @@ export class Landscape extends Simulation {
     this.spawnHouse();
     this.spawnWindmill();
     this.spawnReedClusters();
+    this.spawnFlock();
 
     this.windInterval.start();
 
@@ -237,15 +243,10 @@ export class Landscape extends Simulation {
   }
   spawnMeself() {
     const pos = this.props.originTree.mesh.position.clone();
-    this.props.meself = new Sprite(
-      this.world.texLoader,
-      `${import.meta.env.VITE_SB_CDN_URL}/images/me-under-tree-inv.webp`,
-      pos,
-      (sprite) => {
-        this.world.scene.add(sprite);
-        this.props.meself.baseX = sprite.position.x;
-      },
-    );
+    this.props.meself = new MeSprite(this.world.texLoader, pos, this.color, (sprite) => {
+      this.world.scene.add(sprite);
+      this.props.meself.baseX = sprite.position.x;
+    });
   }
   spawnHouse() {
     const pos = this.getRandomPoint(0.9, 0.3);
@@ -256,6 +257,10 @@ export class Landscape extends Simulation {
     const pos = this.getRandomPoint(0.5, 0.5);
     this.props.windmill = new Windmill(this, pos, (obj) => this.world.scene.add(obj));
     this.props.windmill.baseX = pos.x;
+  }
+  spawnFlock() {
+    const flock = new Flock(this, this.props.noOfBirbs, this.props.originTree);
+    this.props.flock = flock;
   }
   getRandomPoint(xNorm, zNorm) {
     const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.bounds;
@@ -331,12 +336,10 @@ export class Landscape extends Simulation {
     if (this.colorTween && this.props.meself) {
       const colorTweenRes = this.colorTween.update(dt);
       this.color = colorTweenRes.value;
-      this.props.trees.forEach((tree) => (tree.color = this.color));
-      this.props.meself.color = this.color;
+      this.updateColor(colorTweenRes);
       if (colorTweenRes.finished) {
         this.colorTween = null;
       }
-      this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
     }
 
     for (const tree of this.props.trees) {
@@ -376,6 +379,16 @@ export class Landscape extends Simulation {
       reedCluster.mesh.scale.setScalar(pScale);
       reedCluster?.update(dt);
     }
+
+    if (this.props.flock) {
+      this.props.flock.update(dt);
+    }
+  }
+  updateColor() {
+    this.props.trees.forEach((tree) => (tree.color = this.color));
+    this.props.meself.color = this.color;
+    this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
+    this.props.flock.birbs.forEach((birb) => (birb.color = this.color));
   }
   perspectiveXAndScale(prop, z, scaleEased = false) {
     const [nearZ, farZ] = this.sandbox.bounds.z;

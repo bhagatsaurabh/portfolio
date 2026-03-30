@@ -74,6 +74,7 @@ export class Tree {
   mesh = null;
   trunk = null;
   branches = [];
+  upperBranchIndices = [];
   maxDepth = 0;
   maxCrownReach = 0;
   widthScaleFactor = 0.0075; // constant for now, controls default line thickness
@@ -297,10 +298,16 @@ export class Tree {
   }
   setProps() {
     const depthExponent = this.params.flutter.depthExponent;
+    const minNormDepth = 0.25;
+    const maxNormDepth = 0.75;
 
     for (let i = 0; i < this.branches.length; i++) {
       const branch = this.branches[i];
       const normDepth = branch.depth / (this.maxDepth - 1);
+      const chance = Math.pow(1 - normDepth, 0.5);
+      if (normDepth > minNormDepth && normDepth < maxNormDepth && rand(0, 1) < chance) {
+        this.upperBranchIndices.push(i);
+      }
 
       branch.props = {
         normDepth,

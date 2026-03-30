@@ -33,7 +33,7 @@ export class ReedCluster {
   swayScale = 2;
   normX = 0;
   waveSpeed = 3;
-  waveScale = 0.05;
+  waveScale = 0.0325;
   waveAmp = 2;
   responsiveness = 8;
   flutterAmp = 0.03;
