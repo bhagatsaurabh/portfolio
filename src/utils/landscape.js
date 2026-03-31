@@ -6,6 +6,7 @@ import {
   LineBasicMaterial,
   LineSegments,
   Mesh,
+  MeshBasicMaterial,
   Vector2,
   Vector3,
 } from "three";
@@ -29,7 +30,6 @@ import { House } from "./house";
 import { lerp } from "three/src/math/MathUtils";
 import { Windmill } from "./windmill";
 import { ReedCluster } from "./reed-cluster";
-import { Birb } from "./birb.sprite";
 import { Flock } from "./flock";
 
 export class Landscape extends Simulation {
@@ -45,8 +45,7 @@ export class Landscape extends Simulation {
     treeInstanceCount: 2,
     trees: [],
     reedClusters: [],
-    noOfBirbs: 1,
-    birbs: [],
+    noOfBirbs: randInt(2, 3),
     flock: null,
     house: null,
     windmill: null,
@@ -59,6 +58,8 @@ export class Landscape extends Simulation {
       leftFar: null,
       rightNear: null,
       rightFar: null,
+      currLeftNear: null,
+      currRightNear: null,
       z: [-15, -85],
     },
     nearWidth: 0,
@@ -72,6 +73,7 @@ export class Landscape extends Simulation {
   calmWindAmp = 0.2;
   normalWindAmp = 0.75;
   position = new Vector3();
+  prevPosition = new Vector3();
   #targetPos = null;
   startPos = new Vector3();
   minPaxFactor = 0.2;
@@ -98,6 +100,16 @@ export class Landscape extends Simulation {
     super(world);
     this.color = landscapeThemes[world.state.theme];
     this.setup();
+
+    this.boxLN = new Mesh(
+      new BoxGeometry(0.05, 0.05, 0.05),
+      new MeshBasicMaterial({ color: 0xff0000 }),
+    );
+    this.boxRN = new Mesh(
+      new BoxGeometry(0.05, 0.05, 0.05),
+      new MeshBasicMaterial({ color: 0xff0000 }),
+    );
+    this.world.scene.add(this.boxLN, this.boxRN);
   }
 
   setup() {
@@ -137,7 +149,6 @@ export class Landscape extends Simulation {
   }
   calcBounds() {
     const cam = this.world.orthoCam;
-
     const leftBottom = new Vector3(-1, -1, 0).unproject(cam);
     const rightBottom = new Vector3(1, -1, 0).unproject(cam);
 
@@ -167,6 +178,16 @@ export class Landscape extends Simulation {
     const left = this.sandbox.bounds.leftNear.clone().lerp(this.sandbox.bounds.leftFar, 0.5);
     const right = this.sandbox.bounds.rightNear.clone().lerp(this.sandbox.bounds.rightFar, 0.5);
     this.center = left.lerp(right, 0.5);
+
+    const currLeftNear = new Vector3(-1, -1, 0).unproject(this.world.orthoCam);
+    currLeftNear.y = -1;
+    currLeftNear.z = this.sandbox.bounds.z[0];
+    const currRightNear = new Vector3(1, -1, 0).unproject(this.world.orthoCam);
+    currRightNear.y = -1;
+    currRightNear.z = this.sandbox.bounds.z[0];
+
+    this.sandbox.bounds.currLeftNear = currLeftNear;
+    this.sandbox.bounds.currRightNear = currRightNear;
   }
   spawnReedClusters() {
     const minX = this.sandbox.bounds.leftNear.x;
@@ -261,6 +282,7 @@ export class Landscape extends Simulation {
   spawnFlock() {
     const flock = new Flock(this, this.props.noOfBirbs, this.props.originTree);
     this.props.flock = flock;
+    flock.baseX = flock.target.x;
   }
   getRandomPoint(xNorm, zNorm) {
     const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.bounds;
@@ -380,9 +402,14 @@ export class Landscape extends Simulation {
       reedCluster?.update(dt);
     }
 
-    if (this.props.flock) {
-      this.props.flock.update(dt);
+    for (const birb of this.props.flock.birbs) {
+      if (birb.sprite) {
+        // birb.sprite.position.x = birb.baseX - this.position.x;
+        const [pX, _] = this.perspectiveXAndScale(birb, birb.sprite.position.z);
+        birb.sprite.position.x = pX;
+      }
     }
+    this.props.flock.update(dt);
   }
   updateColor() {
     this.props.trees.forEach((tree) => (tree.color = this.color));

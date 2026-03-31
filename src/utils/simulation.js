@@ -44,9 +44,12 @@ export class TimeoutSchedule {
   stop() {
     this.running = false;
   }
-  reset() {
+  reset(newDelay) {
     this.running = false;
     this.accumulator = 0;
+    if (typeof newDelay === "number") {
+      this.delay = newDelay;
+    }
   }
   update(dt) {
     if (!this.running) return false;
