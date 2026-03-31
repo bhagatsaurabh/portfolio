@@ -72,13 +72,25 @@
 
 .Title h5 span {
   opacity: 0;
-  transition: opacity 0.3s linear;
+
+  transition:
+    color var(--theme-transition-duration) linear,
+    opacity 0.3s linear;
+}
+.Title h5 div span {
+  position: absolute;
+  left: 0;
+}
+.Title h5 div span.relative {
+  position: relative;
 }
 .Title h5 > span {
   opacity: 1;
 }
 .Title h5 span.active {
-  transition: opacity 0.75s linear;
+  transition:
+    color var(--theme-transition-duration) linear,
+    opacity 0.75s linear;
   opacity: 1;
 }
 

@@ -1,151 +1,110 @@
-import { ease, rand } from "@/utils/graphics";
 import { Vector } from "canvas-percept";
+import { easeInOut, rand } from "@/utils/graphics";
+import { Tween } from "@/utils/simulation";
+import { Weather } from "@/utils/weather";
 
 export class SnowFlake {
-  constructor(position, radius, color, velocity, radiusDegrade) {
-    this.position = position;
-    this.color = color;
-    this.velocity = velocity;
-    this.radius = radius;
-    this.radiusDegrade = radiusDegrade;
-    this.currStep = 0;
-    this.targetYVelocity = rand(rand(-4, -3), rand(3, 4));
-    this.initialYVelocity = 0;
+  position = new Vector(0, 0);
+  radius = 1;
+  velocity = new Vector(0, 0);
+  shrinkFactor = 60;
+  windInfluence = 1;
+  windInfluenceRange = [0.65, 1.35];
+  vyDurationRange = [0.5, 0.7];
+  vyRange = [-180, 180];
+  vyTween = null;
+
+  constructor({ position, radius, velocity } = {}) {
+    this.position = position ?? this.position;
+    this.radius = radius ?? this.radius;
+    this.velocity = velocity ?? this.velocity;
+
+    this.windInfluence = rand(...this.windInfluenceRange);
+    this.vyTween = new Tween(0, rand(...this.vyRange), rand(...this.vyDurationRange), easeInOut);
+    this.vyTween.start();
   }
-  draw(ctx) {
-    ctx.save();
-    ctx.translate(this.position.x, this.position.y);
-    ctx.fillStyle = this.color;
+  update(dt) {
+    const vyTweenRes = this.vyTween.update(dt);
+    this.velocity.y = vyTweenRes.value;
+    if (vyTweenRes.finished) {
+      this.vyTween = new Tween(
+        this.velocity.y,
+        rand(...this.vyRange),
+        rand(...this.vyDurationRange),
+        easeInOut,
+      );
+      this.vyTween.start();
+    }
+
+    const effectiveVX = this.velocity.x * this.windInfluence * dt;
+    const effectiveVY = this.velocity.y * dt;
+    this.position.x += effectiveVX;
+    this.position.y += effectiveVY;
+    const shrink = this.shrinkFactor / (Math.abs(this.velocity.x) * this.windInfluence);
+    this.radius = Math.max(0.1, this.radius - shrink * dt);
+  }
+  render(ctx) {
     ctx.beginPath();
-    ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
-    ctx.closePath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
-    ctx.restore();
-  }
-  update() {
-    this.position.addInPlace(this.velocity);
-    this.radius -= this.radiusDegrade;
-    if (this.radius <= 0.1) this.radius = 0.1;
   }
 }
 
-export class Snow {
-  config = {
-    minRadius: 1,
-    maxRadius: 2,
-    stormDuration: 750,
-    offset: 10,
-    steps: 150,
-  };
+export class Snow extends Weather {
   state = {
-    generationInterval: 135,
-    color: "#000",
-    startX: 0,
-    direction: true,
-    minXVelocity: -3,
-    maxXVelocity: -5,
-    radiusDegrade: 0.005,
+    baseEmitInterval: 0.135,
+    minRadius: 1.2,
+    maxRadius: 1.8,
   };
-  snow = new Set();
-  snowGeneratorHandle = -1;
-  context = null;
+  flakes = new Set();
+  emitAccumulator = 0;
 
-  get color() {
-    return this.state.color;
-  }
-  set color(c) {
-    this.state.color = c;
-    this.setColor();
+  constructor(world) {
+    super(world);
   }
 
-  constructor(canvas, config) {
-    this.canvas = canvas;
-    this.context = canvas.getContext("2d");
-    this.config = { ...this.config, ...config };
-
-    this.setup();
-  }
-
-  setup() {
-    this.state.startX = this.canvas.width + this.config.offset;
-    this.setColor();
-    this.snowGeneratorHandle = setInterval(
-      () => this.generateSnowFlakes(this.snow),
-      this.state.generationInterval
-    );
-    this.animloop(this.snow);
-  }
-  setColor() {
-    this.snow.forEach((flake) => (flake.color = this.state.color));
-  }
-  resize() {
-    // Re-compute dimension dependent states
-    this.state.startX = this.canvas.width + this.config.offset;
-  }
-  generateSnowFlakes(snow) {
-    snow.add(
-      new SnowFlake(
-        new Vector(this.state.startX, rand(0, this.canvas.height)),
-        rand(this.config.minRadius, this.config.maxRadius),
-        this.state.color,
-        new Vector(rand(this.state.minXVelocity, this.state.maxXVelocity), 0),
-        this.state.radiusDegrade
-      )
-    );
-  }
-  animloop(snow) {
-    if (!this.canvas) return;
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    snow.forEach((flake) => {
-      if (
-        flake.position.x < -this.config.offset ||
-        flake.position.y < -this.config.offset ||
-        flake.position.y > this.canvas.height + this.config.offset ||
-        flake.position.x > this.canvas.width + this.config.offset
-      ) {
-        snow.delete(flake);
+  step(dt) {
+    this.emitAccumulator += dt;
+    if (this.weight > 0.01) {
+      const interval = this.state.baseEmitInterval / this.weight;
+      while (this.emitAccumulator >= interval) {
+        this.emitAccumulator -= interval;
+        this.onEmit();
       }
-      flake.velocity.y = ease(
-        flake.currStep,
-        flake.initialYVelocity,
-        flake.targetYVelocity - flake.initialYVelocity,
-        this.config.steps
-      );
-      if (flake.currStep < this.config.steps) flake.currStep += 3;
-      else {
-        flake.currStep = 0;
-        flake.initialYVelocity = flake.velocity.y;
-        flake.targetYVelocity = rand(rand(-4, -3), rand(3, 4));
-      }
-      flake.update();
-      flake.draw(this.context);
-    });
-    requestAnimationFrame(this.animloop.bind(this, snow));
-  }
-  storm(direction) {
-    this.state.direction = direction;
-    if (this.state.direction) {
-      this.state.generationInterval = 10;
-      this.state.minXVelocity = 7;
-      this.state.maxXVelocity = 9;
-      this.state.radiusDegrade = 0.01;
-      this.state.startX = -5;
-    } else {
-      this.state.generationInterval = 10;
-      this.state.minXVelocity = -7;
-      this.state.maxXVelocity = -9;
-      this.state.radiusDegrade = 0.01;
     }
 
-    this.snow.forEach((flake) => {
-      flake.velocity.x = rand(this.state.minXVelocity, this.state.maxXVelocity);
-    });
-    setTimeout(() => {
-      this.state.generationInterval = 135;
-      this.state.minXVelocity = -3;
-      this.state.maxXVelocity = -5;
-      this.state.radiusDegrade = 0.005;
-      this.state.startX = this.canvas.width + this.config.offset;
-    }, this.config.stormDuration);
+    for (const flake of this.flakes) {
+      flake.velocity.x = this.world.weather.wind.x;
+
+      if (this.isOutofBounds(flake)) {
+        this.flakes.delete(flake);
+      } else {
+        flake.update(dt);
+      }
+    }
   }
+  isOutofBounds(flake) {
+    const r = flake.radius;
+    const x = flake.position.x;
+    const y = flake.position.y;
+
+    return x < -r || y < -r || y > this.world.height + r || x > this.world.width + r;
+  }
+  onEmit() {
+    const radius = rand(this.state.minRadius, this.state.maxRadius);
+    const velocity = this.world.weather.wind.clone();
+    const position = new Vector(
+      velocity.x < 0 ? this.world.width + radius : -radius,
+      rand(0, this.world.height),
+    );
+    this.flakes.add(new SnowFlake({ position, radius, velocity }));
+  }
+  render(ctx) {
+    ctx.fillStyle = this.color;
+
+    for (const flake of this.flakes) {
+      flake.render(ctx);
+    }
+  }
+  destroy() {}
 }

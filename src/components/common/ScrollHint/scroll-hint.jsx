@@ -1,14 +1,10 @@
 import PropTypes from "prop-types";
 
-import styles from "./scroll-hint.module.css";
+import classes from "./scroll-hint.module.css";
+import classNames from "classnames";
 
 const ScrollHint = ({ show }) => {
-  const classes = [styles.scrollhint];
-  if (!show) {
-    classes.push(styles.hide);
-  }
-
-  return <div className={classes.join(" ")}></div>;
+  return <div className={classNames(classes.scrollhint, { [classes.hide]: !show })}></div>;
 };
 
 ScrollHint.propTypes = {

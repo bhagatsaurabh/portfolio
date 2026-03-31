@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import appReducer from "@/store/reducers/app";
-import preferencesReducer from "@/store/reducers/preferences";
-import contactReducer from "@/store/reducers/contact";
-import projectsReducer from "@/store/reducers/projects";
-import preloaderReducer from "@/store/reducers/preloader";
+import appReducer from "@/store/app";
+import preferencesReducer from "@/store/preferences";
+import contactReducer from "@/store/contact";
+import projectsReducer from "@/store/projects";
+import preloaderReducer from "@/store/preloader";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     app: appReducer,
     preferences: preferencesReducer,
@@ -15,3 +15,5 @@ export const store = configureStore({
     preloader: preloaderReducer,
   },
 });
+
+export default store;

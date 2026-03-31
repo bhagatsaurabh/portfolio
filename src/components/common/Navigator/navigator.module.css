@@ -6,7 +6,9 @@
   width: 50%;
   max-width: 15rem;
   z-index: 100;
-  transition: opacity 0.1s linear, color var(--theme-transition-duration) linear;
+  transition:
+    opacity 0.1s linear,
+    color var(--theme-transition-duration) linear;
   color: var(--text-0);
   cursor: pointer;
   touch-action: none;
@@ -47,9 +49,11 @@
   cursor: pointer;
   color: var(--text-3);
   text-align: center;
-  transition: color var(--theme-transition-duration) linear,
+  transition:
+    color var(--theme-transition-duration) linear,
     font-size 0.3s cubic-bezier(0, 0, 0.4, 1);
   z-index: 1;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 100;
 }
@@ -65,8 +69,10 @@
   z-index: 50;
   top: 50%;
   transform: translateY(-50%) scale(1);
-  opacity: 1;
-  transition: opacity 0.5s linear, background-color 0.15s linear,
+  opacity: 0.6;
+  transition:
+    opacity 0.5s linear,
+    background-color 0.15s linear,
     transform 0.15s ease-out;
   padding: 0.5rem;
   font-size: 0;
@@ -102,8 +108,7 @@
   text-orientation: mixed;
   margin: 1rem 0 0 0;
   transform: translateY(calc(-100% - 1rem)) rotateZ(180deg);
-  transition: transform var(--theme-transition-duration)
-    cubic-bezier(0.33, 0.03, 0.35, 0.97);
+  transition: transform var(--theme-transition-duration) cubic-bezier(0.33, 0.03, 0.35, 0.97);
   user-select: none;
   color: var(--text-0);
 }
@@ -133,19 +138,21 @@
     max-width: 15rem;
   }
 }
-@media (hover: none) {
-  .Navigator:focus .SectionTitleList,
-  .Navigator:focus-within .SectionTitleList {
-    transform: translateY(0);
-  }
+.Switch:focus {
+  outline: none;
 }
-@media (hover: none) and (min-width: 1024px) {
+
+.Navigator:focus .SectionTitleList,
+.Navigator:focus-within .SectionTitleList {
+  transform: translateY(0);
+}
+@media (min-width: 1024px) {
   .Navigator:focus .Switch,
   .Navigator:focus-within .Switch {
     transform: translate(-50%, -150%);
   }
 }
-@media (hover: none) and (max-width: 1024px) {
+@media (max-width: 1024px) {
   .Navigator:focus .Switch,
   .Navigator:focus-within .Switch {
     transform: translate(-50%, 150%);

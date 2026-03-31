@@ -25,7 +25,7 @@ const FeedButton = forwardRef(
         <span className={styles.ButtonText}>{children}</span>
       </button>
     );
-  }
+  },
 );
 
 FeedButton.propTypes = {

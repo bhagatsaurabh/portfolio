@@ -18,8 +18,7 @@ class Preloader extends Phaser.Scene {
   }
   init() {}
   preload() {
-    this.load.setPath("spritesheets");
-    this.load.spritesheet("bird", "bird.png", {
+    this.load.spritesheet("bird", `${import.meta.env.VITE_SB_CDN_URL}/spritesheets/bird.webp`, {
       frameWidth: 56,
       frameHeight: 56,
     });
@@ -107,10 +106,7 @@ class MainGame extends Phaser.Scene {
     this.createBirds();
   }
   createBirds() {
-    this.pipeline = this.renderer.pipelines.add(
-      "InvertPipeline",
-      new InvertPipeline(this.game)
-    );
+    this.pipeline = this.renderer.pipelines.add("InvertPipeline", new InvertPipeline(this.game));
     for (let i = 0; i < this.noOfBirds; i += 1) {
       this.birds.push(new Bird(this, i));
     }
@@ -129,12 +125,7 @@ class MainGame extends Phaser.Scene {
   }
   setCamera() {
     this.camera = this.cameras.main;
-    this.camera.setBounds(
-      0,
-      0,
-      this.sys.game.canvas.width,
-      this.sys.game.canvas.height
-    );
+    this.camera.setBounds(0, 0, this.sys.game.canvas.width, this.sys.game.canvas.height);
   }
   update() {}
 }

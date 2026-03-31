@@ -1,17 +1,24 @@
 import PropTypes from "prop-types";
 
-import styles from "./scrolling-background.module.css";
+import classes from "./scrolling-background.module.css";
+import classNames from "classnames";
 
-const ScrollingBackground = (props) => {
-  const { position = 0 } = props;
-
-  let classNames = [styles.ScrollingBackground, styles["Position" + position]];
-
-  return <div className={classNames.join(" ")}></div>;
+const ScrollingBackground = ({ activeRoute, disabled }) => {
+  return (
+    <div
+      className={classNames(
+        classes.ScrollingBackground,
+        classes[`Position${disabled ? 0 : activeRoute.handle.routeOrder}`],
+      )}
+      style={{
+        background: `url("${import.meta.env.VITE_SB_CDN_URL}/textures/cardboard-flat.webp") var(--background-0)`,
+      }}
+    />
+  );
 };
 
 ScrollingBackground.propTypes = {
-  position: PropTypes.number,
+  activeRoute: PropTypes.object,
 };
 
 export default ScrollingBackground;
