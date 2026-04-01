@@ -14,7 +14,8 @@ import { degToRad } from "three/src/math/MathUtils";
 import MeshBasicNodeMaterial from "three/src/materials/nodes/MeshBasicNodeMaterial";
 import { positionLocal, uniform } from "three/src/Three.TSL";
 
-import { biasRand, denorm, norm, rand } from "./graphics";
+import { denorm, norm, rand } from "@/utils";
+import { biasRand } from "@/world/utils";
 
 export class Tree {
   params = {

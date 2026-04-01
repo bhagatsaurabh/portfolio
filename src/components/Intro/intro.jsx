@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollHint from "../common/ScrollHint/scroll-hint";
 import classes from "./intro.module.css";
-import { rand } from "@/utils/graphics";
 import classNames from "classnames";
 import { introTitles } from "@/utils/constants";
+import { rand } from "@/utils";
 
 const Intro = () => {
   const showScrollHint = useSelector((state) => state.app.showScrollHint);

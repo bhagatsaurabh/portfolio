@@ -6,7 +6,7 @@ import classes from "./atmosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useWeather from "@/hooks/useWeather";
 import useWorld from "@/hooks/useWorld";
-import { mapWeatherType } from "@/utils/weather";
+import { mapWeatherType } from "@/world/simulation/weather";
 
 const Atmosphere = ({ theme, routeDirection, currRoute }) => {
   const canvasEl = useRef(null);

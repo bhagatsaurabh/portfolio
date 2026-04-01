@@ -1,6 +1,7 @@
-import { BoxGeometry, Mesh, MeshBasicMaterial, Vector3 } from "three";
-import { Birb } from "./birb.sprite";
-import { rand, randPick } from "./graphics";
+import { Vector3 } from "three";
+import { randPick } from "@/world/utils";
+import { rand } from "@/utils";
+import { Birb } from "../sprite/birb.sprite";
 
 export class Flock {
   offset = {

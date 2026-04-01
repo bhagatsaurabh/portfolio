@@ -19,6 +19,13 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+export const norm = (value, min, max) => (clamp(value, min, max) - min) / (max - min);
+export const denorm = (value, min, max) => clamp(value * (max - min) + min, min, max);
+export const rand = (min, max) => {
+  const buf = new Uint32Array(1);
+  window.crypto.getRandomValues(buf);
+  return denorm(buf[0] / (0xffffffff + 1), min, max);
+};
 export const throttle = function (fn, delay) {
   let timeout = null;
   return (...args) => {

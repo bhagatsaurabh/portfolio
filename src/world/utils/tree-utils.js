@@ -1,4 +1,4 @@
-import { rand } from "./graphics";
+import { rand } from "@/utils";
 
 export const SPREAD_VARIETIES = [
   // expanded

@@ -10,27 +10,21 @@ import {
   Vector2,
   Vector3,
 } from "three";
-import { landscapeThemes } from "./constants";
-import {
-  biasRand,
-  cubicBezier,
-  easeInOut,
-  fbm,
-  norm,
-  rand,
-  randInt,
-  randPick,
-  rescale,
-} from "./graphics";
-import { ColorTween, IntervalSchedule, Simulation, TimeoutSchedule, Tween } from "./simulation";
-import { Tree } from "./tree";
-import { MeSprite } from "./me.sprite";
-import { SPREAD_VARIETIES } from "./tree-utils";
-import { House } from "./house";
 import { lerp } from "three/src/math/MathUtils";
-import { Windmill } from "./windmill";
-import { ReedCluster } from "./reed-cluster";
-import { Flock } from "./flock";
+
+import { landscapeThemes } from "@/utils/constants";
+import { Simulation } from "./simulation";
+import { biasRand, cubicBezier, easeInOut, fbm, randInt, randPick, rescale } from "@/world/utils";
+import { norm, rand } from "@/utils";
+import { ColorTween, Tween } from "@/world/utils/tween";
+import { IntervalSchedule, TimeoutSchedule } from "@/world/utils/schedule";
+import { Tree } from "../props/tree";
+import { ReedCluster } from "../props/reed-cluster";
+import { MeSprite } from "../sprite/me.sprite";
+import { House } from "../props/house";
+import { Windmill } from "../props/windmill";
+import { Flock } from "../props/flock";
+import { SPREAD_VARIETIES } from "../utils/tree-utils";
 
 export class Landscape extends Simulation {
   color = "#363537";
