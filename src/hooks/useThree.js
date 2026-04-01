@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { Vector3 } from "three";
 
-import { rescale } from "@/utils/graphics";
-import { SimulatedThreeWorld } from "@/utils/three-world";
-import { Landscape } from "@/utils/landscape";
+import { rescale } from "@/world/utils";
+import { SimulatedThreeWorld } from "@/world/three-world";
+import { Landscape } from "@/world/simulation/landscape";
 
 export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => {
   const world = useRef(null);

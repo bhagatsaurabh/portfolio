@@ -9,11 +9,11 @@ import {
   Timer,
 } from "three";
 import WebGPURenderer from "three/src/renderers/webgpu/WebGPURenderer";
-
-import { themes } from "./constants";
-import { PerfMonitor } from "./monitor";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { AmbientLightNode, DirectionalLightNode, PointLightNode } from "three/src/nodes/Nodes";
+
+import { themes } from "@/utils/constants";
+import { PerfMonitor } from "@/world/utils/monitor";
 
 export class SimulatedThreeWorld {
   #state = { theme: themes.LIGHT };

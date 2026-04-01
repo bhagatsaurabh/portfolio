@@ -1,8 +1,10 @@
-import { ColorTween, Simulation, TimeoutSchedule, Tween } from "./simulation";
-import { Snow } from "./snow";
-import { weatherThemes } from "./constants";
-import { easeInOut } from "motion";
 import { Vector2 } from "three";
+import { weatherThemes } from "@/utils/constants";
+import { ColorTween, Tween } from "../utils/tween";
+import { easeInOut } from "../utils";
+import { TimeoutSchedule } from "../utils/schedule";
+import { Simulation } from "./simulation";
+import { Snow } from "../weather/snow";
 
 export class Weather extends Simulation {
   weight = 0;

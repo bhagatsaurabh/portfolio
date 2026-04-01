@@ -1,5 +1,5 @@
-import { SimulatedWorld } from "@/utils/world";
 import { useEffect, useRef } from "react";
+import { SimulatedWorld } from "@/world/world";
 
 export const useWorld = (canvasEl, theme) => {
   const world = useRef(null);

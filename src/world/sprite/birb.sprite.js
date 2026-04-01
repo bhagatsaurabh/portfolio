@@ -1,9 +1,10 @@
-import { Vector3, Sprite, Color, DoubleSide, Mesh, BoxGeometry, MeshBasicMaterial } from "three";
+import { Vector3, Sprite, Color, DoubleSide } from "three";
 import SpriteNodeMaterial from "three/src/materials/nodes/SpriteNodeMaterial";
-import { SpriteSheetAnimator } from "./spritesheet-animator";
-import { rand, randInt, randPick } from "./graphics";
-import { TimeoutSchedule } from "./simulation";
 import { lerp } from "three/src/math/MathUtils";
+import { rand } from "@/utils";
+import { randInt, randPick } from "@/world/utils";
+import { TimeoutSchedule } from "../utils/schedule";
+import { SpriteSheetAnimator } from "../utils/spritesheet-animator";
 
 export class Birb {
   sprite = null;

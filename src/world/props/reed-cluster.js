@@ -9,11 +9,10 @@ import {
   Quaternion,
   Vector3,
 } from "three";
-
 import MeshBasicNodeMaterial from "three/src/materials/nodes/MeshBasicNodeMaterial";
 import { positionLocal, attribute, uniform, sin, vec3, pow, cos, abs } from "three/src/nodes/TSL";
 
-import { rand } from "./graphics";
+import { rand } from "@/utils";
 
 export class ReedCluster {
   params = {};
@@ -73,7 +72,7 @@ export class ReedCluster {
     for (let i = 0; i < this.count; i++) {
       const offsetX = (Math.random() - 0.5) * this.params.clusterSpread * this.baseScale;
       const scale = rand(0.5, 1.5) * this.baseScale;
-      
+
       const tilt = rand(-0.2, 0.2);
       const quat = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), tilt);
 

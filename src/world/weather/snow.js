@@ -1,12 +1,13 @@
-import { Vector } from "canvas-percept";
-import { easeInOut, rand } from "@/utils/graphics";
-import { Tween } from "@/utils/simulation";
-import { Weather } from "@/utils/weather";
+import { Vector2 } from "three";
+import { Weather } from "@/world/simulation/weather";
+import { rand } from "@/utils";
+import { easeInOut } from "@/world/utils";
+import { Tween } from "../utils/tween";
 
 export class SnowFlake {
-  position = new Vector(0, 0);
+  position = new Vector2(0, 0);
   radius = 1;
-  velocity = new Vector(0, 0);
+  velocity = new Vector2(0, 0);
   shrinkFactor = 60;
   windInfluence = 1;
   windInfluenceRange = [0.65, 1.35];
@@ -93,7 +94,7 @@ export class Snow extends Weather {
   onEmit() {
     const radius = rand(this.state.minRadius, this.state.maxRadius);
     const velocity = this.world.weather.wind.clone();
-    const position = new Vector(
+    const position = new Vector2(
       velocity.x < 0 ? this.world.width + radius : -radius,
       rand(0, this.world.height),
     );

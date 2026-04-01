@@ -1,5 +1,5 @@
-import { themes } from "./constants";
-import { WeatherController } from "./weather";
+import { themes } from "@/utils/constants";
+import { WeatherController } from "./simulation/weather";
 
 export class SimulatedWorld {
   #width = 0;

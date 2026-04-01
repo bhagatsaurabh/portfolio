@@ -1,4 +1,4 @@
-import "@/utils/snow";
+import "@/world/weather/snow";
 import { useEffect, useState } from "react";
 
 const mapWeatherCode = (code) => {
