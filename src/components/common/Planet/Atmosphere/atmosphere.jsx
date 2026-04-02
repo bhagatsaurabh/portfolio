@@ -4,15 +4,22 @@ import classNames from "classnames";
 
 import classes from "./atmosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
+import { mapWeatherType } from "@/world/utils/weather-utils";
 import useWeather from "@/hooks/useWeather";
 import useWorld from "@/hooks/useWorld";
-import { mapWeatherType } from "@/world/simulation/weather";
 
 const Atmosphere = ({ theme, routeDirection, currRoute }) => {
   const canvasEl = useRef(null);
   const { world } = useWorld(canvasEl, theme);
   const { weather: currWeather, pending } = useWeather();
   useResizeObserver(() => world.current?.resize());
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      world.current.weather.transitionTo(mapWeatherType("light_rain"));
+    }, 4000);
+    return () => clearTimeout(handle);
+  }, [world]);
 
   useEffect(() => {
     if (pending || !world.current) return;

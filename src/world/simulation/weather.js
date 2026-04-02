@@ -4,7 +4,6 @@ import { ColorTween, Tween } from "../utils/tween";
 import { easeInOut } from "../utils";
 import { TimeoutSchedule } from "../utils/schedule";
 import { Simulation } from "./simulation";
-import { Snow } from "../weather/snow";
 
 export class Weather extends Simulation {
   weight = 0;
@@ -70,7 +69,7 @@ export class WeatherController extends Simulation {
 
       if (weather.weight <= 0 && !weather.tween) {
         weather.destroy?.();
-        this.weather.splice(i, 1);
+        this.weathers.splice(i, 1);
       }
     }
   }
@@ -98,17 +97,14 @@ export class WeatherController extends Simulation {
   gust(direction) {
     this.wind = new Vector2(-direction * 480, 0);
     this.gustTimeout.start();
+    for (const weather of this.weathers) {
+      weather.onGustStart?.();
+    }
   }
   onGustTimeout() {
     this.wind = new Vector2(-180, 0);
+    for (const weather of this.weathers) {
+      weather.onGustEnd?.();
+    }
   }
 }
-
-export const mapWeatherType = (/* type */) => {
-  /* if (type === "sunny") return Sunny;
-  if (type === "light_rain") return LightRain;
-  if (type === "heavy_rain") return HeavyRain;
-  if (type === "snow") return Snow;
-  if (type === "foggy") return Foggy; */
-  return Snow;
-};
