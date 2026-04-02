@@ -7,7 +7,7 @@ export class RainDrop {
   velocity = new Vector2();
   length = rand(8, 18);
   thickness = rand(0.5, 1.5);
-  alpha = rand(0.4, 0.9);
+  alpha = rand(0.4, 0.7);
   inertia = rand(2.0, 4.5);
   gravity = rand(900, 1200);
   maxFallSpeed = rand(700, 1000);
@@ -40,8 +40,10 @@ export class RainDrop {
 
 export class Rain extends Weather {
   state = {
-    baseEmitInterval: 0.02,
+    baseEmitInterval: 0.015,
   };
+  spawnPadding = 200;
+  vyRange = [300, 500];
 
   drops = new Set();
   emitAccumulator = 0;
@@ -66,17 +68,25 @@ export class Rain extends Weather {
   isOutofBounds(drop) {
     const x = drop.position.x;
     const y = drop.position.y;
-    return y > this.world.height + 20 || x < -20 || x > this.world.width + 20;
+    return (
+      y > this.world.height + 20 ||
+      x < -20 - this.spawnPadding ||
+      x > this.world.width + 20 + this.spawnPadding
+    );
   }
   onEmit() {
     const wind = this.world.weather.wind;
-    const position = new Vector2(rand(0, this.world.width), -10);
-    const velocity = new Vector2(wind.x, rand(200, 400));
+    const vy = rand(this.vyRange[0], this.vyRange[1]);
+    const vx = wind.x;
+    const fallTime = this.world.height / vy;
+    const hozDrift = Math.abs(vx * fallTime);
+    const padding = hozDrift + 50;
+    const position = new Vector2(rand(-padding, this.world.width + padding), -10);
+    const velocity = new Vector2(vx, vy);
     this.drops.add(new RainDrop({ position, velocity }));
   }
   render(ctx) {
     ctx.strokeStyle = this.color;
-    // ctx.globalAlpha = 0.7;
     for (const drop of this.drops) {
       drop.render(ctx);
     }

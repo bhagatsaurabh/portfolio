@@ -1,11 +1,12 @@
+import { WMO_CODES } from "@/world/utils/weather-utils";
 import "@/world/weather/snow";
 import { useEffect, useState } from "react";
 
 const mapWeatherCode = (code) => {
-  // if ([0, 1].includes(code)) return "sunny";
-  if ([51, 53, 55, 61, 63].includes(code)) return "light_rain";
-  // if ([65, 80, 81, 82].includes(code)) return "heavy_rain";
-  if ([71, 73, 75, 77].includes(code)) return "snow";
+  if (WMO_CODES.sun.has(code)) return "sun";
+  if (WMO_CODES.rain.has(code)) return "rain";
+  if (WMO_CODES.thunderstorm.has(code)) return "thunderstorm";
+  if (WMO_CODES.snow.has(code)) return "snow";
   return "snow";
 };
 const CACHE_KEY = "weather";
