@@ -14,6 +14,7 @@ export class SnowFlake {
   vyDurationRange = [0.5, 0.7];
   vyRange = [-180, 180];
   vyTween = null;
+  inertia = rand(1, 1.75);
 
   constructor({ position, radius, velocity } = {}) {
     this.position = position ?? this.position;
@@ -53,7 +54,9 @@ export class SnowFlake {
 
 export class Snow extends Weather {
   state = {
+    emitInterval: 0.135,
     baseEmitInterval: 0.135,
+    gustEmitInterval: 0.09,
     minRadius: 1.2,
     maxRadius: 1.8,
   };
@@ -67,7 +70,7 @@ export class Snow extends Weather {
   step(dt) {
     this.emitAccumulator += dt;
     if (this.weight > 0.01) {
-      const interval = this.state.baseEmitInterval / this.weight;
+      const interval = this.state.emitInterval / this.weight;
       while (this.emitAccumulator >= interval) {
         this.emitAccumulator -= interval;
         this.onEmit();
@@ -75,7 +78,8 @@ export class Snow extends Weather {
     }
 
     for (const flake of this.flakes) {
-      flake.velocity.x = this.world.weather.wind.x;
+      const targetVX = this.world.weather.wind.x;
+      flake.velocity.x += (targetVX - flake.velocity.x) * flake.inertia * dt;
 
       if (this.isOutofBounds(flake)) {
         this.flakes.delete(flake);
@@ -106,6 +110,12 @@ export class Snow extends Weather {
     for (const flake of this.flakes) {
       flake.render(ctx);
     }
+  }
+  onGustStart() {
+    this.state.emitInterval = this.state.gustEmitInterval;
+  }
+  onGustEnd() {
+    this.state.emitInterval = this.state.baseEmitInterval;
   }
   destroy() {}
 }

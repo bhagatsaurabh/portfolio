@@ -2,12 +2,10 @@ import "@/world/weather/snow";
 import { useEffect, useState } from "react";
 
 const mapWeatherCode = (code) => {
-  /* if ([0, 1].includes(code)) return "sunny";
+  // if ([0, 1].includes(code)) return "sunny";
   if ([51, 53, 55, 61, 63].includes(code)) return "light_rain";
-  if ([65, 80, 81, 82].includes(code)) return "heavy_rain";
+  // if ([65, 80, 81, 82].includes(code)) return "heavy_rain";
   if ([71, 73, 75, 77].includes(code)) return "snow";
-  if ([45, 48].includes(code)) return "foggy"; */
-
   return "snow";
 };
 const CACHE_KEY = "weather";
