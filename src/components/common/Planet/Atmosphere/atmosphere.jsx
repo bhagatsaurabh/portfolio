@@ -16,7 +16,7 @@ const Atmosphere = ({ theme, routeDirection, currRoute }) => {
 
   useEffect(() => {
     const handle = setTimeout(() => {
-      world.current.weather.transitionTo(mapWeatherType("light_rain"));
+      // world.current.weather.transitionTo(mapWeatherType("sun"));
     }, 4000);
     return () => clearTimeout(handle);
   }, [world]);
