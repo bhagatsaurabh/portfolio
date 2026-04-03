@@ -72,7 +72,7 @@ export class Birb {
     this.curveStrength = 0.6;
     this.wanderStrength = 0.2;
 
-    this.phase = Math.random() * Math.PI * 2;
+    this.phase = rand(0, 1) * Math.PI * 2;
 
     this.sprite.position.copy(pos);
 

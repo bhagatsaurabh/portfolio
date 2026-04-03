@@ -481,5 +481,20 @@ export class Landscape extends Simulation {
       tree.resize({ width, height });
     }
   }
+  onWeatherChange(type) {
+    if (type === "sun") {
+      console.log("Landscape Weather: sun");
+      // normalize (happy?) birb behaviour, normalize wind
+    } else if (type === "snow") {
+      console.log("Landscape Weather: snow");
+      // (tired?) birb behaviour, normalize wind
+    } else if (type === "rain") {
+      console.log("Landscape Weather: rain");
+      // (still?) birb behaviour, normalize wind
+    } else if (type === "thunderstorm") {
+      console.log("Landscape Weather: thunderstorm");
+      // (still?) birb behaviour, exaggerate wind
+    } else console.warn("Unknown world weather: ", type);
+  }
   destroy() {}
 }

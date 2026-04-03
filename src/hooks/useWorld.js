@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { SimulatedWorld } from "@/world/world";
 
-export const useWorld = (canvasEl, theme) => {
+export const useWorld = (canvasEl, theme, onWorldWeatherChange = () => {}) => {
   const world = useRef(null);
 
   useEffect(() => {
@@ -12,10 +12,13 @@ export const useWorld = (canvasEl, theme) => {
       world.current = new SimulatedWorld(canvasEl.current, { theme });
       world.current.start();
     }
+    if (world.current) {
+      world.current.weather.onChange = onWorldWeatherChange;
+    }
     if (world.current.state.theme !== theme) {
       world.current.state = { ...world.current.state, theme };
     }
-  }, [canvasEl, theme]);
+  }, [canvasEl, onWorldWeatherChange, theme]);
   useEffect(() => () => world.current?.destroy(), []);
 
   return { world };

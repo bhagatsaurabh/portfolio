@@ -70,7 +70,7 @@ export class ReedCluster {
     const matrix = new Matrix4();
 
     for (let i = 0; i < this.count; i++) {
-      const offsetX = (Math.random() - 0.5) * this.params.clusterSpread * this.baseScale;
+      const offsetX = (rand(0, 1) - 0.5) * this.params.clusterSpread * this.baseScale;
       const scale = rand(0.5, 1.5) * this.baseScale;
 
       const tilt = rand(-0.2, 0.2);
@@ -131,7 +131,7 @@ export class ReedCluster {
 
     const flutterPhase = new Float32Array(this.count);
     for (let i = 0; i < this.count; i++) {
-      flutterPhase[i] = Math.random() * Math.PI * 2;
+      flutterPhase[i] = rand(0, 1) * Math.PI * 2;
     }
     geometry.setAttribute("flutterPhase", new InstancedBufferAttribute(flutterPhase, 1));
 

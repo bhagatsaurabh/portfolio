@@ -6,7 +6,7 @@ import classes from "./lithosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useThree from "@/hooks/useThree";
 
-const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes }) => {
+const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) => {
   const containerEl = useRef();
   const perfEl = useRef(document.createElement("div"));
 
@@ -16,6 +16,7 @@ const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes }) => {
     currRoute.handle.routeOrder,
     noOfRoutes,
     perfEl,
+    weather,
   );
   useResizeObserver((width, height) => resize(width, height));
 

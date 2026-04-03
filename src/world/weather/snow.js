@@ -64,12 +64,17 @@ export class Snow extends Weather {
   emitAccumulator = 0;
 
   constructor(world) {
-    super(world);
+    super(world, "snow");
   }
 
   step(dt) {
+    if (this.cleared && this.flakes.size === 0) {
+      this.onClear(this);
+      return;
+    }
+
     this.emitAccumulator += dt;
-    if (this.weight > 0.01) {
+    if (this.weight > 0.01 && !this.cleared) {
       const interval = this.state.emitInterval / this.weight;
       while (this.emitAccumulator >= interval) {
         this.emitAccumulator -= interval;
@@ -117,5 +122,10 @@ export class Snow extends Weather {
   onGustEnd() {
     this.state.emitInterval = this.state.baseEmitInterval;
   }
-  destroy() {}
+  clear(cb) {
+    super.clear(cb);
+  }
+  destroy() {
+    super.destroy();
+  }
 }
