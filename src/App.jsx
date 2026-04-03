@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion } from "motion/react";
 
@@ -24,6 +24,7 @@ import Planet from "@/components/common/Planet/planet";
 import useIdlePreload from "./hooks/useIdlePreload";
 
 const App = () => {
+  const [worldWeather, setWorldWeather] = useState("");
   const dispatch = useDispatch();
   const theme = useSelector(selectCurrTheme);
   const prefsLoaded = useSelector(selectPrefsLoaded);
@@ -110,12 +111,18 @@ const App = () => {
       <div id="selfcover"></div>
       {prefsLoaded && (
         <>
-          <Planet.Atmosphere theme={theme} routeDirection={direction} currRoute={currRoute} />
+          <Planet.Atmosphere
+            theme={theme}
+            routeDirection={direction}
+            currRoute={currRoute}
+            onWorldWeatherChange={(type) => setWorldWeather(type)}
+          />
           <Planet.Lithosphere
             theme={theme}
             routeDirection={direction}
             currRoute={currRoute}
             noOfRoutes={routes.length}
+            weather={worldWeather}
           />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />

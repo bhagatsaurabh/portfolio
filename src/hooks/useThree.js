@@ -5,7 +5,7 @@ import { rescale } from "@/world/utils";
 import { SimulatedThreeWorld } from "@/world/three-world";
 import { Landscape } from "@/world/simulation/landscape";
 
-export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => {
+export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl, weather) => {
   const world = useRef(null);
   const landscape = useRef(null);
   const panDelta = useRef(0);
@@ -35,6 +35,11 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl) => 
     [routeOrder],
   );
 
+  useEffect(() => {
+    if (weather) {
+      landscape.current?.onWeatherChange(weather);
+    }
+  }, [weather]);
   useEffect(() => {
     if (!containerEl.current) {
       return;

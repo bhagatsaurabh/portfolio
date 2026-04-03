@@ -8,18 +8,21 @@ import { mapWeatherType } from "@/world/utils/weather-utils";
 import useWeather from "@/hooks/useWeather";
 import useWorld from "@/hooks/useWorld";
 
-const Atmosphere = ({ theme, routeDirection, currRoute }) => {
+const Atmosphere = ({ theme, routeDirection, currRoute, onWorldWeatherChange = () => {} }) => {
   const canvasEl = useRef(null);
-  const { world } = useWorld(canvasEl, theme);
+  const { world } = useWorld(canvasEl, theme, onWorldWeatherChange);
   const { weather: currWeather, pending } = useWeather();
   useResizeObserver(() => world.current?.resize());
 
-  useEffect(() => {
+  /* useEffect(() => {
     const handle = setTimeout(() => {
-      // world.current.weather.transitionTo(mapWeatherType("sun"));
-    }, 4000);
+      world.current.weather.transitionTo(mapWeatherType("thunderstorm"));
+      setTimeout(() => {
+        world.current.weather.transitionTo(mapWeatherType("rain"));
+      }, 8000);
+    }, 5000);
     return () => clearTimeout(handle);
-  }, [world]);
+  }, [world]); */
 
   useEffect(() => {
     if (pending || !world.current) return;
@@ -27,10 +30,8 @@ const Atmosphere = ({ theme, routeDirection, currRoute }) => {
     const weathers = world.current?.weather.weathers;
     const lastWeather = weathers?.[weathers?.length - 1];
     const weatherClass = mapWeatherType(currWeather);
-    if (weathers?.length === 0) {
-      world.current?.weather.transitionTo(weatherClass, 0);
-    } else if (!(lastWeather instanceof weatherClass)) {
-      world.current.weather.transitionTo(weatherClass);
+    if (!(lastWeather instanceof weatherClass)) {
+      world.current?.weather.transitionTo(weatherClass);
     }
   }, [currWeather, pending, world]);
   useEffect(() => {

@@ -6,20 +6,27 @@ export class Thunderstorm extends Rain {
   lightningTimer = 0;
   lightningSequence = [];
   lightningIndex = 0;
+  darknessAlpha = 0;
 
   constructor(world) {
-    super(world);
+    super(world, "thunderstorm");
   }
 
+  step(dt) {
+    super.step(dt);
+    this.updateLightning(dt);
+    this.applyWindTurbulence(dt);
+  }
   render(ctx) {
-    ctx.fillStyle = "rgba(0,0,0,0.12)";
+    this.darknessAlpha = 0.12 * this.weight;
+    ctx.fillStyle = `rgba(0,0,0,${this.darknessAlpha})`;
     ctx.fillRect(0, 0, this.world.width, this.world.height);
     ctx.strokeStyle = this.color;
     for (const drop of this.drops) {
       const speed = drop.velocity.length();
       const originalLength = drop.length;
       drop.length = originalLength * (1 + speed / 1200);
-      if (Math.random() < 0.05) {
+      if (rand(0, 1) < 0.05) {
         drop.length *= 1.5;
         ctx.lineWidth = drop.thickness * 1.5;
       } else {
@@ -29,23 +36,14 @@ export class Thunderstorm extends Rain {
       drop.length = originalLength;
     }
 
-    /* for (const s of this.splashes) {
-      s.render(ctx);
-    } */
-
     if (this.lightningAlpha > 0.01) {
       ctx.fillStyle = `rgba(255,255,255,${this.lightningAlpha})`;
       ctx.fillRect(0, 0, this.world.width, this.world.height);
     }
     ctx.globalAlpha = 1;
   }
-  step(dt) {
-    super.step(dt);
-    this.updateLightning(dt);
-    this.applyWindTurbulence(dt);
-  }
   updateLightning(dt) {
-    if (this.lightningSequence.length === 0 && Math.random() < 0.002) {
+    if (this.lightningSequence.length === 0 && rand(0, 1) < 0.0015) {
       this.startLightning();
     }
 
@@ -74,5 +72,11 @@ export class Thunderstorm extends Rain {
   applyWindTurbulence(dt) {
     const wind = this.world.weather.wind;
     wind.x += rand(-40, 40) * dt;
+  }
+  clear(cb) {
+    super.clear(cb);
+  }
+  destroy() {
+    super.destroy();
   }
 }

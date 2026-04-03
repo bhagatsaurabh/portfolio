@@ -1,6 +1,7 @@
 import { Vector2 } from "three";
 import { Weather } from "@/world/simulation/weather";
 import { rand } from "@/utils";
+import { Tween } from "../utils/tween";
 
 class SunDust {
   position;
@@ -42,16 +43,32 @@ export class Sun extends Weather {
   emitAccumulator = 0;
   state = {
     baseEmitInterval: 0.08,
+    radius: 0,
+    alpha: 0,
   };
+  maxRadius = 150;
+
+  constructor(world) {
+    super(world, "sun");
+  }
 
   step(dt) {
+    if (this.cleared && this.dust.size === 0) {
+      this.onClear(this);
+      return;
+    }
+
     this.emitAccumulator += dt;
-    if (this.weight > 0.01) {
+    if (this.weight > 0.01 && !this.cleared) {
       const interval = this.state.baseEmitInterval / this.weight;
       while (this.emitAccumulator >= interval) {
         this.emitAccumulator -= interval;
         this.onEmit();
       }
+    }
+    if (this.weight < 1) {
+      this.state.radius = this.maxRadius * this.weight;
+      this.state.alpha = this.weight;
     }
     for (const p of this.dust) {
       if (!p.update(dt, this.world.weather.wind)) {
@@ -65,27 +82,30 @@ export class Sun extends Weather {
     this.dust.add(new SunDust(x, y));
   }
   render(ctx) {
+    ctx.globalAlpha = this.state.alpha;
     const { width, height } = this.world;
-    ctx.fillStyle = "rgba(255, 220, 150, 0.06)";
-    ctx.fillRect(0, 0, width, height);
     const x = width * 0.8;
     const y = height * 0.2;
-    const pulse = 1 + Math.sin(performance.now() * 0.0015) * 0.05;
-    const radius = 100 * pulse;
-    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, "rgba(255,245,200,1)");
-    gradient.addColorStop(0.25, "rgba(255,220,150,0.7)");
-    gradient.addColorStop(1, "rgba(255,200,120,0)");
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, this.state.radius);
+    gradient.addColorStop(0, "rgba(255, 253, 244, 1)");
+    gradient.addColorStop(0.3, "rgba(242, 241, 233, 0.7)");
+    gradient.addColorStop(0.5, "rgba(234, 233, 232, 0.3)");
+    gradient.addColorStop(0.7, "rgba(225, 225, 225, 0.2)");
+    gradient.addColorStop(1, "rgba(215, 215, 215, 0)");
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(x, y, this.state.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = this.color;
     for (const p of this.dust) {
       p.render(ctx);
     }
-    ctx.fillStyle = "rgba(255,255,255,0.04)";
-    ctx.fillRect(0, 0, width, height);
     ctx.globalAlpha = 1;
+  }
+  clear(cb) {
+    super.clear(cb);
+  }
+  destroy() {
+    super.destroy();
   }
 }

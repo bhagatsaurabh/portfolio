@@ -10,9 +10,14 @@ export class Weather extends Simulation {
   tween = null;
   color = "#363537";
   colorTween = null;
+  cleared = false;
+  destroyed = false;
+  type = "";
+  onClear = () => {};
 
-  constructor(world) {
+  constructor(world, type) {
     super(world);
+    this.type = type;
     this.color = weatherThemes[world.state.theme];
   }
 
@@ -21,6 +26,10 @@ export class Weather extends Simulation {
     this.tween.start();
   }
   update(dt) {
+    if (this.destroyed) {
+      return;
+    }
+
     if (this.tween) {
       const res = this.tween.update(dt);
       this.weight = res.value;
@@ -46,12 +55,20 @@ export class Weather extends Simulation {
     );
     this.colorTween.start();
   }
+  clear(cb) {
+    this.cleared = true;
+    this.onClear = cb;
+  }
+  destroy() {
+    this.destroyed = true;
+  }
 }
 
 export class WeatherController extends Simulation {
   weathers = [];
   wind = new Vector2(-180, 0);
   gustTimeout = new TimeoutSchedule(0.75);
+  onChange = () => {};
 
   constructor(world) {
     super(world);
@@ -61,15 +78,11 @@ export class WeatherController extends Simulation {
     if (this.gustTimeout.update(dt)) {
       this.onGustTimeout();
     }
-
     for (let i = this.weathers.length - 1; i >= 0; i--) {
       const weather = this.weathers[i];
-
       weather.update(dt);
-
-      if (weather.weight <= 0 && !weather.tween) {
-        weather.destroy?.();
-        this.weathers.splice(i, 1);
+      if (weather.weight <= 0 && !weather.tween && !weather.cleared) {
+        weather.clear?.((w) => this.onWeatherClear(w));
       }
     }
   }
@@ -83,8 +96,16 @@ export class WeatherController extends Simulation {
       weather.sync?.();
     }
   }
+  onWeatherClear(weather) {
+    const idx = this.weathers.findIndex((w) => w === weather);
+    if (idx > -1) {
+      weather.destroy?.();
+      this.weathers.splice(idx, 1);
+    }
+  }
   transitionTo(WeatherClass, duration = 3) {
     const weather = new WeatherClass(this.world);
+    this.onChange?.(weather.type);
     weather.fadeTo(1, duration);
     this.weathers.push(weather);
 

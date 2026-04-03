@@ -48,7 +48,16 @@ export class Rain extends Weather {
   drops = new Set();
   emitAccumulator = 0;
 
+  constructor(world, type = "rain") {
+    super(world, type);
+  }
+
   step(dt) {
+    if (this.cleared && this.drops.size === 0) {
+      this.onClear(this);
+      return;
+    }
+
     this.emitAccumulator += dt;
     if (this.weight > 0.01) {
       const interval = this.state.baseEmitInterval / this.weight;
@@ -96,5 +105,11 @@ export class Rain extends Weather {
     for (const drop of this.drops) {
       drop.velocity.x *= 1.5;
     }
+  }
+  clear(cb) {
+    super.clear(cb);
+  }
+  destroy() {
+    super.destroy();
   }
 }
