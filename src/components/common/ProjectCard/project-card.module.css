@@ -2,8 +2,11 @@
   position: relative;
   width: 80vw;
   min-height: 53vw;
-  padding: 0.5rem;
   cursor: pointer;
+  background-color: #d2d2d2e8;
+}
+html[data-theme="dark"] .ProjectCard {
+  background-color: #2d2d2de8;
 }
 .ProjectCard .Cover {
   width: 100%;
@@ -20,6 +23,16 @@
   );
   opacity: 0.8;
   filter: grayscale(1);
+}
+.ProjectCard .CoverName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.ProjectCard .CoverName h3 {
+  font-size: 3rem;
+  font-weight: 400;
 }
 .ProjectCard video.Cover {
   object-fit: cover;

@@ -1,32 +1,28 @@
-import { forwardRef } from "react";
 import PropTypes from "prop-types";
 
-import styles from "./feed-button.module.css";
+import classes from "./feed-button.module.css";
 import Icon from "../Icon/icon";
+import classNames from "classnames";
 
-const FeedButton = forwardRef(
-  ({ onClick, icon, iconRight, size = 1, children }, ref) => {
-    let buttonClasses = [styles.FeedButton];
-    if (icon) {
-      if (iconRight) buttonClasses.push(styles.FeedButtonReverse);
-    }
-
-    return (
-      <button
-        ref={ref}
-        className={buttonClasses.join(" ")}
-        onClick={onClick}
-        style={{
-          "--size": `${size}rem`,
-          "--padding": `${0.25 * size}rem ${size}rem`,
-        }}
-      >
-        {icon && <Icon className={styles.ButtonIcon} name={icon} size={size} />}
-        <span className={styles.ButtonText}>{children}</span>
-      </button>
-    );
-  },
-);
+const FeedButton = ({ onClick, icon, iconRight, size = 1, children, ref }) => {
+  return (
+    <button
+      ref={ref}
+      className={classNames([
+        classes.FeedButton,
+        { [classes.FeedButtonReverse]: icon && iconRight },
+      ])}
+      onClick={onClick}
+      style={{
+        "--size": `${size}rem`,
+        "--padding": `${0.25 * size}rem ${size}rem`,
+      }}
+    >
+      {icon && <Icon className={classes.ButtonIcon} name={icon} size={size} />}
+      <span className={classes.ButtonText}>{children}</span>
+    </button>
+  );
+};
 
 FeedButton.propTypes = {
   onClick: PropTypes.func,
@@ -35,6 +31,5 @@ FeedButton.propTypes = {
   children: PropTypes.any,
   size: PropTypes.number,
 };
-FeedButton.displayName = "FeedButton";
 
 export default FeedButton;

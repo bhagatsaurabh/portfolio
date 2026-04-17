@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 
 import Icon from "../Icon/icon";
-import styles from "./external-link.module.css";
+import classes from "./external-link.module.css";
 
 const ExternalLink = ({ icon, url, size }) => {
   return (
     <a
       onKeyUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
-      className={styles.ExternalLink}
+      className={classes.ExternalLink}
       href={url}
       target="_blank"
     >

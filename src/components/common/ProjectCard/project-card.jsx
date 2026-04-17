@@ -2,51 +2,52 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
-import styles from "./project-card.module.css";
+import classes from "./project-card.module.css";
 import Icon from "../Icon/icon";
 import ExternalLink from "../ExternalLink/external-link";
-import { preload } from "@/store/actions/preloader";
-import SelfCover from "../SelfCover/self-cover";
+import { preload } from "@/store/preloader";
 
 const ProjectCard = ({ project }) => {
-  const mediaSource = useSelector(
-    (state) => state.preloader[project.mediaLink],
-  );
+  const mediaSource = useSelector((state) => state.preloader[project.mediaLink]);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    project.mediaLink &&
-      typeof mediaSource === "undefined" &&
+    if (project.mediaLink && !mediaSource) {
       dispatch(preload(project.mediaLink));
-    return () => {};
-  }, []);
+    }
+  }, [dispatch, mediaSource, project.mediaLink]);
 
   const handleOpen = (e) => {
     if (
       (!e.key || (e.key && ["Enter", "Space"].includes(e.key))) &&
-      (project.liveLink || project.githubLink)
+      (project.liveLink ?? project.githubLink)
     ) {
-      window.open(project.liveLink || project.githubLink, "_blank");
+      window.open(project.liveLink ?? project.githubLink, "_blank");
     }
   };
 
-  return (
-    <article
-      className={styles.ProjectCard}
-      tabIndex="0"
-      onKeyUp={handleOpen}
-      onClick={handleOpen}
-    >
-      {typeof mediaSource === "undefined" ? (
-        <div
-          className={styles.Cover}
-          style={{ backgroundImage: `url(${project.image})` }}
-        >
-          {project.name === "My Portfolio" && <SelfCover />}
+  let cover;
+  if (!mediaSource) {
+    if (project.image?.startsWith("$")) {
+      cover = (
+        <div className={classes.Cover}>
+          <div className={classes.CoverName}>
+            <h3>{project.image.substring(1)}</h3>
+          </div>
         </div>
-      ) : (
+      );
+    } else {
+      cover = (
+        <div className={classes.Cover} style={{ backgroundImage: `url(${project.image})` }}></div>
+      );
+    }
+  }
+
+  return (
+    <article className={classes.ProjectCard} tabIndex="0" onKeyUp={handleOpen} onClick={handleOpen}>
+      {cover ?? (
         <video
-          className={styles.Cover}
+          className={classes.Cover}
           src={mediaSource}
           poster={project.image}
           autoPlay
@@ -55,27 +56,23 @@ const ProjectCard = ({ project }) => {
           muted
         ></video>
       )}
-      <div className={styles.Title}>
+      <div className={classes.Title}>
         <h3>{project.name}</h3>
-        <div className={styles.Links}>
-          {project.liveLink && (
-            <ExternalLink icon="external" url={project.liveLink} />
-          )}
-          {project.githubLink && (
-            <ExternalLink icon="github" url={project.githubLink} />
-          )}
+        <div className={classes.Links}>
+          {project.liveLink && <ExternalLink icon="external" url={project.liveLink} />}
+          {project.githubLink && <ExternalLink icon="github" url={project.githubLink} />}
         </div>
       </div>
-      <div className={styles.Footer}>
-        <div className={styles.Tags}>
+      <div className={classes.Footer}>
+        <div className={classes.Tags}>
           {project.tags
             .filter((tag) => !tag.startsWith("#"))
             .map((tag) => (
-              <Icon size={1} key={tag} name={tag} className={styles.Tag} />
+              <Icon size={1} key={tag} name={tag} className={classes.Tag} />
             ))}
         </div>
       </div>
-      <div className={styles.Info}>
+      <div className={classes.Info}>
         <span>{project.description}</span>
       </div>
     </article>

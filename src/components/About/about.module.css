@@ -16,10 +16,17 @@
   justify-content: center;
   align-items: center;
 }
+.Silly {
+  filter: grayscale(1);
+  transition: filter var(--theme-transition-duration) linear;
+}
+html[data-theme="dark"] .Silly {
+  filter: grayscale(1) invert(1);
+}
 .About h4 {
   font-size: 0.9rem;
   font-weight: 100;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   text-align: center;
   color: var(--text-1);
   transition: color var(--theme-transition-duration) linear;
@@ -28,16 +35,18 @@
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
-  margin: 1rem;
+  margin: 0.5rem;
 }
 .PlatformLink {
-  margin: 1rem;
+  margin: 0.5rem;
   font-size: 0;
+  color: var(--text-2);
 }
 .Email {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 300;
 }
 .Email a {
   display: flex;
@@ -48,8 +57,9 @@
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
 }
-.Email a img {
+.Email a svg {
   margin-right: 0.5rem;
+  margin-top: 0.275rem;
 }
 .Email a:visited {
   color: var(--text-0);
@@ -62,25 +72,27 @@
   padding: 0.35rem;
   border-radius: 50%;
   margin-left: 0.5rem;
+  margin-top: 0.275rem;
   position: relative;
   transition: background-color 0.15s linear;
   cursor: pointer;
 }
-.Email button img {
-  transition: filter var(--theme-transition-duration) linear,
+.Email button svg {
+  transition:
+    color var(--theme-transition-duration) linear,
     opacity 0.1s linear;
   opacity: 1;
 }
-.Email button img:last-child {
+.Email button svg:last-child {
   width: 1rem;
   position: absolute;
   left: 0.35rem;
   opacity: 0;
 }
-.Email.copied button img:last-child {
+.Email.copied button svg:last-child {
   opacity: 1;
 }
-.Email.copied button img:first-child {
+.Email.copied button svg:first-child {
   opacity: 0;
 }
 
@@ -91,10 +103,17 @@
   position: absolute;
   bottom: 0.5rem;
   font-size: 0.75rem;
-  color: var(--text-3);
-  transition: color var(--theme-transition-duration) linear;
+  transition:
+    color var(--theme-transition-duration) linear,
+    background-color var(--theme-transition-duration) linear;
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
+  background-color: #dcdcdcb3;
+  padding: 0.15rem 0.5rem;
+  color: var(--text-3);
+}
+html[data-theme="dark"] .Copyright {
+  background-color: #424242b3;
 }
 .MeContainer {
   text-align: center;
@@ -118,7 +137,7 @@
   display: flex;
   align-items: center;
 }
-.Container > span img {
+.Container > span svg {
   margin-right: 0.5rem;
 }
 

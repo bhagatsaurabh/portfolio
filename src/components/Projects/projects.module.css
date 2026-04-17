@@ -24,6 +24,12 @@
   justify-content: center;
   align-items: center;
   min-height: 100%;
-  gap: 1rem;
-  padding: 7rem 3rem;
+  gap: 1.5rem;
+  padding: 7rem 6rem;
+}
+
+@media (max-width: 768px) {
+  .Container {
+    padding: 7rem 2rem;
+  }
 }
