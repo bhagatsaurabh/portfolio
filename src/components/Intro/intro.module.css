@@ -61,6 +61,9 @@
   opacity: 0;
   animation: fadein 0.5s linear forwards 2.4s;
 }
+.Titles {
+  white-space: nowrap;
+}
 .Title h5 {
   font-weight: lighter;
   color: var(--text-3);

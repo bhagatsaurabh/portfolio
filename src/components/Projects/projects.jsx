@@ -1,23 +1,17 @@
-// import ProjectCard from "../common/ProjectCard/project-card";
-import styles from "./projects.module.css";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import ProjectCard from "../common/ProjectCard/project-card";
+import classes from "./projects.module.css";
 
 const Projects = () => {
-  // const projects = useSelector((state) => state.projects);
+  const projects = useSelector((state) => state.projects);
 
   return (
-    <div className={styles.Projects}>
-      <h1>Projects</h1>
-      {/* <div
-        onScroll={(e) => {
-          e.preventDefault();
-        }}
-        className={styles.Container}
-      >
+    <div className={classes.Projects}>
+      <div className={classes.Container} onScroll={(e) => e.preventDefault()}>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };

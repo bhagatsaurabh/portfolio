@@ -1,71 +1,77 @@
-import { useEffect, /* useRef, */ useState } from "react";
-/* import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom"; */
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import classNames from "classnames";
 
-import styles from "./about.module.css";
-/* import myImage from "@/assets/images/me.png";
+import classes from "./about.module.css";
 import Icon from "../common/Icon/icon.jsx";
 import FeedButton from "../common/FeedButton/feed-button.jsx";
-import { router } from "@/router"; */
+import { router } from "@/router";
 
 const About = () => {
-  // const contact = useSelector((state) => state.contact);
+  const contact = useSelector((state) => state.contact);
   const [emailCopied, setEmailCopied] = useState(false);
-  /* const location = useLocation();
-  const animated = useRef(false); */
-
-  const classes = [styles.About];
-  /* if (location.pathname === "/about" || animated.current) {
-    classes.push(styles.animate);
-    animated.current = true;
-  } */
+  const location = useLocation();
+  const isActive = location.pathname === "/about";
 
   useEffect(() => {
-    let handle = -1;
+    let handle;
     if (emailCopied) {
       handle = setTimeout(() => setEmailCopied(false), 3000);
     }
     return () => clearTimeout(handle);
   }, [emailCopied]);
 
-  /* const handleEmailCopy = () => {
+  const handleEmailCopy = () => {
     navigator.clipboard.writeText(contact.email);
     setEmailCopied(true);
-  }; */
+  };
 
   return (
-    <div className={classes.join(" ")}>
-      <div className={styles.Container}>
-        <h1>{"About"}</h1>
-        {/* <h4>
-          Over the past 5 years, my journey has taken me through various business domains, from Risk
-          Management and Regulatory Compliance to Automation.
+    <div className={classNames([classes.About, { [classes.animate]: isActive }])}>
+      <div className={classes.Container}>
+        <h4>
+          I’m a frontend-leaning full-stack engineer with 6+ years of experience building scalable
+          web apps and backend systems. I enjoy working across the stack—whether it’s shaping
+          frontend architecture, designing APIs, setting up cloud infrastructure, or improving
+          workflows with CI/CD.
         </h4>
         <h4>
-          I have enjoyed creating both front-end and back-end systems, enhancing productivity with
-          innovative tools, and streamlining workflows with DevOps.
+          Over the years, I’ve worked in multiple domains, building end-to-end systems and finding
+          ways to make development faster and more efficient through better tooling and DevOps
+          practices.
         </h4>
-        <div className={styles.MeContainer}>
-          {<img className={styles.Me} alt="Me" src={myImage} />}
+        <div className={classes.MeContainer}>
+          {
+            <img
+              className={classes.Me}
+              alt="Me"
+              src={`${import.meta.env.VITE_SB_CDN_URL}/images/me.webp`}
+            />
+          }
         </div>
         <h4>
-          Outside of work, I love the thrill of developing games and composing instrumental music.
+          Outside of work, I’m drawn to creative and exploratory projects—I enjoy diving deep into
+          ideas, especially around research and development of games and interactive systems.
+          <br />
+          <br />I also spend time composing instrumental music, which is a completely different kind
+          of creative outlet but just as rewarding <span className={classes.Silly}>🎶</span>.
         </h4>
-        <div className={[styles.Email, emailCopied ? styles.copied : ""].join(" ")}>
+        <div className={classNames([classes.Email, { [classes.copied]: emailCopied }])}>
           <a href={"mailto:" + contact.email}>
-            <Icon name="email" size={1.5} />
-            {contact.email}
+            <Icon name="email" size={1} />
+            <span>{contact.email}</span>
           </a>
           <button onClick={() => !emailCopied && handleEmailCopy()}>
             <Icon name="copy" />
             <Icon name="check" />
           </button>
         </div>
-        <div className={styles.Platforms}>
+        <div className={classes.Platforms}>
           {contact.platforms &&
             contact.platforms.map((platform) => (
               <a
-                className={styles.PlatformLink}
+                className={classes.PlatformLink}
                 target="_blank"
                 rel="noreferrer"
                 key={platform.name}
@@ -77,18 +83,14 @@ const About = () => {
         </div>
         <FeedButton
           customStyle={{ alignSelf: "unset", marginTop: "1rem" }}
-          icon="resumé"
+          icon="resume"
           onClick={() => router.navigate("/resumé")}
         >
           {"Résumé"}
         </FeedButton>
-        <span className={styles.Location}>
-          <Icon name="pin" size={1} />
-          Mumbai, India
-        </span>
-        <span className={styles.Copyright}>
+        <span className={classes.Copyright}>
           &copy;&nbsp;{new Date().getFullYear()}&nbsp;Saurabh Bhagat
-        </span> */}
+        </span>
       </div>
     </div>
   );

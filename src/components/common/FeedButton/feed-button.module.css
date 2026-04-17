@@ -5,7 +5,8 @@
   align-items: center;
   border-radius: 999px;
   border: 1px solid var(--text-0);
-  transition: border var(--theme-transition-duration) linear,
+  transition:
+    border var(--theme-transition-duration) linear,
     opacity 0.2s linear;
   padding: var(--padding);
   position: relative;

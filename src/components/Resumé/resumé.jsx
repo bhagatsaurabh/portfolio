@@ -15,9 +15,11 @@ const Resumé = () => {
 
   return (
     <div className={classes.Resumé}>
-      <a className={classes.Download} href={file.url} download>
-        <FeedButton icon="download">Download PDF</FeedButton>
-      </a>
+      <div className={classes.Controls}>
+        <a className={classes.Download} href={file.url} download>
+          <FeedButton icon="download">Download PDF</FeedButton>
+        </a>
+      </div>
       <div className={classes.Container}>
         <div id="adobe-dc-view"></div>
       </div>

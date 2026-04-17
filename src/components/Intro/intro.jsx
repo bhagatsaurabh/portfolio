@@ -13,14 +13,14 @@ const Intro = () => {
   useEffect(() => {
     const handle = setInterval(
       () => setActiveIdx((prevIdx) => (prevIdx + 1) % introTitles.length),
-      3500,
+      4100,
     );
     return () => clearInterval(handle);
   }, []);
 
   return (
     <div className={classes.Intro}>
-      {/* <div className={classNames(classes.Float, classes.IntroFloat)}>
+      <div className={classNames(classes.Float, classes.IntroFloat)}>
         <div className={classes.Greeting}>
           <span>Hi</span>
           <span>, I'm</span>
@@ -32,7 +32,7 @@ const Intro = () => {
         <div className={classes.Title}>
           <h5>
             <span>a </span>
-            <div>
+            <div className={classes.Titles}>
               {introTitles.map((title, idx) => (
                 <span
                   key={title}
@@ -48,7 +48,7 @@ const Intro = () => {
           </h5>
         </div>
       </div>
-      <ScrollHint show={showScrollHint} /> */}
+      <ScrollHint show={showScrollHint} />
     </div>
   );
 };

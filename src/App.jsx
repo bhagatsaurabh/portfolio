@@ -108,7 +108,6 @@ const App = () => {
 
   return (
     <div className={[classes.App, theme].join(" ")} id="App" {...swipeHandlers}>
-      <div id="selfcover"></div>
       {prefsLoaded && (
         <>
           <Planet.Atmosphere

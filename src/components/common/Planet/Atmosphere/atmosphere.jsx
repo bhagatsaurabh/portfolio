@@ -14,16 +14,6 @@ const Atmosphere = ({ theme, routeDirection, currRoute, onWorldWeatherChange = (
   const { weather: currWeather, pending } = useWeather();
   useResizeObserver(() => world.current?.resize());
 
-  /* useEffect(() => {
-    const handle = setTimeout(() => {
-      world.current.weather.transitionTo(mapWeatherType("thunderstorm"));
-      setTimeout(() => {
-        world.current.weather.transitionTo(mapWeatherType("rain"));
-      }, 8000);
-    }, 5000);
-    return () => clearTimeout(handle);
-  }, [world]); */
-
   useEffect(() => {
     if (pending || !world.current) return;
 

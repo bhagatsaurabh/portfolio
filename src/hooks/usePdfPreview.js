@@ -5,7 +5,7 @@ const usePdfPreview = (id, file) => {
     if (!id || !file || !file.url) return;
 
     const adobeDCView = new window.AdobeDC.View({
-      clientId: import.meta.env.VITE_ADOBE_PDF_EMBED_PUBLIC_KEY,
+      clientId: import.meta.env.VITE_ADOBE_PDF_EMBED_PUBLICKEY,
       divId: "adobe-dc-view",
     });
     adobeDCView.previewFile(

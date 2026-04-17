@@ -24,7 +24,9 @@ export const landscapeThemes = Object.freeze({
 export const introTitles = Object.freeze([
   "frontend enthusiast",
   "software engineer",
-  "UI/UX designer",
   "creative developer",
-  "full-stack engineer",
+  "backend engineer",
+  "ui/ux designer",
+  "DevSecOps professional",
+  "cloud solution developer",
 ]);
