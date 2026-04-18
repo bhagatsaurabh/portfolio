@@ -130,7 +130,6 @@ html[data-theme="dark"] .Copyright {
 .Me {
   margin-bottom: 1.5rem;
   opacity: 0.8;
-  filter: grayscale(1);
 }
 .Container > span {
   margin-top: 1.5rem;

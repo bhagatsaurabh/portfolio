@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Icon from "../Icon/icon";
 import classes from "./external-link.module.css";
 
-const ExternalLink = ({ icon, url, size }) => {
+const ExternalLink = ({ icon, url, size = 1 }) => {
   return (
     <a
       onKeyUp={(e) => e.stopPropagation()}

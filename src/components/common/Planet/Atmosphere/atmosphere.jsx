@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 
 import classes from "./atmosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
@@ -31,9 +30,7 @@ const Atmosphere = ({ theme, routeDirection, currRoute, onWorldWeatherChange = (
   }, [currRoute.handle.routeOrder, routeDirection, world]);
 
   return (
-    <div
-      className={classNames(classes.Atmosphere, { [classes.blur]: currRoute?.handle.globalBlur })}
-    >
+    <div className={classes.Atmosphere}>
       <canvas
         className={classes.canvas}
         ref={(element) => element && (canvasEl.current = element)}

@@ -13,7 +13,6 @@ export const routes = [
     handle: {
       name: "Intro",
       title: "▢",
-      globalBlur: false,
       routeOrder: 0,
     },
   },
@@ -23,7 +22,6 @@ export const routes = [
     handle: {
       name: "Projects",
       title: "Projects",
-      globalBlur: true,
       routeOrder: 1,
     },
   },
@@ -33,7 +31,6 @@ export const routes = [
     handle: {
       name: "Skills",
       title: "Skills",
-      globalBlur: true,
       routeOrder: 2,
     },
   },
@@ -43,7 +40,6 @@ export const routes = [
     handle: {
       name: "Work",
       title: "Experience",
-      globalBlur: true,
       routeOrder: 3,
     },
   },
@@ -53,7 +49,6 @@ export const routes = [
     handle: {
       name: "About",
       title: "About",
-      globalBlur: false,
       routeOrder: 4,
     },
   },

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
 import classes from "./scrolling-background.module.css";
-import classNames from "classnames";
 
 const ScrollingBackground = ({ activeRoute, disabled }) => {
   return (
@@ -19,6 +19,7 @@ const ScrollingBackground = ({ activeRoute, disabled }) => {
 
 ScrollingBackground.propTypes = {
   activeRoute: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
 export default ScrollingBackground;

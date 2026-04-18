@@ -2,12 +2,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  filter: blur(0px);
-  transition: filter 0.3s linear;
   z-index: 1;
-}
-.Atmosphere.blur {
-  filter: blur(var(--global-blur));
 }
 .canvas {
   width: 100%;

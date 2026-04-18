@@ -4,6 +4,7 @@
   min-height: 53vw;
   cursor: pointer;
   background-color: #d2d2d2e8;
+  transition: background-color var(--theme-transition-duration) linear;
 }
 html[data-theme="dark"] .ProjectCard {
   background-color: #2d2d2de8;
@@ -22,7 +23,6 @@ html[data-theme="dark"] .ProjectCard {
     rgba(0, 0, 0, 0) 100%
   );
   opacity: 0.8;
-  filter: grayscale(1);
 }
 .ProjectCard .CoverName {
   display: flex;

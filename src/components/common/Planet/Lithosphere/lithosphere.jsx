@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
 
 import classes from "./lithosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
@@ -26,18 +25,12 @@ const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) 
     }
   }, [pan, routeDirection]);
 
-  return (
-    <div
-      className={classNames(classes.Lithosphere, { [classes.blur]: currRoute.handle?.globalBlur })}
-      ref={containerEl}
-    ></div>
-  );
+  return <div className={classes.Lithosphere} ref={containerEl}></div>;
 };
 
 Lithosphere.propTypes = {
   routeDirection: PropTypes.bool,
   theme: PropTypes.string,
-  blur: PropTypes.bool,
   noOfRoutes: PropTypes.number,
 };
 
