@@ -197,7 +197,7 @@ export class Landscape extends Simulation {
         this.spawnReedCluster(x);
       }
     }
-    console.log(this.props.reedClusters.length);
+    this.world.metrics.noOfReedClusters = this.props.reedClusters.length;
   }
   spawnReedCluster(x) {
     const pos = new Vector3(x, -1, this.sandbox.bounds.z[0]);
@@ -231,6 +231,7 @@ export class Landscape extends Simulation {
       this.props.trees.push(tree);
       this.world.scene.add(tree.mesh);
     }
+    this.world.metrics.noOfTrees = this.props.trees.length;
   }
   randomizeTreeConfig(pos, nearZ, farZ) {
     const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
@@ -483,16 +484,12 @@ export class Landscape extends Simulation {
   }
   onWeatherChange(type) {
     if (type === "sun") {
-      console.log("Landscape Weather: sun");
       // normalize (happy?) birb behaviour, normalize wind
     } else if (type === "snow") {
-      console.log("Landscape Weather: snow");
       // (tired?) birb behaviour, normalize wind
     } else if (type === "rain") {
-      console.log("Landscape Weather: rain");
       // (still?) birb behaviour, normalize wind
     } else if (type === "thunderstorm") {
-      console.log("Landscape Weather: thunderstorm");
       // (still?) birb behaviour, exaggerate wind
     } else console.warn("Unknown world weather: ", type);
   }

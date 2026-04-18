@@ -1,0 +1,19 @@
+[
+  {
+    "id": 0,
+    "name": "Frontend",
+    "skills": ["React", "Vue", "TypeScript", "JavaScript", "HTML", "CSS"]
+  },
+  { "id": 1, "name": "Backend", "skills": ["Java", "NodeJS", "GoLang", "Spring", "NestJS"] },
+  { "id": 2, "name": "Cloud", "skills": ["Azure", "Firebase", "Bicep", "Kubernetes", "Linux"] },
+  {
+    "id": 3,
+    "name": "Tooling",
+    "skills": ["Figma", "NPM", "Docker", "Postman", "Maven", "Vite", "SonarQube", "Grafana"]
+  },
+  {
+    "id": 4,
+    "name": "Other technologies I've worked with",
+    "skills": ["Redis", "NATS", "Playwright", "RabbitMQ", "PostgreSQL", "Kafka"]
+  }
+]

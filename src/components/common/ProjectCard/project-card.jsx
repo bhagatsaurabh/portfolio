@@ -37,7 +37,7 @@ const ProjectCard = ({ project }) => {
           </div>
         </div>
       );
-    } else {
+    } else if (project.image) {
       cover = (
         <div className={classes.Cover} style={{ backgroundImage: `url(${project.image})` }}></div>
       );

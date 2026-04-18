@@ -4,7 +4,6 @@
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
-
   mask-image: linear-gradient(
     to bottom,
     transparent 3rem,

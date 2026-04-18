@@ -55,20 +55,33 @@ code {
   --defaultBackground: #313131;
 }
 
-@media (hover: hover) {
-  *::-webkit-scrollbar {
-    width: 7px;
-  }
-  *::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0);
-    width: 7px;
-  }
-  *::-webkit-scrollbar-thumb {
-    background-color: rgba(174, 174, 174, 0.73);
-    border-radius: 1rem;
-  }
-  * {
-    scrollbar-color: rgba(174, 174, 174, 0.73) rgba(0, 0, 0, 0);
+@supports not selector(::-webkit-scrollbar) {
+  .scrollable {
     scrollbar-width: thin;
+    scrollbar-color: rgba(174, 174, 174, 0.73) rgba(0, 0, 0, 0);
+  }
+}
+
+@supports selector(::-webkit-scrollbar) {
+  @media (min-width: 1024px) {
+    .scrollable::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    .scrollable::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0);
+      width: 7px;
+      height: 7px;
+    }
+    .scrollable::-webkit-scrollbar-thumb {
+      background-color: rgba(174, 174, 174, 0.73);
+      border-radius: 1rem;
+    }
+    .scrollable::-webkit-scrollbar-button {
+      display: none;
+    }
+    .scrollable::-webkit-scrollbar-thumb:active {
+      background-color: #585858;
+    }
   }
 }

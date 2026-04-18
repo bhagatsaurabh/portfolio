@@ -7,7 +7,7 @@ const SkillTag = ({ icon, name, size = 1 }) => {
   return (
     <span className={classes.SkillTag} style={{ fontSize: `${size}rem` }}>
       <Icon name={icon} size={size} />
-      {name}
+      <span className={classes.Name}>{name}</span>
     </span>
   );
 };
