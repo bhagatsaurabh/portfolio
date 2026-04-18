@@ -4,10 +4,14 @@
   min-height: 53vw;
   cursor: pointer;
   background-color: #d2d2d2e8;
-  transition: background-color var(--theme-transition-duration) linear;
+  transition:
+    background-color var(--theme-transition-duration) linear,
+    box-shadow var(--theme-transition-duration) linear;
+  box-shadow: 4px 4px 20px 0px #00000024;
 }
 html[data-theme="dark"] .ProjectCard {
   background-color: #2d2d2de8;
+  box-shadow: 4px 4px 20px 0px #000000b5;
 }
 .ProjectCard .Cover {
   width: 100%;
@@ -23,6 +27,10 @@ html[data-theme="dark"] .ProjectCard {
     rgba(0, 0, 0, 0) 100%
   );
   opacity: 0.8;
+}
+.Self {
+  object-position: 0 -4.5rem;
+  transform: scaleX(-1);
 }
 .ProjectCard .CoverName {
   display: flex;
@@ -40,9 +48,6 @@ html[data-theme="dark"] .ProjectCard {
 .ProjectCard .Info {
   width: 100%;
   padding: 0 0.75rem 0.75rem 0.75rem;
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
-  border-right: 1px solid grey;
 }
 .ProjectCard .Title {
   position: absolute;
@@ -68,8 +73,6 @@ html[data-theme="dark"] .ProjectCard {
   display: flex;
   justify-content: center;
   padding: 0.25rem 0.75rem 0.75rem 0.75rem;
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
 }
 .Footer .Tags {
   flex: 1;

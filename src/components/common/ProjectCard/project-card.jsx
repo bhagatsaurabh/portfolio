@@ -6,6 +6,7 @@ import classes from "./project-card.module.css";
 import Icon from "../Icon/icon";
 import ExternalLink from "../ExternalLink/external-link";
 import { preload } from "@/store/preloader";
+import classNames from "classnames";
 
 const ProjectCard = ({ project }) => {
   const mediaSource = useSelector((state) => state.preloader[project.mediaLink]);
@@ -47,7 +48,10 @@ const ProjectCard = ({ project }) => {
     <article className={classes.ProjectCard} tabIndex="0" onKeyUp={handleOpen} onClick={handleOpen}>
       {cover ?? (
         <video
-          className={classes.Cover}
+          className={classNames([
+            classes.Cover,
+            { [classes.Self]: project.name === "My Portfolio" },
+          ])}
           src={mediaSource}
           poster={project.image}
           autoPlay

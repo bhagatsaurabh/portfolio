@@ -9,7 +9,7 @@ button.theme-button {
   top: 0.5rem;
   right: 0.5rem;
   z-index: 100;
-  opacity: 0.55;
+  opacity: 0.65;
 }
 
 svg.theme-icon {
@@ -17,7 +17,8 @@ svg.theme-icon {
   width: 2rem !important;
   transition:
     opacity var(--theme-transition-duration) linear,
-    transform var(--theme-transition-duration) linear !important;
+    transform var(--theme-transition-duration) linear,
+    color var(--theme-transition-duration) linear !important;
 }
 
 svg.theme-icon:first-child {
