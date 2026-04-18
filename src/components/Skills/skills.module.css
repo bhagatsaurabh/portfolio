@@ -4,73 +4,46 @@
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .Wrapper {
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem 2.5rem;
-}
-.Skills h1 {
-  color: var(--text-2);
-  transition: color var(--theme-transition-duration) linear;
-  font-weight: 100;
-  font-size: 2rem;
-  opacity: 0;
-}
-.Skills h1 span {
-  font-family: serif, math, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  height: 15rem;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-snap-stop: always;
+  padding: 0 1rem 0 1rem;
 }
 .SkillSet {
   width: 100%;
+  height: 15rem;
   text-align: left;
   margin: 0 auto;
-  padding: 1.5rem 0.5rem;
-  mask: linear-gradient(
-      to top,
-      transparent 0,
-      #fff 0.5rem calc(100% - 0.5rem),
-      transparent 100%
-    ),
-    linear-gradient(
-      to left,
-      transparent 0,
-      #fff 0.5rem calc(100% - 0.5rem),
-      transparent 100%
-    );
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-composite: intersect;
+  scroll-snap-align: start;
 }
 .Upper {
-  overflow: hidden;
+  z-index: 5;
 }
 .UpperContent {
   text-align: center;
-  transform: translateY(120%);
-  opacity: 0.75;
+  padding: 0.075rem 0.35rem 0.25rem 0.35rem;
 }
 .Upper h3 {
-  color: var(--background-0);
-  background-color: var(--text-2);
+  color: var(--text-1);
   font-size: 1.25rem;
   font-weight: 100;
-  padding: 0.075rem 0.35rem 0.25rem 0.35rem;
   margin: 0 0 0.15rem 0;
-  transition: color var(--theme-transition-duration) linear,
-    background-color var(--theme-transition-duration) linear;
-}
-.Divider {
-  margin: 0.35rem auto;
-  border-bottom: 1px solid #9c9c9c;
-  width: 0;
+  padding-bottom: 0.25rem;
+  transition:
+    color var(--theme-transition-duration) linear,
+    background-color var(--theme-transition-duration) linear,
+    border-bottom var(--theme-transition-duration) linear;
+  border-bottom: 1px solid var(--text-2);
 }
 .Lower {
   overflow: hidden;
@@ -84,89 +57,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  transform: translateY(-120%);
-}
-
-.Skills.animate h1 {
-  animation: fadein 0.5s linear 0.5s forwards;
-}
-.Skills.animate .UpperContent {
-  animation: slide-b 0.5s cubic-bezier(0, 0, 0.05, 1) 1.5s forwards;
-}
-.Skills.animate .Divider {
-  animation: expand-h 0.5s cubic-bezier(0, 0, 0.05, 1) 0.9s forwards;
-}
-.Skills.animate .LowerContent {
-  animation: slide-t 0.5s cubic-bezier(0, 0, 0.025, 1) 1.55s forwards;
-}
-
-@keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes expand-h {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
-}
-@keyframes slide-b {
-  0% {
-    transform: translateY(120%);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-@keyframes slide-t {
-  0% {
-    transform: translateY(-120%);
-  }
-  100% {
-    transform: translateY(0);
-  }
+  transform: translateY(0);
+  padding: 0 1rem 0 1rem;
+  opacity: 0.85;
 }
 
 @media (min-width: 950px) {
   .Wrapper {
     max-width: 600px;
-    padding: 2rem 3rem;
+    padding: 0;
   }
   .Skills h1 {
     font-size: 2.25rem;
   }
-  .SkillSet {
-    padding: 2rem 0.75rem;
-    mask: linear-gradient(
-        to top,
-        transparent 0,
-        #fff 0.75rem calc(100% - 0.75rem),
-        transparent 100%
-      ),
-      linear-gradient(
-        to left,
-        transparent 0,
-        #fff 0.75rem calc(100% - 0.75rem),
-        transparent 100%
-      );
+  .UpperContent {
+    padding: 0.1rem 0.5rem 0.35rem 0.5rem;
   }
   .Upper h3 {
     font-size: 1.5rem;
-    padding: 0.1rem 0.5rem 0.35rem 0.5rem;
     margin: 0 0 0.25rem 0;
-  }
-  .Divider {
-    margin: 0.45rem auto;
-  }
-  .LowerContent {
-    gap: 1rem;
   }
 }

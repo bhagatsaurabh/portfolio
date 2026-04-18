@@ -31,9 +31,10 @@ export class PerfMonitor {
 
       const currCalls = this.world.renderer.info.render.calls;
       this.el.innerText = `
-        FPS:          ${this.fps}
-        No. of Trees: ${metrics.noOfTrees ?? "-"}
-        Calls:        ${(currCalls ?? 0) - this.lastCalls}
+        FPS:                  ${this.fps}
+        No. of Trees:         ${metrics.noOfTrees ?? "-"}
+        No. of Reed Clusters: ${metrics.noOfReedClusters ?? "-"}
+        GPU Draw Calls:       ${(currCalls ?? 0) - this.lastCalls}
       `;
       this.lastCalls = currCalls;
     }

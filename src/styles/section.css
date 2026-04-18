@@ -9,6 +9,10 @@ section {
   pointer-events: none;
   will-change: transform, opacity;
 }
+section::-webkit-scrollbar {
+  display: none;
+}
+
 .preload-left {
   transform: translateX(-40%);
   z-index: 0;
@@ -17,62 +21,3 @@ section {
   transform: translateX(40%);
   z-index: 0;
 }
-section::-webkit-scrollbar {
-  display: none;
-}
-/* .section-forward-appear {
-  opacity: 1;
-}
-.section-forward-enter {
-  transform: translateX(40%);
-  opacity: 0;
-}
-.section-forward-enter-active {
-  transform: translateX(0);
-  opacity: 1;
-}
-.section-forward-enter-done {
-  transform: translateX(0);
-  opacity: 1;
-  z-index: 2;
-}
-.section-forward-exit {
-  transform: translateX(0);
-  opacity: 1;
-}
-.section-forward-exit-active {
-  transform: translateX(-30%);
-  opacity: 0;
-}
-.section-forward-exit-done {
-  transform: translateX(-30%);
-  opacity: 0;
-  z-index: 0;
-}
-.section-backward-enter {
-  transform: translateX(-30%);
-  opacity: 0;
-}
-.section-backward-enter-active {
-  transform: translateX(0);
-  opacity: 1;
-}
-.section-backward-enter-done {
-  transform: translateX(0);
-  opacity: 1;
-  z-index: 2;
-}
-.section-backward-exit {
-  transform: translateX(0);
-  opacity: 1;
-}
-.section-backward-exit-active {
-  transform: translateX(40%);
-  opacity: 0;
-}
-.section-backward-exit-done {
-  transform: translateX(40%);
-  opacity: 0;
-  z-index: 0;
-}
- */

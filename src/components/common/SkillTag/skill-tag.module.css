@@ -2,8 +2,9 @@
   display: flex;
   align-items: center;
   width: min-content;
+  white-space: nowrap;
 }
 
-.SkillTag img {
-  margin-right: 0.25rem;
+.SkillTag .Name {
+  margin-left: 0.35rem;
 }

@@ -44,7 +44,7 @@
     "name": "H-IDE",
     "description": "A cloud platform with real-time collaborative tools for prototyping in on-demand Linux workspaces.",
     "descriptionLong": null,
-    "tags": ["react", "typescript", "nodejs", "java", "golang", "k8s", "docker"],
+    "tags": ["react", "typescript", "nodejs", "java", "golang", "kubernetes", "docker"],
     "image": "https://cdn.saurabhagat.me/portfolio/images/h-ide.webp",
     "githubLink": "https://github.com/bhagatsaurabh/hide-server",
     "liveLink": "https://hide.saurabhagat.me"

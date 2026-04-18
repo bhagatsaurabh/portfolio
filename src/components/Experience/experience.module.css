@@ -67,7 +67,8 @@
   padding-left: 0.75rem;
   max-height: 2.75rem;
   overflow: hidden;
-  transition: max-height 0.75s cubic-bezier(0, 0, 0.04, 1),
+  transition:
+    max-height 0.75s cubic-bezier(0, 0, 0.04, 1),
     margin-bottom 0.5s linear;
   margin-bottom: 0;
 }

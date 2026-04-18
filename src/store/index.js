@@ -4,6 +4,7 @@ import appReducer from "@/store/app";
 import preferencesReducer from "@/store/preferences";
 import contactReducer from "@/store/contact";
 import projectsReducer from "@/store/projects";
+import skillsReducer from "@/store/skills";
 import preloaderReducer from "@/store/preloader";
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
     contact: contactReducer,
     projects: projectsReducer,
     preloader: preloaderReducer,
+    skills: skillsReducer,
   },
 });
 
