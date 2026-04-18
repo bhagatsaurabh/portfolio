@@ -3,8 +3,7 @@
 }
 html,
 body {
-  height: 100%;
-  background: var(--background);
+  height: 100vh;
 }
 * {
   box-sizing: border-box;
@@ -26,7 +25,6 @@ code {
   --preview-initial-top: 0;
   --preview-initial-left: 0;
   --scroll-timing-fn: cubic-bezier(0.33, 0.03, 0.35, 0.97);
-  --global-blur: 0px;
 }
 .light {
   --background-nav: #00000014;
@@ -40,7 +38,7 @@ code {
   --text-3: #7e7e7e;
   --text-4: #b2b2b2;
   --iconColor: none;
-  --backgroundFilter: none;
+  --defaultBackground: #dddddd;
 }
 .dark {
   --background-nav: #ffffff14;
@@ -54,7 +52,7 @@ code {
   --text-3: #9a9a9a;
   --text-4: #898989;
   --iconColor: #ffffff;
-  --backgroundFilter: brightness(0.7);
+  --defaultBackground: #313131;
 }
 
 @media (hover: hover) {

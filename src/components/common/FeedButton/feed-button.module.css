@@ -12,7 +12,6 @@
   position: relative;
   overflow: hidden;
   opacity: 0.65;
-  backdrop-filter: blur(3px);
   width: min-content;
   background-color: unset;
   font-size: var(--size);
@@ -46,8 +45,6 @@
 }
 .ButtonIcon {
   margin-right: 0.4rem;
-  filter: var(--iconFilter);
-  transition: filter var(--theme-transition-duration) linear;
 }
 
 @keyframes shine {

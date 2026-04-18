@@ -5,25 +5,34 @@
   height: 100%;
   transition:
     left 0.75s cubic-bezier(0.33, 0.03, 0.35, 0.97),
-    background-color var(--theme-transition-duration) linear,
-    filter var(--theme-transition-duration) linear;
-  filter: var(--backgroundFilter);
+    background-color var(--theme-transition-duration) linear;
+}
+.ScrollingBackground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color var(--theme-transition-duration) linear;
+  pointer-events: none;
+}
+html[data-theme="dark"] .ScrollingBackground::after {
+  background-color: rgba(0, 0, 0, 0.45);
 }
 .Position0 {
   left: 0;
 }
 .Position1 {
-  left: -5rem;
+  left: -2.55rem;
 }
 .Position2 {
-  left: -10rem;
+  left: -5rem;
 }
 .Position3 {
-  left: -15rem;
+  left: -7.5rem;
 }
 .Position4 {
-  left: -20rem;
+  left: -10rem;
 }
 .Position5 {
-  left: -25rem;
+  left: -12.5rem;
 }

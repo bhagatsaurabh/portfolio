@@ -98,6 +98,7 @@ const App = () => {
         initial={false}
         animate={animate}
         transition={transition}
+        inert={currRoute.path === route.path ? undefined : true}
       >
         <route.Component />
       </MotionSection>
@@ -125,7 +126,7 @@ const App = () => {
           />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />
-          <ScrollingBackground activeRoute={currRoute} disabled={true} />
+          <ScrollingBackground activeRoute={currRoute} disabled={false} />
           <Suspense fallback={<span>{"..."}</span>}>{routes.map(mapRoute)}</Suspense>
         </>
       )}
