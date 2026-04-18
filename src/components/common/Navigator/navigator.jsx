@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
 import classes from "./navigator.module.css";
 import { clamp } from "@/utils";
 import Icon from "../Icon/icon";
-import classNames from "classnames";
 
 const Navigator = ({ routes, activeRoute, onNavigate }) => {
   const navigatorEl = useRef(null);
@@ -29,7 +29,6 @@ const Navigator = ({ routes, activeRoute, onNavigate }) => {
           {routes.map((route) => (
             <button
               key={route.handle.name}
-              tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleClick(route)}
               onClick={() => handleClick(route)}
               className={classNames(classes.SectionTitle, {
