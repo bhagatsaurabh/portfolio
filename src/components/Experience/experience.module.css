@@ -4,7 +4,6 @@
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
-
   mask-image: linear-gradient(
     to bottom,
     transparent 3rem,
@@ -15,36 +14,38 @@
   mask-repeat: no-repeat;
   mask-composite: intersect;
   overflow-y: overlay;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 .Experience button {
   align-items: flex-start;
   border: none;
-  opacity: 0;
-  animation: fadein 0.5s linear forwards 2s normal;
+  opacity: 0.5;
 }
 .Container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 6rem 3rem;
   width: 100%;
-  min-height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
   font-weight: lighter;
+  height: 20rem;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-snap-stop: always;
 }
-.Container img {
+.Container svg {
   opacity: 0.75;
 }
 .Container h4 {
   font-weight: 100;
 }
-.Container img {
+.Container svg {
   position: relative;
   top: 0.15rem;
 }
-.Container button img {
+.Container button svg {
   top: unset;
 }
 .Container button {
@@ -65,65 +66,20 @@
 .Container .Set {
   border-left: 1px solid var(--text-3);
   padding-left: 0.75rem;
-  max-height: 2.75rem;
-  overflow: hidden;
-  transition:
-    max-height 0.75s cubic-bezier(0, 0, 0.04, 1),
-    margin-bottom 0.5s linear;
-  margin-bottom: 0;
+  padding-right: 0.75rem;
+  height: 20rem;
+  scroll-snap-align: start;
+}
+.Container .Set:not(:last-child) {
+  margin-bottom: 2rem;
 }
 .Container .Set h2 {
   margin-bottom: 1.5rem;
-  opacity: 0;
-  transform: translateX(-100%);
+  opacity: 1;
   cursor: pointer;
 }
 .Container .Set span:not(:last-child) {
   margin-bottom: 1rem;
-}
-.Expand {
-  max-height: var(--max-height) !important;
-}
-.Container .Set.Expand:not(:last-child) {
-  margin-bottom: 2rem;
-}
-
-.Container .Set:nth-child(1) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.8s normal;
-}
-.Container .Set:nth-child(2) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.7s normal;
-}
-.Container .Set:nth-child(3) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1s normal;
-}
-.Container .Set:nth-child(4) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 0.9s normal;
-}
-.Container .Set:nth-child(5) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1.05s normal;
-}
-.Container .Set:nth-child(6) h2 {
-  animation: fadeslide 0.5s cubic-bezier(0, 0, 0.04, 1) forwards 1.01s normal;
-}
-
-@keyframes fadeslide {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-@keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0.5;
-  }
 }
 
 @media (min-width: 1000px) {

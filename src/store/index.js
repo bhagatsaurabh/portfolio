@@ -5,6 +5,7 @@ import preferencesReducer from "@/store/preferences";
 import contactReducer from "@/store/contact";
 import projectsReducer from "@/store/projects";
 import skillsReducer from "@/store/skills";
+import experiencesReducer from "@/store/experiences";
 import preloaderReducer from "@/store/preloader";
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     projects: projectsReducer,
     preloader: preloaderReducer,
     skills: skillsReducer,
+    experiences: experiencesReducer,
   },
 });
 
