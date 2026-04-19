@@ -1,33 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import classNames from "classnames";
 
 import Icon from "../common/Icon/icon";
 import classes from "./experience.module.css";
-import FeedButton from "../common/FeedButton/feed-button";
+import { useSelector } from "react-redux";
 
 const Experience = () => {
-  const maxHeights = useRef([]);
-  const refs = useRef([]);
-  const cRefs = useRef([]);
-  const [expand, setExpand] = useState(false);
-
-  useEffect(() => {
-    refs.current.forEach((el, idx) => {
-      maxHeights.current[idx] = el.getBoundingClientRect().height;
-      cRefs.current[idx]?.style.setProperty("--max-height", `${maxHeights.current[idx]}px`);
-    });
-
-    return () => {};
-  }, []);
+  const exps = useSelector((state) => state.experiences);
+  // TODO
 
   return (
     <div className={classes.Experience}>
-      <div className={classes.Container}>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[0] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[0] = el)} className={classes.Content}>
+      <div className={classNames([classes.Container, "scrollable"])}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>Modernization</h2>
             <span>
               Led the migration of a legacy codebase to <Icon name="vue" /> Vue, complete with a
@@ -43,12 +28,8 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[2] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[2] = el)} className={classes.Content}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>Automation</h2>
             <span>
               Created a functional test suite using <Icon name="testcafe" /> TestCafe with CICD
@@ -56,12 +37,8 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[3] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[3] = el)} className={classes.Content}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>Developer Experience</h2>
             <span>
               Contributed improvements and fixes to Lit components of the common design system
@@ -73,12 +50,8 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[4] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[4] = el)} className={classes.Content}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>UI/UX Development</h2>
             <span>
               Created both simple and complex screen mock-ups and static designs with{" "}
@@ -86,12 +59,8 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[5] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[5] = el)} className={classes.Content}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>DevOps</h2>
             <span>
               Built a common IaC library of generic <Icon name="bicep" /> Bicep modules with
@@ -109,12 +78,8 @@ const Experience = () => {
             </span>
           </div>
         </div>
-        <div
-          onClick={() => setExpand(true)}
-          ref={(el) => el && (cRefs.current[6] = el)}
-          className={[classes.Set, expand ? classes.Expand : ""].join(" ")}
-        >
-          <div ref={(el) => el && (refs.current[6] = el)} className={classes.Content}>
+        <div className={classes.Set}>
+          <div className={classes.Content}>
             <h2>Cloud Migration</h2>
             <span>
               Migrated two applications from on-premises to <Icon name="azure" /> Azure.
@@ -125,10 +90,6 @@ const Experience = () => {
             </span>
           </div>
         </div>
-
-        <FeedButton onClick={() => setExpand(!expand)} icon="info" size={0.8}>
-          {!expand ? "Know More" : "Hide"}
-        </FeedButton>
       </div>
     </div>
   );

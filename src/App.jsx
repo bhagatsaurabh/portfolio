@@ -23,6 +23,7 @@ import { useHorizontalSwipe } from "@/hooks/useHorizontalSwipe";
 import Planet from "@/components/common/Planet/planet";
 import useIdlePreload from "./hooks/useIdlePreload";
 import { loadSkills } from "./store/skills";
+import { loadExperiences } from "./store/experiences";
 
 const App = () => {
   const [worldWeather, setWorldWeather] = useState("");
@@ -54,9 +55,10 @@ const App = () => {
     const appInit = async () => {
       const tasks = [];
       tasks.push(dispatch(loadPreferences()).unwrap());
-      tasks.push(dispatch(loadContact()).unwrap());
       tasks.push(dispatch(loadProjects()).unwrap());
       tasks.push(dispatch(loadSkills()).unwrap());
+      tasks.push(dispatch(loadExperiences()).unwrap());
+      tasks.push(dispatch(loadContact()).unwrap());
       await Promise.all(tasks);
       dispatch(setPrefsLoaded(true));
     };
