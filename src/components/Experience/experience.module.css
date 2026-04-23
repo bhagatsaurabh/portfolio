@@ -29,7 +29,7 @@
   margin: 0 auto;
   width: 100%;
   font-weight: lighter;
-  height: 20rem;
+  height: 25rem;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
@@ -59,15 +59,14 @@
 }
 .Container span {
   font-weight: normal;
-  display: block;
   color: var(--text-2);
   transition: color var(--theme-transition-duration) linear;
 }
 .Container .Set {
-  border-left: 1px solid var(--text-3);
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  height: 20rem;
+  border-left: 3px solid var(--text-3);
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  height: 25rem;
   scroll-snap-align: start;
 }
 .Container .Set:not(:last-child) {
@@ -80,6 +79,19 @@
 }
 .Container .Set span:not(:last-child) {
   margin-bottom: 1rem;
+}
+.XPList {
+  list-style: none;
+  padding: 0;
+}
+.XP:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .Container .Set {
+    border-left: 1px solid var(--text-3);
+  }
 }
 
 @media (min-width: 1000px) {
