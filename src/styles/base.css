@@ -39,6 +39,8 @@ code {
   --text-4: #b2b2b2;
   --iconColor: none;
   --defaultBackground: #dddddd;
+  --scrollbar-thumb-color: rgba(174, 174, 174, 0.73);
+  --scrollbar-track-color: rgba(0, 0, 0, 0.035);
 }
 .dark {
   --background-nav: #ffffff14;
@@ -53,12 +55,18 @@ code {
   --text-4: #898989;
   --iconColor: #ffffff;
   --defaultBackground: #313131;
+  --scrollbar-thumb-color: rgba(174, 174, 174, 0.4);
+  --scrollbar-track-color: rgba(0, 0, 0, 0.2);
 }
 
 @supports not selector(::-webkit-scrollbar) {
   .scrollable {
     scrollbar-width: thin;
-    scrollbar-color: rgba(174, 174, 174, 0.73) rgba(0, 0, 0, 0);
+    scrollbar-color: var(--scrollbar-thumb-color) #00000000;
+    transition: scrollbar-color var(--theme-transition-duration) linear;
+  }
+  .scrollable.tracked {
+    scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
   }
 }
 
@@ -69,12 +77,17 @@ code {
       height: 7px;
     }
     .scrollable::-webkit-scrollbar-track {
-      background-color: rgba(0, 0, 0, 0);
+      background-color: #00000000;
+      transition: background-color var(--theme-transition-duration) linear;
       width: 7px;
       height: 7px;
     }
+    .scrollable.tracked::-webkit-scrollbar-track {
+      background-color: var(--scrollbar-track-color);
+    }
     .scrollable::-webkit-scrollbar-thumb {
-      background-color: rgba(174, 174, 174, 0.73);
+      background-color: var(--scrollbar-thumb-color);
+      transition: background-color var(--theme-transition-duration) linear;
       border-radius: 1rem;
     }
     .scrollable::-webkit-scrollbar-button {
