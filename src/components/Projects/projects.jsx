@@ -8,7 +8,7 @@ const Projects = () => {
   const projects = useSelector((state) => state.projects);
 
   return (
-    <div className={classNames([classes.Projects, "scrollable"])}>
+    <div className={classNames([classes.Projects, "scrollable", "tracked"])}>
       <div className={classes.Container} onScroll={(e) => e.preventDefault()}>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />

@@ -28,16 +28,21 @@ const About = () => {
   };
 
   return (
-    <div className={classNames([classes.About, { [classes.animate]: isActive }])}>
+    <div
+      className={classNames([
+        classes.About,
+        { [classes.animate]: isActive, [classes["c-animate"]]: !isActive },
+      ])}
+    >
       <div className={classes.Container}>
         <h4>
-          I’m a frontend-leaning full-stack engineer with 6+ years of experience building scalable
-          web apps and backend systems. I enjoy working across the stack—whether it’s shaping
+          I'm a frontend-leaning full-stack engineer with 6+ years of experience building scalable
+          web apps and backend systems. I enjoy working across the stack—whether it's shaping
           frontend architecture, designing APIs, setting up cloud infrastructure, or improving
           workflows with CI/CD.
         </h4>
         <h4>
-          Over the years, I’ve worked in multiple domains, building end-to-end systems and finding
+          Over the years, I've worked in multiple domains, building end-to-end systems and finding
           ways to make development faster and more efficient through better tooling and DevOps
           practices.
         </h4>
@@ -51,7 +56,7 @@ const About = () => {
           }
         </div>
         <h4>
-          Outside of work, I’m drawn to creative and exploratory projects—I enjoy diving deep into
+          Outside of work, I'm drawn to creative and exploratory projects—I enjoy diving deep into
           ideas, especially around research and development of games and interactive systems.
           <br />
           <br />I also spend time composing instrumental music, which is a completely different kind

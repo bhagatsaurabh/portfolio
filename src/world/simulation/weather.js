@@ -4,6 +4,7 @@ import { ColorTween, Tween } from "../utils/tween";
 import { easeInOut } from "../utils";
 import { TimeoutSchedule } from "../utils/schedule";
 import { Simulation } from "./simulation";
+import { mapWeatherType } from "../utils/weather-utils";
 
 export class Weather extends Simulation {
   weight = 0;
@@ -103,7 +104,12 @@ export class WeatherController extends Simulation {
       this.weathers.splice(idx, 1);
     }
   }
-  transitionTo(WeatherClass, duration = 3) {
+  transitionTo(weatherName, duration = 3) {
+    const WeatherClass = mapWeatherType(weatherName);
+    if (this.lastWeather === weatherName) {
+      return;
+    }
+
     const weather = new WeatherClass(this.world);
     this.onChange?.(weather.type);
     weather.fadeTo(1, duration);
@@ -114,6 +120,7 @@ export class WeatherController extends Simulation {
         w.fadeTo(0, duration);
       }
     }
+    this.lastWeather = weatherName;
   }
   gust(direction) {
     this.wind = new Vector2(-direction * 480, 0);

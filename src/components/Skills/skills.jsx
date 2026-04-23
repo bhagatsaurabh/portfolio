@@ -23,7 +23,7 @@ const Skills = () => {
 
   return (
     <div className={classNames([classes.Skills, { [classes.animate]: animate }])}>
-      <div className={classNames([classes.Wrapper, "scrollable"])}>
+      <div className={classNames([classes.Wrapper, "scrollable", "tracked"])}>
         {shuffledSklCtgrs.map((skillCtgr) => (
           <div key={skillCtgr.id} className={classes.SkillSet}>
             <div className={classes.Upper}>

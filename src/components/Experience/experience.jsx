@@ -5,11 +5,14 @@ import classes from "./experience.module.css";
 import { useSelector } from "react-redux";
 import { parseText } from "@/utils/xp-parser";
 import { useMemo } from "react";
+import { shuffle } from "@/utils";
 
 const Experience = () => {
   const exps = useSelector((state) => state.experiences);
   const parsedExps = useMemo(() => {
-    return exps.map((exp) => ({ ...exp, points: exp.points.map((point) => parseText(point)) }));
+    return shuffle(
+      exps.map((exp) => ({ ...exp, points: exp.points.map((point) => parseText(point)) })),
+    );
   }, [exps]);
 
   return (
