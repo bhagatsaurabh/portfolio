@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import { WMO_CODES } from "@/world/utils/weather-utils";
 import "@/world/weather/snow";
-import { useEffect, useState } from "react";
 
 const mapWeatherCode = (code) => {
   if (WMO_CODES.sun.has(code)) return "sun";

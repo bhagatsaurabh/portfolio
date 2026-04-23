@@ -5,6 +5,8 @@ export const randInt = (min, max) => {
   return Math.floor(rand(0, 1) * (max - min + 1)) + min;
 };
 export const randPick = (...options) => options[randInt(0, options.length - 1)];
+export const randPickExc = (options, exclude) =>
+  randPick(...options.filter((item) => item !== exclude));
 
 export const biasRand = (min, max, norm, type, strength = 10) => {
   if (type === "sig") {

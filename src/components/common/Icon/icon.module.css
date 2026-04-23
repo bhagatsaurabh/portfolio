@@ -3,10 +3,10 @@ svg.icon {
   transition: color var(--theme-transition-duration) linear;
 }
 
-html[data-theme="dark"] svg.icon {
-  color: #ffffff;
+svg.icon.adaptive {
+  color: #000000;
 }
 
-svg.icon.adaptive {
-  color: unset;
+html[data-theme="dark"] svg.icon.adaptive {
+  color: #ffffff;
 }

@@ -30,3 +30,5 @@ export const introTitles = Object.freeze([
   "DevSecOps practitioner",
   "cloud solution developer",
 ]);
+
+export const weathers = ["sun", "rain", "thunderstorm", "snow"];

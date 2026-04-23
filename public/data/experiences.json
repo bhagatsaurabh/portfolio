@@ -3,10 +3,10 @@
     "id": 0,
     "name": "Frontend Architecture",
     "points": [
-      "Rebuilt a legacy frontend using Vue (Composition API), shaping a more maintainable architecture and pushing test coverage beyond 95%.",
+      "Contributed to a centralized design system, making components more reusable and keeping the UI consistent across applications.",
+      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage beyond 95%.",
       "Built a micro-frontend setup with Module Federation for 4 interdependent SPAs, reducing duplication and enabling independent deployments.",
-      "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility.",
-      "Contributed to a centralized design system, making components more reusable and keeping the UI consistent across applications."
+      "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility."
     ]
   },
   {
@@ -14,15 +14,15 @@
     "name": "Performance Optimization",
     "points": [
       "Improved Core Web Vitals (LCP) by ~20% by fixing tree-shaking issues, introducing code-splitting, and enabling gzip compression.",
-      "Switched the build system from legacy tooling to Vite, cutting down build times and making development feedback loops much faster."
+      "Switched the build system from legacy tooling to #vite Vite, cutting down build times and making development feedback loops much faster."
     ]
   },
   {
     "id": 2,
     "name": "Testing & Quality",
     "points": [
-      "Built a functional testing setup (TestCafe) integrated with CI/CD, cutting down manual regression effort significantly.",
-      "Put together an end-to-end API testing framework using Postman/Newman, covering authentication and authorization flows.",
+      "Built a functional testing setup (#playwright Playwright) integrated with CI/CD, cutting down manual regression effort significantly.",
+      "Put together an end-to-end API testing framework using #postman Postman/Newman, covering authentication and authorization flows.",
       "Established a high-coverage testing strategy (>95%) to keep large-scale changes stable over time."
     ]
   },
@@ -30,10 +30,10 @@
     "id": 3,
     "name": "Cloud & Infrastructure",
     "points": [
-      "Migrated two applications to Azure, setting up networking, compute, storage, and serverless components end-to-end.",
-      "Built a reusable IaC library with Bicep, along with automated versioning for consistent deployments.",
+      "Migrated two applications to #azure Azure, setting up networking, compute, storage, and serverless components end-to-end.",
+      "Built a reusable IaC library with #bicep Bicep, along with automated versioning for consistent deployments.",
       "Delivered Azure automation workflows (network provisioning, Key Vault rotation, DevOps pipelines) to reduce manual operational work.",
-      "Built a serverless ETL pipeline using Node.js and Azure Functions for scalable data processing.",
+      "Built a serverless ETL pipeline using Node.js and #function Azure Functions for scalable data processing.",
       "Cut infrastructure costs by ~50% by aligning workloads with the right cloud resources."
     ]
   },
@@ -41,7 +41,7 @@
     "id": 4,
     "name": "Backend & Distributed Systems",
     "points": [
-      "Designed and maintained Spring Boot services, including Kafka consumers, batch jobs, and REST APIs.",
+      "Designed and maintained #spring Spring Boot services, including #kafka Kafka consumers, batch jobs, and REST APIs.",
       "Worked with event-driven and service-based architectures to support scalable backend workflows."
     ]
   },
@@ -49,30 +49,30 @@
     "id": 5,
     "name": "Observability",
     "points": [
-      "Built monitoring and alerting systems with metrics dashboards and automated incident triggers, improving visibility and response times."
+      "Built monitoring and alerting systems (Azure Workspace/Monitor) with metrics dashboards and automated incident triggers, improving visibility and response times."
     ]
   },
   {
     "id": 6,
     "name": "Developer Experience",
     "points": [
-      "Modernized the stack with Node.js upgrades, Pinia for state management, and Composition API, improving maintainability and developer workflow.",
-      "Introduced Docker-based local environments to make complex setups reproducible and easier to work with.",
-      "Mentored engineers and ran internal sessions on React, Vue, and micro-frontends, helping raise the team’s overall capability."
+      "Modernized application's stack with #nodejs Node.js upgrades, Pinia for state management, and Composition API, improving maintainability and developer workflow.",
+      "Introduced #docker Docker-based local environments to make complex setups reproducible and easier to work with.",
+      "Mentored engineers and ran internal sessions on #react React, #vue Vue, and micro-frontends, helping raise the team's overall capability."
     ]
   },
   {
     "id": 7,
     "name": "Product & UX",
     "points": [
-      "Created high-fidelity UI mockups and static designs, enabling faster iteration through continuous feedback with stakeholders."
+      "Created high-fidelity UI mockups and static designs using #figma Figma, enabling faster iteration through continuous feedback with stakeholders."
     ]
   },
   {
     "id": 8,
     "name": "Tooling & Automation",
     "points": [
-      "Built database migration tooling in Java, including a semantic analyzer and an automated documentation generator."
+      "Built database migration tooling in #java Java, including a semantic analyzer and an automated documentation generator."
     ]
   }
 ]

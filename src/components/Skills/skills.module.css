@@ -30,7 +30,7 @@
   z-index: 5;
 }
 .UpperContent {
-  text-align: center;
+  text-align: right;
   padding: 0.075rem 0.35rem 0.25rem 0.35rem;
 }
 .Upper h3 {
@@ -55,7 +55,7 @@
 }
 .LowerContent {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;

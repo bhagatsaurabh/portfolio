@@ -12,6 +12,7 @@ export class SimulatedWorld {
   lastTime = 0;
   simulations = [];
   frameId = -1;
+  renderFn = undefined;
 
   get weather() {
     return this.#weather;
@@ -35,9 +36,10 @@ export class SimulatedWorld {
     this.sync();
   }
 
-  constructor(canvas) {
+  constructor(canvas, renderFn) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
+    this.renderFn = renderFn;
     this.resize();
     this.#weather = new WeatherController(this);
     this.simulations.push(this.weather);
@@ -57,6 +59,7 @@ export class SimulatedWorld {
       simulation.update?.(dt);
       simulation.render?.(this.context);
     }
+    this.renderFn?.(dt);
   }
   resize() {
     const rect = this.canvas.getBoundingClientRect();
