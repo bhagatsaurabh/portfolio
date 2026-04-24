@@ -19,7 +19,7 @@ export const sanitizePrefs = (prefs = {}) => {
 };
 export const clamp = (value, min, max) =>
   Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
-export const norm = (value, min, max) => (clamp(value, min, max) - min) / (max - min);
+export const norm = (value, min = 0, max = 1) => (clamp(value, min, max) - min) / (max - min);
 export const denorm = (value, min, max) => clamp(value * (max - min) + min, min, max);
 export const rand = (min, max) => {
   const buf = new Uint32Array(1);

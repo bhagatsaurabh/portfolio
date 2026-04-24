@@ -41,12 +41,12 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl, wea
     }
   }, [weather]);
   useEffect(() => {
-    if (!containerEl.current) {
+    if (!containerEl) {
       return;
     }
 
     if (!world.current) {
-      const wrld = new SimulatedThreeWorld(containerEl.current, () => {}, perfEl.current);
+      const wrld = new SimulatedThreeWorld(containerEl.current, theme, () => {}, perfEl.current);
       world.current = wrld;
 
       landscape.current = new Landscape(wrld);
@@ -62,7 +62,17 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl, wea
       world.current.state = { ...world.current.state, theme };
     }
   }, [containerEl, noOfRoutes, perfEl, resetPanPosition, routeOrder, theme]);
-  useEffect(() => () => world.current?.destroy(), []);
+  useEffect(
+    () => () => {
+      world.current?.destroy();
+      const renderer = world.current.renderer;
+      if (renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
+      world.current = null;
+    },
+    [],
+  );
 
   return { world, resize, pan };
 };

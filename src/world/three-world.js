@@ -54,14 +54,15 @@ export class SimulatedThreeWorld {
     this.sync();
   }
 
-  constructor(container, update = () => {}, perfEl) {
-    this.setup(container);
+  constructor(container, theme, update = () => {}, perfEl) {
+    this.setup(container, theme);
     this.update = update;
     if (perfEl) {
       this.monitor = new PerfMonitor(this, perfEl);
     }
   }
-  setup(container) {
+  setup(container, theme) {
+    this.#state.theme = theme;
     this.gltfLoader = new GLTFLoader();
     this.texLoader = new TextureLoader();
 
@@ -74,9 +75,7 @@ export class SimulatedThreeWorld {
     renderer.library.addLight(DirectionalLightNode, DirectionalLight);
     renderer.library.addLight(AmbientLightNode, AmbientLight);
     renderer.library.addLight(PointLightNode, PointLight);
-
     renderer.shadowMap.enabled = true;
-
     this.renderer = renderer;
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
