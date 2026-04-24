@@ -1,14 +1,23 @@
-import { DirectionalLight, Vector3 } from "three";
+import { denorm } from "@/utils";
+import { Color, DirectionalLight, PointLight, PointLightHelper, Vector3 } from "three";
 import MeshStandardNodeMaterial from "three/src/materials/nodes/MeshStandardNodeMaterial";
 import { degToRad } from "three/src/math/MathUtils";
 import { lights } from "three/src/nodes/TSL";
 
 export class Windmill {
   mesh = null;
+  material = null;
   propMesh = null;
   baseScale = 0.08;
   maxAngle = degToRad(17.5);
-  light = null;
+  lights = {
+    shadowCast: null,
+    night: [],
+  };
+  lightIntensity = {
+    shadowCast: [0.5, 1],
+    night: [0, 0.5],
+  };
   angularVel = 0;
 
   constructor(landscape, pos, onReady) {
@@ -19,7 +28,10 @@ export class Windmill {
   }
 
   setup(pos) {
-    this.light = new DirectionalLight(0xffffff, 1);
+    this.lights.shadowCast = new DirectionalLight(
+      0xffffff,
+      denorm(this.landscape.light, ...this.lightIntensity.shadowCast),
+    );
 
     this.landscape.world.gltfLoader.load(
       `${import.meta.env.VITE_SB_CDN_URL}/models/prop-windmill.glb`,
@@ -43,32 +55,55 @@ export class Windmill {
     windmill.rotateOnAxis(new Vector3(0, 1, 0), degToRad(-35));
     this.baseQuat = this.mesh.quaternion.clone();
 
-    this.setupLight();
+    this.setupShadowLight();
+    this.setupNightLights();
 
-    const material = new MeshStandardNodeMaterial({
+    this.material = new MeshStandardNodeMaterial({
       color: 0xbcbcbc,
-      lightsNode: lights([this.landscape.lights.ambient, this.light]),
+      lightsNode: lights([
+        this.landscape.lights.ambient,
+        this.lights.shadowCast,
+        ...this.lights.night,
+      ]),
     });
-    this.mesh.material = material;
-    this.propMesh.material = material;
+    this.mesh.material = this.material;
+    this.propMesh.material = this.material;
 
     this.onReady(windmill);
   }
-  setupLight() {
-    this.light.position.z += 15;
-    this.light.position.y += 8;
-    this.light.position.x -= 8;
-    this.light.target = this.mesh;
-    this.light.castShadow = true;
-    this.light.shadow.camera.left = -0.4;
-    this.light.shadow.camera.right = 0.4;
-    this.light.shadow.camera.top = 0.4;
-    this.light.shadow.camera.bottom = -0.1;
-    this.light.shadow.camera.near = 0.6;
-    this.light.shadow.camera.far = 1.15;
-    this.light.shadow.mapSize.set(256, 256);
-    this.landscape.world.scene.add(this.light, this.light.target);
-    this.mesh.add(this.light);
+  setupShadowLight() {
+    const light = this.lights.shadowCast;
+    light.position.z += 15;
+    light.position.y += 15;
+    light.position.x -= 8;
+    light.target = this.mesh;
+    light.castShadow = true;
+    light.shadow.camera.left = -0.4;
+    light.shadow.camera.right = 0.4;
+    light.shadow.camera.top = 0.4;
+    light.shadow.camera.bottom = -0.1;
+    light.shadow.camera.near = 0.6;
+    light.shadow.camera.far = 1.15;
+    light.shadow.mapSize.set(256, 256);
+    this.landscape.world.scene.add(light, light.target);
+    this.mesh.add(light);
+  }
+  setupNightLights() {
+    this.lights.night.push(
+      new PointLight(
+        0xffffc5,
+        denorm(this.landscape.light, ...this.lightIntensity.night),
+        0.175,
+        0.75,
+      ),
+    );
+
+    const light = this.lights.night[0];
+    light.position.z += 2.5;
+    light.position.y += 0.5;
+    light.position.x += -0.2;
+    this.landscape.world.scene.add(light);
+    this.mesh.add(light);
   }
   update(dt) {
     if (!this.mesh) return;

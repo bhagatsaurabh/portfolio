@@ -1,13 +1,21 @@
-import { Vector3 } from "three";
+import { PointLight, PointLightHelper, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils";
 import MeshStandardNodeMaterial from "three/src/materials/nodes/MeshStandardNodeMaterial";
 import { lights } from "three/src/nodes/lighting/LightsNode";
+import { denorm } from "@/utils";
 
 export class House {
   mesh = null;
+  material = null;
   baseScale = 0.00016;
   maxAngle = degToRad(17.5);
+  lights = {
+    night: [],
+  };
+  lightIntensity = {
+    night: [0, 1],
+  };
 
   constructor(landscape, pos, onReady) {
     this.landscape = landscape;
@@ -38,12 +46,38 @@ export class House {
     house.rotateOnAxis(new Vector3(0, 1, 0), degToRad(135));
     this.baseQuat = this.mesh.quaternion.clone();
 
-    this.mesh.material = new MeshStandardNodeMaterial({
+    this.setupNightLights();
+
+    this.material = new MeshStandardNodeMaterial({
       color: 0xdddddd,
-      lightsNode: lights([this.landscape.lights.ambient, this.landscape.lights.sun]),
+      lightsNode: lights([
+        this.landscape.lights.ambient,
+        this.landscape.lights.sun,
+        ...this.lights.night,
+      ]),
     });
+    this.mesh.material = this.material;
 
     this.onReady(house);
+  }
+  setupNightLights() {
+    this.lights.night.push(
+      new PointLight(
+        0xffffc5,
+        denorm(this.landscape.light, ...this.lightIntensity.night),
+        0.25,
+        0.3,
+      ),
+    );
+
+    const light = this.lights.night[0];
+    light.position.z -= 500;
+    light.position.y += 1250;
+    light.position.x -= 650;
+    this.landscape.world.scene.add(light);
+    this.mesh.add(light);
+    // const helper = new PointLightHelper(light, 500, 0xffffff);
+    // this.landscape.world.scene.add(helper);
   }
   update() {
     if (!this.mesh) return;

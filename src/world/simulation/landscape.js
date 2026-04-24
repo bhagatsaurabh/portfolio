@@ -12,10 +12,10 @@ import {
 } from "three";
 import { lerp } from "three/src/math/MathUtils";
 
-import { landscapeThemes } from "@/utils/constants";
+import { landscapeThemes, themes } from "@/utils/constants";
 import { Simulation } from "./simulation";
 import { biasRand, cubicBezier, easeInOut, fbm, randInt, randPick, rescale } from "@/world/utils";
-import { norm, rand } from "@/utils";
+import { denorm, norm, rand } from "@/utils";
 import { ColorTween, Tween } from "@/world/utils/tween";
 import { IntervalSchedule, TimeoutSchedule } from "@/world/utils/schedule";
 import { Tree } from "../props/tree";
@@ -29,6 +29,8 @@ import { SPREAD_VARIETIES } from "../utils/tree-utils";
 export class Landscape extends Simulation {
   color = "#363537";
   colorTween = null;
+  light = 0;
+  lightTween = null;
   posTween = new Tween(0, 1, 1.25, cubicBezier(0.33, 0.03, 0.35, 0.97));
   gustTimeout = new TimeoutSchedule(0.75);
   windInterval = new IntervalSchedule(rand(6, 16));
@@ -62,7 +64,6 @@ export class Landscape extends Simulation {
     orgFarWidth: 0,
   };
   wind = new Vector2(randPick(-0.75, 0.75), 0);
-  // wind = new Vector2(0, 0);
   gustWindAmp = 2;
   calmWindAmp = 0.2;
   normalWindAmp = 0.75;
@@ -77,6 +78,10 @@ export class Landscape extends Simulation {
   lights = {
     ambient: null,
     sun: null,
+  };
+  lightIntensity = {
+    ambient: [0.1, 0.5],
+    sun: [0.4, 0.85],
   };
 
   get targetPos() {
@@ -93,6 +98,7 @@ export class Landscape extends Simulation {
   constructor(world) {
     super(world);
     this.color = landscapeThemes[world.state.theme];
+    this.light = world.state.theme === themes.LIGHT ? 1 : 0;
     this.setup();
 
     this.boxLN = new Mesh(
@@ -129,13 +135,15 @@ export class Landscape extends Simulation {
     this.position.copy(this.targetPos);
   }
   setupGlobalLights() {
-    this.lights.ambient = new AmbientLight(0xffffff, 0.5);
+    const minOrMax = this.world.state.theme === themes.DARK ? 0 : 1;
+    this.lights.ambient = new AmbientLight(0xffffff, this.lightIntensity.ambient[minOrMax]);
+    this.lights.sun = new DirectionalLight(0xffffff, this.lightIntensity.sun[minOrMax]);
 
-    this.lights.sun = new DirectionalLight(0xffffff, 0.85);
     const pos = this.center.clone();
     pos.x -= 30;
     pos.y += 30;
     pos.z = -30;
+
     this.lights.sun.position.copy(pos);
     this.lights.sun.target.position.copy(this.center);
 
@@ -353,9 +361,17 @@ export class Landscape extends Simulation {
     if (this.colorTween && this.props.meself) {
       const colorTweenRes = this.colorTween.update(dt);
       this.color = colorTweenRes.value;
-      this.updateColor(colorTweenRes);
+      this.updateColor();
       if (colorTweenRes.finished) {
         this.colorTween = null;
+      }
+    }
+    if (this.lightTween) {
+      const lightTweenRes = this.lightTween.update(dt);
+      this.light = lightTweenRes.value;
+      this.updateLight();
+      if (lightTweenRes.finished) {
+        this.lightTween = null;
       }
     }
 
@@ -411,6 +427,24 @@ export class Landscape extends Simulation {
     this.props.meself.color = this.color;
     this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
     this.props.flock.birbs.forEach((birb) => (birb.color = this.color));
+    this.props.windmill.color = this.color;
+    this.props.house.color = this.color;
+  }
+  updateLight() {
+    this.lights.ambient.intensity = denorm(this.light, ...this.lightIntensity.ambient);
+    this.lights.sun.intensity = denorm(this.light, ...this.lightIntensity.sun);
+    if (this.props.windmill?.mesh) {
+      this.props.windmill.lights.shadowCast.intensity = denorm(
+        this.light,
+        ...this.props.windmill.lightIntensity.shadowCast,
+      );
+      const nIntensity = denorm(1 - this.light, ...this.props.windmill.lightIntensity.night);
+      this.props.windmill.lights.night.forEach((nLight) => (nLight.intensity = nIntensity));
+    }
+    if (this.props.house?.mesh) {
+      const nIntensity = denorm(1 - this.light, ...this.props.house.lightIntensity.night);
+      this.props.house.lights.night.forEach((nLight) => (nLight.intensity = nIntensity));
+    }
   }
   perspectiveXAndScale(prop, z, scaleEased = false) {
     const [nearZ, farZ] = this.sandbox.bounds.z;
@@ -476,6 +510,14 @@ export class Landscape extends Simulation {
       easeInOut,
     );
     this.colorTween.start();
+
+    this.lightTween = new Tween(
+      this.light,
+      this.world.state.theme === themes.LIGHT ? 1 : 0,
+      0.75,
+      easeInOut,
+    );
+    this.lightTween.start();
   }
   resize(width, height) {
     for (const tree of this.props.trees) {
