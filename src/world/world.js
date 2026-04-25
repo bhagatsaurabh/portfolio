@@ -1,11 +1,15 @@
 import { themes } from "@/utils/constants";
 import { WeatherController } from "./simulation/weather";
+import { Tween } from "./utils/tween";
+import { easeInOut } from "./utils";
 
 export class SimulatedWorld {
   #width = 0;
   #height = 0;
   #state = { theme: themes.LIGHT };
   #weather = null;
+  light = 0;
+  lightTween = null;
 
   // To avoid large frame gaps causing sim explosion
   MAX_DT = 0.05; // 50ms
@@ -36,10 +40,12 @@ export class SimulatedWorld {
     this.sync();
   }
 
-  constructor(canvas, renderFn) {
+  constructor(canvas, theme, renderFn) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.renderFn = renderFn;
+    this.#state.theme = theme;
+    this.light = theme === themes.LIGHT ? 1 : 0;
     this.resize();
     this.#weather = new WeatherController(this);
     this.simulations.push(this.weather);
@@ -54,6 +60,14 @@ export class SimulatedWorld {
     let dt = (now - this.lastTime) / 1000;
     dt = Math.min(dt, this.MAX_DT);
     this.lastTime = now;
+
+    if (this.lightTween) {
+      const lightTweenRes = this.lightTween.update(dt);
+      this.light = lightTweenRes.value;
+      if (lightTweenRes.finished) {
+        this.lightTween = null;
+      }
+    }
 
     for (const simulation of this.simulations) {
       simulation.update?.(dt);
@@ -83,6 +97,14 @@ export class SimulatedWorld {
     }
   }
   sync() {
+    this.lightTween = new Tween(
+      this.light,
+      this.state.theme === themes.LIGHT ? 1 : 0,
+      0.75,
+      easeInOut,
+    );
+    this.lightTween.start();
+
     for (const simulation of this.simulations) {
       simulation.sync?.();
     }
