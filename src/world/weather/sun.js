@@ -1,7 +1,6 @@
 import { Vector2 } from "three";
 import { Weather } from "@/world/simulation/weather";
 import { rand } from "@/utils";
-import { Tween } from "../utils/tween";
 
 class SunDust {
   position;
@@ -67,9 +66,10 @@ export class Sun extends Weather {
       }
     }
     if (this.weight < 1) {
-      this.state.radius = this.maxRadius * this.weight;
       this.state.alpha = this.weight;
     }
+    this.state.radius = this.maxRadius * this.weight * this.world.light;
+
     for (const p of this.dust) {
       if (!p.update(dt, this.world.weather.wind)) {
         this.dust.delete(p);

@@ -26,7 +26,8 @@ export const useWorld = (canvasEl, theme, onWorldWeatherChange = () => {}) => {
       return;
     }
     if (!world.current) {
-      world.current = new SimulatedWorld(canvasEl.current, render);
+      world.current = new SimulatedWorld(canvasEl.current, theme, render);
+      world.current.sync();
       world.current.start();
       weatherTimeout.current.start();
     }

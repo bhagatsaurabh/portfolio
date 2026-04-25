@@ -413,20 +413,22 @@ export class Landscape extends Simulation {
       reedCluster?.update(dt);
     }
 
-    for (const birb of this.props.flock.birbs) {
-      if (birb.sprite) {
-        // birb.sprite.position.x = birb.baseX - this.position.x;
-        const [pX, _] = this.perspectiveXAndScale(birb, birb.sprite.position.z);
-        birb.sprite.position.x = pX;
+    if (this.props.flock) {
+      for (const birb of this.props.flock.birbs) {
+        if (birb.sprite) {
+          const [pX, _] = this.perspectiveXAndScale(birb, birb.sprite.position.z);
+          birb.sprite.position.x = pX;
+        }
       }
     }
-    this.props.flock.update(dt);
+
+    this.props.flock?.update(dt);
   }
   updateColor() {
     this.props.trees.forEach((tree) => (tree.color = this.color));
     this.props.meself.color = this.color;
     this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
-    this.props.flock.birbs.forEach((birb) => (birb.color = this.color));
+    this.props.flock?.birbs.forEach((birb) => (birb.color = this.color));
     this.props.windmill.color = this.color;
     this.props.house.color = this.color;
   }
@@ -526,13 +528,13 @@ export class Landscape extends Simulation {
   }
   onWeatherChange(type) {
     if (type === "sun") {
-      // normalize (happy?) birb behaviour, normalize wind
+      // TODO: normalize (happy?) birb behaviour, normalize wind
     } else if (type === "snow") {
-      // (tired?) birb behaviour, normalize wind
+      // TODO: (tired?) birb behaviour, normalize wind
     } else if (type === "rain") {
-      // (still?) birb behaviour, normalize wind
+      // TODO: (still?) birb behaviour, normalize wind
     } else if (type === "thunderstorm") {
-      // (still?) birb behaviour, exaggerate wind
+      // TODO: (still?) birb behaviour, exaggerate wind
     } else console.warn("Unknown world weather: ", type);
   }
   destroy() {}
