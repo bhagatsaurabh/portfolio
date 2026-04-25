@@ -55,6 +55,7 @@ export class Tree {
       xBranchRotation: 45,
       yBranchRotation: 45,
       lod: 1,
+      minOpacity: [0.05, 0.325], // [night, day]
     },
     spread: {
       anomalyChance: {
@@ -69,7 +70,7 @@ export class Tree {
       },
     },
   };
-  at = 0; // accumulated
+  at = 0;
   sandbox = null;
   root = null;
   mesh = null;
@@ -84,6 +85,8 @@ export class Tree {
   baseScale = 0.16;
   instances = [];
   instancedMesh = null;
+  opacity = { day: 0, night: 0 };
+  normZ = 0;
 
   get color() {
     return this.material.color.getHexString();
@@ -143,9 +146,12 @@ export class Tree {
     this.mesh.scale.setScalar(this.baseScale);
 
     const [nearZ, farZ] = this.sandbox.bounds.z;
-    const normZ = norm(this.mesh.position.z, nearZ, farZ);
-    this.maxZWidthScale = 1 + Math.pow(Math.abs(normZ), 1 / 1.5) * 2;
-    this.material.opacity = denorm(1 - normZ, 0.325, 1);
+    this.normZ = norm(this.mesh.position.z, nearZ, farZ);
+    this.maxZWidthScale = 1 + Math.pow(Math.abs(this.normZ), 1 / 1.5) * 2;
+
+    this.opacity.night = denorm(1 - this.normZ, this.params.generation.minOpacity[0], 1);
+    this.opacity.day = denorm(1 - this.normZ, this.params.generation.minOpacity[1], 1);
+    this.material.opacity = this.landscape.light === 0 ? this.opacity.night : this.opacity.day;
   }
   setupInstances(count) {
     if (count === 0) {
@@ -153,14 +159,11 @@ export class Tree {
     }
 
     const matrix = new Matrix4();
-    const [nearZ, farZ] = this.sandbox.bounds.z;
-    const normZ = norm(this.mesh.position.z, nearZ, farZ);
 
-    // const materialR = new MeshBasicNodeMaterial({ color: 0xff0000 });
-    this.instancedMesh = new InstancedMesh(this.geometry, this.material /*  materialR */, count);
+    this.instancedMesh = new InstancedMesh(this.geometry, this.material, count);
 
     for (let i = 0; i < count; i++) {
-      const position = this.landscape.getRandomPoint(undefined, normZ);
+      const position = this.landscape.getRandomPoint(undefined, this.normZ);
       const scale = rand(0.8, 1.2) * this.baseScale;
 
       this.instances.push({
@@ -212,7 +215,7 @@ export class Tree {
     if (branchLength < p.initialLength * p.branchLengthThreshold) return;
 
     // always binary for now
-    // TODO: add biasness at lower depths to have opposite extremes of branchLengthFactor in sibling branches
+    // Improvement: add biasness at lower depths to have opposite extremes of branchLengthFactor in sibling branches
     this.growBranch(
       width * p.branchWidthFactor,
       branchLength * rand(...p.branchLengthFactor),

@@ -76,8 +76,6 @@ export class House {
     light.position.x -= 650;
     this.landscape.world.scene.add(light);
     this.mesh.add(light);
-    // const helper = new PointLightHelper(light, 500, 0xffffff);
-    // this.landscape.world.scene.add(helper);
   }
   update() {
     if (!this.mesh) return;
