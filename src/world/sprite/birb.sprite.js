@@ -1,8 +1,9 @@
 import { Vector3, Sprite, Color, DoubleSide } from "three";
 import SpriteNodeMaterial from "three/src/materials/nodes/SpriteNodeMaterial";
 import { lerp } from "three/src/math/MathUtils";
+
 import { rand } from "@/utils";
-import { randInt, randPick } from "@/world/utils";
+import { randInt, randPick, rescale } from "@/world/utils";
 import { TimeoutSchedule } from "../utils/schedule";
 import { SpriteSheetAnimator } from "../utils/spritesheet-animator";
 
@@ -26,6 +27,7 @@ export class Birb {
   flyTimeout = new TimeoutSchedule(rand(5, 10));
   target = new Vector3();
   ndc = new Vector3();
+  fpsRange = [60, 140];
   onReady = () => {};
 
   get color() {
@@ -80,7 +82,7 @@ export class Birb {
       tilesX: 17,
       tilesY: 1,
       defaultAnim: "fly",
-      fps: 80,
+      fps: this.fpsRange[0],
       anims: { fly: { start: 0, end: 15, loop: true }, sit: { start: 16, end: 16, loop: false } },
     });
 
@@ -185,6 +187,8 @@ export class Birb {
       ).multiplyScalar(this.wanderStrength);
       desiredVelocity.add(wander);
       this.velocity.lerp(desiredVelocity, this.steerStrength * dt);
+      this.animator.fps = rescale(this.velocity.length(), 0, 1.75, ...this.fpsRange);
+      // console.log(this.velocity.length());
       this.sprite.position.addScaledVector(this.velocity, dt);
       const prevToTarget = new Vector3().subVectors(this.target, this.prevPosition);
       const currToTarget = new Vector3().subVectors(this.target, this.sprite.position);

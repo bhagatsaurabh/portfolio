@@ -15,7 +15,7 @@ import { lerp } from "three/src/math/MathUtils";
 import { landscapeThemes, themes } from "@/utils/constants";
 import { Simulation } from "./simulation";
 import { biasRand, cubicBezier, easeInOut, fbm, randInt, randPick, rescale } from "@/world/utils";
-import { denorm, norm, rand } from "@/utils";
+import { clamp, denorm, norm, rand } from "@/utils";
 import { ColorTween, Tween } from "@/world/utils/tween";
 import { IntervalSchedule, TimeoutSchedule } from "@/world/utils/schedule";
 import { Tree } from "../props/tree";
@@ -25,6 +25,7 @@ import { House } from "../props/house";
 import { Windmill } from "../props/windmill";
 import { Flock } from "../props/flock";
 import { SPREAD_VARIETIES } from "../utils/tree-utils";
+import { EventBus } from "@/utils/event-bus";
 
 export class Landscape extends Simulation {
   color = "#363537";
@@ -83,6 +84,7 @@ export class Landscape extends Simulation {
     ambient: [0.1, 0.5],
     sun: [0.4, 0.85],
   };
+  events = new EventBus();
 
   get targetPos() {
     return this.#targetPos;
@@ -447,6 +449,10 @@ export class Landscape extends Simulation {
       const nIntensity = denorm(1 - this.light, ...this.props.house.lightIntensity.night);
       this.props.house.lights.night.forEach((nLight) => (nLight.intensity = nIntensity));
     }
+
+    this.props.trees.forEach((tree) => {
+      tree.material.opacity = denorm(this.light, tree.opacity.night, tree.opacity.day);
+    });
   }
   perspectiveXAndScale(prop, z, scaleEased = false) {
     const [nearZ, farZ] = this.sandbox.bounds.z;
@@ -479,7 +485,8 @@ export class Landscape extends Simulation {
     this.windInterval.stop();
     this.windTween.stop();
 
-    this.wind = new Vector2(direction * this.gustWindAmp, 0);
+    const baseAmp = clamp(Math.abs(direction), 0, 2);
+    this.wind = new Vector2(baseAmp * Math.sign(direction) * this.gustWindAmp, 0);
     this.gustTimeout.start();
   }
   onGustTimeout() {
@@ -532,10 +539,12 @@ export class Landscape extends Simulation {
     } else if (type === "snow") {
       // TODO: (tired?) birb behaviour, normalize wind
     } else if (type === "rain") {
-      // TODO: (still?) birb behaviour, normalize wind
+      // TODO: (mostly still?) birb behaviour, normalize wind
     } else if (type === "thunderstorm") {
-      // TODO: (still?) birb behaviour, exaggerate wind
+      // TODO: (extra still?) birb behaviour, exaggerate wind
     } else console.warn("Unknown world weather: ", type);
   }
-  destroy() {}
+  destroy() {
+    this.events.clear();
+  }
 }

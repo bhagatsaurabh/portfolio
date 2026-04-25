@@ -1,12 +1,16 @@
 import { Rain } from "./rain";
-import { rand } from "@/utils";
+import { denorm, rand } from "@/utils";
 
 export class Thunderstorm extends Rain {
+  params = {
+    baseLightningSequence: [0.5, 0.2, 0.4, 0.1, 0.5, 0.15],
+  };
   lightningAlpha = 0;
   lightningTimer = 0;
   lightningSequence = [];
   lightningIndex = 0;
   darknessAlpha = 0;
+  alphaStrength = 1;
 
   constructor(world) {
     super(world, "thunderstorm");
@@ -14,6 +18,8 @@ export class Thunderstorm extends Rain {
 
   step(dt) {
     super.step(dt);
+    this.alphaStrength = denorm(this.world.light, 0.3, 1); // reduced contrast at night
+
     this.updateLightning(dt);
     this.applyWindTurbulence(dt);
   }
@@ -57,16 +63,16 @@ export class Thunderstorm extends Rain {
           this.lightningSequence = [];
           this.lightningAlpha = 0;
         } else {
-          this.lightningAlpha = this.lightningSequence[this.lightningIndex];
+          this.lightningAlpha = this.lightningSequence[this.lightningIndex] * this.alphaStrength;
           this.lightningTimer = rand(0.02, 0.06);
         }
       }
     }
   }
   startLightning() {
-    this.lightningSequence = [1, 0.4, 0.8, 0.2, 1, 0.3];
+    this.lightningSequence = [...this.params.baseLightningSequence];
     this.lightningIndex = 0;
-    this.lightningAlpha = this.lightningSequence[0];
+    this.lightningAlpha = this.lightningSequence[0] * this.alphaStrength;
     this.lightningTimer = 0.03;
   }
   applyWindTurbulence(dt) {

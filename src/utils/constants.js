@@ -14,11 +14,11 @@ export const themeClasses = Object.freeze({
 
 export const weatherThemes = Object.freeze({
   [themes.LIGHT]: "#363537",
-  [themes.DARK]: "#e7e7e7",
+  [themes.DARK]: "#c1c1c1",
 });
 export const landscapeThemes = Object.freeze({
   [themes.LIGHT]: "#363537",
-  [themes.DARK]: "#e7e7e7",
+  [themes.DARK]: "#c1c1c1",
 });
 
 export const introTitles = Object.freeze([
