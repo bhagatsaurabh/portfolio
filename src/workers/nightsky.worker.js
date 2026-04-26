@@ -15,16 +15,18 @@ self.onmessage = async (e) => {
   const { width, height, dpr } = e.data;
   const { ctx, offCanvas } = createOffCanvas(width, height, dpr);
 
-  setParams();
+  setParams(width, height);
   renderNightSky(ctx, width, height);
 
   const bitmap = offCanvas.transferToImageBitmap();
   self.postMessage(bitmap, [bitmap]);
 };
 
-function setParams() {
+function setParams(width, height) {
+  const area = width * height;
+  const density = rand(0.0012, 0.0016);
   params = {
-    starCount: rand(1500, 2000),
+    starCount: clamp(Math.floor(area * density), 400, 2000),
     minStarRadius: 0.25,
     minStarBrightness: 1,
     bandWidthFactor: rand(0.05, 0.15),

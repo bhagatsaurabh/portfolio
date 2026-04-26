@@ -1,18 +1,7 @@
 export class PerfMonitor {
-  constructor(world, el) {
+  constructor(world) {
     this.world = world;
-    this.el = el;
-    Object.assign(this.el.style, {
-      position: "fixed",
-      top: "0",
-      left: "0",
-      color: "rgb(0, 175, 0)",
-      fontFamily: "monospace",
-      fontSize: "12px",
-      zIndex: 9999,
-    });
-    document.body.appendChild(this.el);
-
+    this.el = document.getElementById("perf-monitor");
     this.frames = 0;
     this.last = performance.now();
     this.fps = 0;

@@ -37,12 +37,12 @@ export class Landscape extends Simulation {
   windInterval = new IntervalSchedule(rand(6, 16));
   windTween = new Tween(1, 1, 2, easeInOut);
   props = {
-    originTree: null,
     noOfTrees: 20,
     treeInstanceCount: 2,
+    noOfBirbs: randInt(2, 3),
+    originTree: null,
     trees: [],
     reedClusters: [],
-    noOfBirbs: randInt(2, 3),
     flock: null,
     house: null,
     windmill: null,
@@ -101,6 +101,7 @@ export class Landscape extends Simulation {
     super(world);
     this.color = landscapeThemes[world.state.theme];
     this.light = world.state.theme === themes.LIGHT ? 1 : 0;
+    this.setProfile();
     this.setup();
 
     this.boxLN = new Mesh(
@@ -114,6 +115,13 @@ export class Landscape extends Simulation {
     this.world.scene.add(this.boxLN, this.boxRN);
   }
 
+  setProfile() {
+    if (this.world.width < 768) this.props.noOfTrees = 5;
+    else if (this.world.width < 1024) this.props.noOfTrees = 10;
+    else if (this.world.width < 1280) this.props.noOfTrees = 15;
+    else if (this.world.width < 1536) this.props.noOfTrees = 20;
+    else this.props.noOfTrees = 25;
+  }
   setup() {
     this.resetWorldPos(this.position);
     this.calcBounds();
@@ -215,16 +223,21 @@ export class Landscape extends Simulation {
       clusterSpread: 3,
     });
     cluster.baseX = pos.x;
+    this.computeNormX(cluster, cluster.normZ, cluster.baseX);
+
     this.world.scene.add(cluster.mesh);
     this.props.reedClusters.push(cluster);
   }
   spawnHeroTree() {
     const pos = this.sandbox.bounds.leftNear.clone();
     pos.x = -(0.75 * (this.sandbox.orgNearWidth / 2));
-    this.props.originTree = new Tree(this, pos, 0, this.color);
-    this.props.originTree.baseX = pos.x;
-    this.world.scene.add(this.props.originTree.mesh);
-    this.props.trees.push(this.props.originTree);
+    const originTree = new Tree(this, pos, 0, this.color);
+    originTree.baseX = pos.x;
+    this.computeNormX(originTree, originTree.normZ, originTree.baseX);
+
+    this.props.originTree = originTree;
+    this.world.scene.add(originTree.mesh);
+    this.props.trees.push(originTree);
   }
   spawnFoliage() {
     const [nearZ, farZ] = this.sandbox.bounds.z;
@@ -238,6 +251,8 @@ export class Landscape extends Simulation {
         this.randomizeTreeConfig(pos, nearZ, farZ),
       );
       tree.baseX = pos.x;
+      this.computeNormX(tree, tree.normZ, tree.baseX);
+
       this.props.trees.push(tree);
       this.world.scene.add(tree.mesh);
     }
@@ -269,25 +284,38 @@ export class Landscape extends Simulation {
   }
   spawnMeself() {
     const pos = this.props.originTree.mesh.position.clone();
-    this.props.meself = new MeSprite(this.world.texLoader, pos, this.color, (sprite) => {
+    const meself = new MeSprite(this, pos, this.color, (sprite) => {
       this.world.scene.add(sprite);
-      this.props.meself.baseX = sprite.position.x;
+      meself.baseX = sprite.position.x;
+      this.computeNormX(meself, meself.normZ, meself.baseX);
     });
+
+    this.props.meself = meself;
   }
   spawnHouse() {
     const pos = this.getRandomPoint(0.9, 0.3);
-    this.props.house = new House(this, pos, (obj) => this.world.scene.add(obj));
-    this.props.house.baseX = pos.x;
+    const house = new House(this, pos, (mesh) => {
+      house.baseX = pos.x;
+      this.computeNormX(house, house.normZ, house.baseX);
+      this.world.scene.add(mesh);
+    });
+
+    this.props.house = house;
   }
   spawnWindmill() {
     const pos = this.getRandomPoint(0.5, 0.5);
-    this.props.windmill = new Windmill(this, pos, (obj) => this.world.scene.add(obj));
-    this.props.windmill.baseX = pos.x;
+    const windmill = new Windmill(this, pos, (mesh) => {
+      windmill.baseX = pos.x;
+      this.computeNormX(windmill, windmill.normZ, windmill.baseX);
+      this.world.scene.add(mesh);
+    });
+
+    this.props.windmill = windmill;
   }
   spawnFlock() {
     const flock = new Flock(this, this.props.noOfBirbs, this.props.originTree);
-    this.props.flock = flock;
     flock.baseX = flock.target.x;
+    this.props.flock = flock;
   }
   getRandomPoint(xNorm, zNorm) {
     const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.bounds;
@@ -298,6 +326,22 @@ export class Landscape extends Simulation {
     const right = rightNear.clone().lerp(rightFar.clone(), zN);
 
     return left.lerp(right, xN);
+  }
+  computeNormX(prop, normZ, x) {
+    const left = this.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.sandbox.bounds.leftFar, Math.abs(normZ));
+    const right = this.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.sandbox.bounds.rightFar, Math.abs(normZ));
+
+    prop.normX = norm(x, left.x, right.x);
+
+    if (prop.instances) {
+      prop.instances.forEach((instance) => {
+        instance.normX = norm(instance.baseX, left.x, right.x);
+      });
+    }
   }
   debugGroundTrapezoid() {
     const { leftNear, leftFar, rightNear, rightFar } = this.sandbox.bounds;
@@ -428,11 +472,17 @@ export class Landscape extends Simulation {
   }
   updateColor() {
     this.props.trees.forEach((tree) => (tree.color = this.color));
-    this.props.meself.color = this.color;
     this.props.reedClusters.forEach((cluster) => (cluster.color = this.color));
     this.props.flock?.birbs.forEach((birb) => (birb.color = this.color));
-    this.props.windmill.color = this.color;
-    this.props.house.color = this.color;
+    if (this.props.meself) {
+      this.props.meself.color = this.color;
+    }
+    if (this.props.windmill) {
+      this.props.windmill.color = this.color;
+    }
+    if (this.props.house) {
+      this.props.house.color = this.color;
+    }
   }
   updateLight() {
     this.lights.ambient.intensity = denorm(this.light, ...this.lightIntensity.ambient);
@@ -529,10 +579,19 @@ export class Landscape extends Simulation {
     this.lightTween.start();
   }
   resize(_width, _height) {
+    const oldWidth = this.sandbox.nearWidth;
     this.calcBounds();
-    /* for (const tree of this.props.trees) {
-      tree.resize({ width, height });
-    } */
+    const newWidth = this.sandbox.nearWidth;
+
+    if (oldWidth === newWidth) {
+      return;
+    }
+
+    this.props.trees.forEach((tree) => tree.resize());
+    this.props.reedClusters.forEach((cluster) => cluster.resize());
+    this.props.meself?.resize();
+    this.props.house?.resize();
+    this.props.windmill?.resize();
   }
   onWeatherChange(type) {
     if (type === "sun") {

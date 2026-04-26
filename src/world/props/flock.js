@@ -4,23 +4,18 @@ import { rand } from "@/utils";
 import { Birb } from "../sprite/birb.sprite";
 
 export class Flock {
-  offset = {
-    x: [-1, 1],
-    y: [-1, 1],
-  };
   birbs = [];
   target = null;
   reached = new Set();
   radius = 0.2;
   high = 0.25;
   saturation = 0.75;
-  baseX = 0;
   baseScale = 1;
+  baseX = 0;
 
   constructor(landscape, noOfBirbs, tree) {
     this.landscape = landscape;
-    this.sandbox = landscape.sandbox;
-    this.target = new Vector3(
+    this.target = new Vector3( // ndc
       rand(-1 + this.radius, 1 - this.radius),
       rand(-1 + this.radius + this.high, 1 - this.radius),
       this.landscape.sandbox.bounds.z[0],
@@ -62,6 +57,7 @@ export class Flock {
     if (this.reached.size > this.saturation * this.birbs.length) {
       this.reached.clear();
       this.target.set(
+        // ndc
         rand(-1 + this.radius, 1 - this.radius),
         rand(-1 + this.radius + this.high, 1 - this.radius),
         this.landscape.sandbox.bounds.z[0],

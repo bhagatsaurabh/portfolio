@@ -71,7 +71,6 @@ export class Tree {
     },
   };
   at = 0;
-  sandbox = null;
   root = null;
   mesh = null;
   trunk = null;
@@ -87,6 +86,8 @@ export class Tree {
   instancedMesh = null;
   opacity = { day: 0, night: 0 };
   normZ = 0;
+  normX = 0;
+  baseX = 0;
 
   get color() {
     return this.material.color.getHexString();
@@ -97,7 +98,6 @@ export class Tree {
 
   constructor(landscape, pos, instanceCount, color, options = {}) {
     this.landscape = landscape;
-    this.sandbox = landscape.sandbox;
     for (const key in this.params) {
       this.params[key] = { ...this.params[key], ...(options[key] ?? {}) };
     }
@@ -145,7 +145,7 @@ export class Tree {
     }
     this.mesh.scale.setScalar(this.baseScale);
 
-    const [nearZ, farZ] = this.sandbox.bounds.z;
+    const [nearZ, farZ] = this.landscape.sandbox.bounds.z;
     this.normZ = norm(this.mesh.position.z, nearZ, farZ);
     this.maxZWidthScale = 1 + Math.pow(Math.abs(this.normZ), 1 / 1.5) * 2;
 
@@ -168,6 +168,7 @@ export class Tree {
 
       this.instances.push({
         baseX: position.x,
+        normX: 0,
         z: position.z,
         baseScale: scale,
       });
@@ -532,6 +533,16 @@ export class Tree {
     return v;
   }
   resize() {
-    // TODO
+    const left = this.landscape.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.leftFar, Math.abs(this.normZ));
+    const right = this.landscape.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.rightFar, Math.abs(this.normZ));
+
+    this.baseX = denorm(this.normX, left.x, right.x);
+    this.instances.forEach((instance) => {
+      instance.baseX = denorm(instance.normX, left.x, right.x);
+    });
   }
 }

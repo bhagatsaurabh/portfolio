@@ -27,7 +27,11 @@ export class SimulatedCosmos {
   }
   setupWorker() {
     this.worker = new NightSkyRenderer();
-    this.worker.onmessage = (e) => this.contextBG.drawImage(e.data, 0, 0);
+    this.worker.onmessage = (e) => {
+      const bitmap = e.data;
+      this.contextBG.setTransform(1, 0, 0, 1, 0, 0);
+      this.contextBG.drawImage(bitmap, 0, 0, this.canvasBG.width, this.canvasBG.height);
+    };
   }
   start() {
     this.frameId = requestAnimationFrame(this.loop.bind(this));
@@ -58,7 +62,8 @@ export class SimulatedCosmos {
     this.canvasBG.width = dprWidth;
     this.canvasBG.height = dprHeight;
     this.contextFG.setTransform(dpr, 0, 0, dpr, 0, 0);
-    this.contextBG.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // this.contextBG.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.contextBG.setTransform(1, 0, 0, 1, 0, 0);
 
     this.#width = width;
     this.#height = height;
