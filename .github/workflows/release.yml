@@ -2,15 +2,14 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   Build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Build
         run: |
@@ -18,18 +17,54 @@ jobs:
           npm run build
 
       - name: Upload dist artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
 
+  Content-Delivery:
+    name: Content Delivery
+    needs: [ Build ]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: "${{ secrets.AWS_ROLE_ARN }}"
+          role-session-name: cdrolesession
+          aws-region: ap-south-1
+
+      - name: Upload content to S3
+        run: |
+          BUCKET="${{ secrets.S3_BUCKET_NAME }}"
+          for dir in data images models previews spritesheets textures; do
+            if [ -d "dist/$dir" ]; then
+              echo "Uploading $dir..."
+              aws s3 sync dist/$dir s3://$BUCKET/portfolio/$dir --delete
+            else
+              echo "Skipping $dir (not found)"
+            fi
+          done
+
   Deploy-Firebase:
-    needs: [Build]
+    name: Deploy to Firebase
+    needs: [ Build, Content-Delivery ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Download dist artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
@@ -41,31 +76,12 @@ jobs:
           channelId: live
           projectId: saurabh-bhagat-portfolio
 
-  Deploy-ghpages:
-    needs: [Build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download dist artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          target_branch: gh-pages
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   Cleanup:
-    needs: [Deploy-Firebase, Deploy-ghpages]
+    needs: [ Deploy-Firebase ]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Delete dist artifacts
-        uses: geekyeggo/delete-artifact@v1
+        uses: geekyeggo/delete-artifact@v6
         with:
           name: dist
