@@ -19,6 +19,8 @@
 .Silly {
   filter: grayscale(1);
   transition: filter var(--theme-transition-duration) linear;
+  cursor: pointer;
+  user-select: none;
 }
 html[data-theme="dark"] .Silly {
   filter: grayscale(1) invert(1);

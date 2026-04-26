@@ -24,6 +24,7 @@ import Planet from "@/components/common/Planet/planet";
 import useIdlePreload from "./hooks/useIdlePreload";
 import { loadSkills } from "./store/skills";
 import { loadExperiences } from "./store/experiences";
+import PerfMonitor from "./components/common/PerfMonitor/PerfMonitor";
 
 const App = () => {
   const [worldWeather, setWorldWeather] = useState("");
@@ -115,6 +116,7 @@ const App = () => {
     <div className={[classes.App, theme].join(" ")} id="App" {...swipeHandlers}>
       {prefsLoaded && (
         <>
+          <PerfMonitor />
           <Planet.Atmosphere
             theme={theme}
             routeDirection={direction}

@@ -4,10 +4,13 @@ import PropTypes from "prop-types";
 import classes from "./lithosphere.module.css";
 import useResizeObserver from "@/hooks/useResizeObserver";
 import useThree from "@/hooks/useThree";
+import { useSelector } from "react-redux";
+import { selectEnablePerfMonitor } from "@/store/app";
 
 const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) => {
   const containerEl = useRef();
   const perfEl = useRef(document.createElement("div"));
+  const enablePerfMonitor = useSelector(selectEnablePerfMonitor);
 
   const { resize, pan } = useThree(
     containerEl,
@@ -16,6 +19,7 @@ const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) 
     noOfRoutes,
     perfEl,
     weather,
+    enablePerfMonitor,
   );
   useResizeObserver(document.body, (width, height) => resize(width, height), 500);
 

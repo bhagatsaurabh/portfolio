@@ -1,4 +1,4 @@
-import { denorm } from "@/utils";
+import { denorm, norm } from "@/utils";
 import { Color, DirectionalLight, PointLight, PointLightHelper, Vector3 } from "three";
 import MeshStandardNodeMaterial from "three/src/materials/nodes/MeshStandardNodeMaterial";
 import { degToRad } from "three/src/math/MathUtils";
@@ -19,6 +19,9 @@ export class Windmill {
     night: [0, 0.5],
   };
   angularVel = 0;
+  baseX = 0;
+  normZ = 0;
+  normX = 0;
 
   constructor(landscape, pos, onReady) {
     this.landscape = landscape;
@@ -39,6 +42,9 @@ export class Windmill {
       () => {},
       (error) => console.error("Windmill: Loader error", error),
     );
+
+    const [nearZ, farZ] = this.landscape.sandbox.bounds.z;
+    this.normZ = norm(pos.z, nearZ, farZ);
   }
   onLoad(pos, gltf) {
     this.upAxis = new Vector3(0, 1, 0);
@@ -118,5 +124,15 @@ export class Windmill {
     const responsiveness = 0.85;
     this.angularVel += (targetVelocity - this.angularVel) * (1 - Math.exp(-responsiveness * dt));
     this.propMesh.rotation.z += this.angularVel * dt;
+  }
+  resize() {
+    const left = this.landscape.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.leftFar, Math.abs(this.normZ));
+    const right = this.landscape.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.rightFar, Math.abs(this.normZ));
+
+    this.baseX = denorm(this.normX, left.x, right.x);
   }
 }

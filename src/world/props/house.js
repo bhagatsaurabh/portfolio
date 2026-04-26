@@ -3,7 +3,7 @@ import { degToRad } from "three/src/math/MathUtils";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils";
 import MeshStandardNodeMaterial from "three/src/materials/nodes/MeshStandardNodeMaterial";
 import { lights } from "three/src/nodes/lighting/LightsNode";
-import { denorm } from "@/utils";
+import { denorm, norm } from "@/utils";
 
 export class House {
   mesh = null;
@@ -16,6 +16,9 @@ export class House {
   lightIntensity = {
     night: [0, 1],
   };
+  baseX = 0;
+  normZ = 0;
+  normX = 0;
 
   constructor(landscape, pos, onReady) {
     this.landscape = landscape;
@@ -31,6 +34,9 @@ export class House {
       () => {},
       (error) => console.error("House: Loader error", error),
     );
+
+    const [nearZ, farZ] = this.landscape.sandbox.bounds.z;
+    this.normZ = norm(pos.z, nearZ, farZ);
   }
   onLoad(pos, gltf) {
     this.upAxis = new Vector3(0, 1, 0);
@@ -85,5 +91,15 @@ export class House {
 
     this.mesh.quaternion.copy(this.baseQuat);
     this.mesh.rotateOnAxis(this.upAxis, targetAngle);
+  }
+  resize() {
+    const left = this.landscape.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.leftFar, Math.abs(this.normZ));
+    const right = this.landscape.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.rightFar, Math.abs(this.normZ));
+
+    this.baseX = denorm(this.normX, left.x, right.x);
   }
 }

@@ -16,6 +16,8 @@ import { themes } from "@/utils/constants";
 import { PerfMonitor } from "@/world/utils/monitor";
 
 export class SimulatedThreeWorld {
+  #width = 0;
+  #height = 0;
   #state = { theme: themes.LIGHT };
   renderer = null;
   orthoCam = null;
@@ -25,7 +27,7 @@ export class SimulatedThreeWorld {
   timer = new Timer();
   MAX_DT = 0.015;
   simulations = [];
-  perf = true;
+  perf = false;
   monitor = null;
   metrics = {};
   gltfLoader = null;
@@ -33,10 +35,10 @@ export class SimulatedThreeWorld {
   activeCamera = null;
 
   get width() {
-    return this.renderer.getSize().x;
+    return this.#width;
   }
   get height() {
-    return this.renderer.getSize().y;
+    return this.#height;
   }
   get dimensions() {
     return { width: this.width, height: this.height };
@@ -68,6 +70,8 @@ export class SimulatedThreeWorld {
 
     let width = container.clientWidth;
     let height = container.clientHeight;
+    this.#width = width;
+    this.#height = height;
 
     const renderer = new WebGPURenderer({ alpha: true, antialias: true });
 
@@ -106,6 +110,8 @@ export class SimulatedThreeWorld {
     }
   }
   resize(width, height) {
+    this.#width = width;
+    this.#height = height;
     this.renderer.setSize(width, height);
 
     this.aspect = width / height;

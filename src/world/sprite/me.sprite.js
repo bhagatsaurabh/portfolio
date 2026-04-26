@@ -1,3 +1,4 @@
+import { denorm, norm } from "@/utils";
 import { Color, DoubleSide, Sprite } from "three";
 import SpriteNodeMaterial from "three/src/materials/nodes/SpriteNodeMaterial";
 
@@ -6,6 +7,9 @@ export class MeSprite {
   material = null;
   baseScale = 0.075;
   onReady = () => {};
+  baseX = 0;
+  normZ = 0;
+  normX = 0;
 
   get color() {
     return this.material?.color.getHexString();
@@ -15,8 +19,9 @@ export class MeSprite {
     this.material.color = new Color(c);
   }
 
-  constructor(loader, pos, color, onReady) {
-    this.setup(loader, pos, color, onReady);
+  constructor(landscape, pos, color, onReady) {
+    this.landscape = landscape;
+    this.setup(landscape.world.texLoader, pos, color, onReady);
   }
 
   setup(loader, pos, color, onReady) {
@@ -27,6 +32,9 @@ export class MeSprite {
       () => {},
       (err) => console.log("Meself: Loader error: ", err),
     );
+
+    const [nearZ, farZ] = this.landscape.sandbox.bounds.z;
+    this.normZ = norm(pos.z, nearZ, farZ);
   }
   onLoad(tex, pos, color) {
     this.material = new SpriteNodeMaterial({
@@ -38,13 +46,22 @@ export class MeSprite {
     });
 
     const sprite = new Sprite(this.material);
+    sprite.center.set(0, 0);
     sprite.scale.set(tex.width / tex.height, 1, 1).multiplyScalar(this.baseScale);
     sprite.position.copy(pos);
-    sprite.position.y += sprite.scale.y / 2;
-    sprite.position.x += sprite.scale.x / 2;
     this.sprite = sprite;
 
     this.onReady(sprite);
   }
   update() {}
+  resize() {
+    const left = this.landscape.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.leftFar, Math.abs(this.normZ));
+    const right = this.landscape.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.rightFar, Math.abs(this.normZ));
+
+    this.baseX = denorm(this.normX, left.x, right.x);
+  }
 }

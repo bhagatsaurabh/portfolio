@@ -12,7 +12,7 @@ import {
 import MeshBasicNodeMaterial from "three/src/materials/nodes/MeshBasicNodeMaterial";
 import { positionLocal, attribute, uniform, sin, vec3, pow, cos, abs } from "three/src/nodes/TSL";
 
-import { rand } from "@/utils";
+import { denorm, norm, rand } from "@/utils";
 
 export class ReedCluster {
   params = {};
@@ -30,12 +30,14 @@ export class ReedCluster {
   freqScale = 0.5;
   ampScale = 0.5;
   swayScale = 2;
-  normX = 0;
   waveSpeed = 3;
   waveScale = 0.0325;
   waveAmp = 2;
   responsiveness = 8;
   flutterAmp = 0.03;
+  normX = 0;
+  normZ = 0;
+  baseX = 0;
 
   get color() {
     return this.material.color.getHexString();
@@ -93,9 +95,8 @@ export class ReedCluster {
     this.mesh.scale.setScalar(this.baseScale);
     this.landscape.world.scene.add(this.mesh);
 
-    const minX = this.landscape.sandbox.bounds.leftNear.x;
-    const maxX = this.landscape.sandbox.bounds.rightNear.x;
-    this.normX = (this.mesh.position.x - minX) / (maxX - minX);
+    const [nearZ, farZ] = this.landscape.sandbox.bounds.z;
+    this.normZ = norm(this.mesh.position.z, nearZ, farZ);
   }
   buildGeometry() {
     const { segments, height, width } = this.params;
@@ -222,5 +223,15 @@ export class ReedCluster {
     this.windUniform.value = wind;
     this.waveUniform.value = wave;
     this.geometry.attributes.instanceAngle.needsUpdate = true;
+  }
+  resize() {
+    const left = this.landscape.sandbox.bounds.leftNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.leftFar, Math.abs(this.normZ));
+    const right = this.landscape.sandbox.bounds.rightNear
+      .clone()
+      .lerp(this.landscape.sandbox.bounds.rightFar, Math.abs(this.normZ));
+
+    this.baseX = denorm(this.normX, left.x, right.x);
   }
 }

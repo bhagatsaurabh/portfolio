@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 
@@ -7,12 +7,15 @@ import classes from "./about.module.css";
 import Icon from "../common/Icon/icon.jsx";
 import FeedButton from "../common/FeedButton/feed-button.jsx";
 import { router } from "@/router";
+import { setEnablePerfMonitor } from "@/store/app";
 
 const About = () => {
   const contact = useSelector((state) => state.contact);
   const [emailCopied, setEmailCopied] = useState(false);
   const location = useLocation();
   const isActive = location.pathname === "/about";
+  const [clicks, setClicks] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let handle;
@@ -21,6 +24,11 @@ const About = () => {
     }
     return () => clearTimeout(handle);
   }, [emailCopied]);
+  useEffect(() => {
+    if (clicks >= 3) {
+      dispatch(setEnablePerfMonitor(true));
+    }
+  }, [clicks, dispatch]);
 
   const handleEmailCopy = () => {
     navigator.clipboard.writeText(contact.email);
@@ -60,7 +68,11 @@ const About = () => {
           ideas, especially around research and development of games and interactive systems.
           <br />
           <br />I also spend time composing instrumental music, which is a completely different kind
-          of creative outlet but just as rewarding <span className={classes.Silly}>🎶</span>.
+          of creative outlet but just as rewarding{" "}
+          <span className={classes.Silly} onClick={() => setClicks((c) => c + 1)}>
+            🎶
+          </span>
+          .
         </h4>
         <div className={classNames([classes.Email, { [classes.copied]: emailCopied }])}>
           <a href={"mailto:" + contact.email}>

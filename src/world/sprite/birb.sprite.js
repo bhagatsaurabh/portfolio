@@ -11,7 +11,6 @@ export class Birb {
   sprite = null;
   material = null;
   baseScale = 0.0875;
-  baseX = 0;
   at = 0;
   animator = null;
   #rest = false;
@@ -21,7 +20,6 @@ export class Birb {
   restT = 0;
   restGT = 0;
   restPos = new Vector3(0, 0, 0);
-  restGroundBaseX = 0;
   restingOn = "";
   restTimeout = new TimeoutSchedule(rand(4, 6));
   flyTimeout = new TimeoutSchedule(rand(5, 10));
@@ -29,6 +27,8 @@ export class Birb {
   ndc = new Vector3();
   fpsRange = [60, 140];
   onReady = () => {};
+  baseX = 0;
+  restGroundBaseX = 0;
 
   get color() {
     return this.material?.color.getHexString();
@@ -188,7 +188,6 @@ export class Birb {
       desiredVelocity.add(wander);
       this.velocity.lerp(desiredVelocity, this.steerStrength * dt);
       this.animator.fps = rescale(this.velocity.length(), 0, 1.75, ...this.fpsRange);
-      // console.log(this.velocity.length());
       this.sprite.position.addScaledVector(this.velocity, dt);
       const prevToTarget = new Vector3().subVectors(this.target, this.prevPosition);
       const currToTarget = new Vector3().subVectors(this.target, this.sprite.position);
@@ -208,7 +207,6 @@ export class Birb {
           this.#tired = false;
           this.animator.play("sit");
 
-          // recompute restGroundBaseX ?
           const left = this.flock.landscape.sandbox.bounds.currLeftNear;
           const right = this.flock.landscape.sandbox.bounds.currRightNear;
           const x = left.x + (right.x - left.x) * 0.5;
@@ -271,7 +269,7 @@ export class Birb {
     );
     this.restPos.multiplyScalar(this.restTree.mesh.scale.x).add(this.restTree.mesh.position);
   }
-  updateRestPosGround(/* t */) {
+  updateRestPosGround() {
     const [nearZ, farZ] = this.flock.landscape.sandbox.bounds.z;
     let t = (this.sprite.position.z - nearZ) / (farZ - nearZ);
     const factor = lerp(1.0, this.flock.landscape.minPaxFactor, t);
