@@ -9,7 +9,7 @@ const observer = new ResizeObserver((entries) => {
 });
 const subscribe = (el, cb, throttleMs) => {
   if (subscribers.size === 0) {
-    observer.observe(/* document.body */ el);
+    observer.observe(el);
   }
   const throttled = throttle(cb, throttleMs);
   subscribers.add(throttled);

@@ -26,14 +26,42 @@ export const rand = (min, max) => {
   window.crypto.getRandomValues(buf);
   return denorm(buf[0] / (0xffffffff + 1), min, max);
 };
-export const throttle = function (fn, delay) {
+export const throttle = (fn, wait, options = {}) => {
+  const { leading = true, trailing = true } = options;
   let timeout = null;
-  return (...args) => {
-    if (!timeout) {
-      fn(...args);
-      timeout = setTimeout(() => {
+  let lastArgs = null;
+  let lastThis = null;
+  let lastCallTime = 0;
+
+  const invoke = (time) => {
+    lastCallTime = time;
+    fn.apply(lastThis, lastArgs);
+    lastArgs = lastThis = null;
+  };
+  const startTimer = (remaining) => {
+    timeout = setTimeout(() => {
+      timeout = null;
+      if (trailing && lastArgs) {
+        invoke(performance.now());
+      }
+    }, remaining);
+  };
+  return function (...args) {
+    const now = performance.now();
+    if (!lastCallTime && !leading) {
+      lastCallTime = now;
+    }
+    const remaining = wait - (now - lastCallTime);
+    lastArgs = args;
+    lastThis = this;
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
         timeout = null;
-      }, delay);
+      }
+      invoke(now);
+    } else if (!timeout && trailing) {
+      startTimer(remaining);
     }
   };
 };

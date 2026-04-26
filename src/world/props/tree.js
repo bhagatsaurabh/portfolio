@@ -531,5 +531,7 @@ export class Tree {
 
     return v;
   }
-  resize() {}
+  resize() {
+    // TODO
+  }
 }
