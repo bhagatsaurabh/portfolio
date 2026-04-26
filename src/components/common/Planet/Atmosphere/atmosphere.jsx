@@ -10,7 +10,7 @@ const Atmosphere = ({ theme, routeDirection, currRoute, onWorldWeatherChange = (
   const canvasEl = useRef(null);
   const { world } = useWorld(canvasEl, theme, onWorldWeatherChange);
   const { weather: currWeather, pending } = useWeather();
-  useResizeObserver(document.body, () => world.current?.resize());
+  useResizeObserver(document.body, () => world.current?.resize(), 500);
 
   useEffect(() => {
     if (pending || !world.current) return;

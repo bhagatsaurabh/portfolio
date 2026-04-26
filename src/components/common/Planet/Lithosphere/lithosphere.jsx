@@ -17,7 +17,7 @@ const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) 
     perfEl,
     weather,
   );
-  useResizeObserver(document.body, (width, height) => resize(width, height));
+  useResizeObserver(document.body, (width, height) => resize(width, height), 500);
 
   useEffect(() => {
     if (routeDirection !== 0) {

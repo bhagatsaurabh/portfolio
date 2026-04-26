@@ -20,9 +20,10 @@ export const useThree = (containerEl, theme, routeOrder, noOfRoutes, perfEl, wea
       const wrld = world.current;
       if (!wrld) return;
       wrld.resize(width, height);
+      panDelta.current = landscape.current.maxWorldX / (noOfRoutes - 1);
       resetPanPosition(routeOrder);
     },
-    [resetPanPosition, routeOrder],
+    [noOfRoutes, resetPanPosition, routeOrder],
   );
   const pan = useCallback(
     (routeDirection) => {

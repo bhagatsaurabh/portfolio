@@ -528,10 +528,11 @@ export class Landscape extends Simulation {
     );
     this.lightTween.start();
   }
-  resize(width, height) {
-    for (const tree of this.props.trees) {
+  resize(_width, _height) {
+    this.calcBounds();
+    /* for (const tree of this.props.trees) {
       tree.resize({ width, height });
-    }
+    } */
   }
   onWeatherChange(type) {
     if (type === "sun") {
