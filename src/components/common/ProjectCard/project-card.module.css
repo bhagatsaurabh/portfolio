@@ -61,6 +61,7 @@ html[data-theme="dark"] .ProjectCard {
   padding: 0 0.75rem;
 }
 .ProjectCard .Title h3 {
+  font-size: 1.17rem;
   font-weight: 500;
   margin: 0;
 }

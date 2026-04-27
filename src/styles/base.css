@@ -1,6 +1,9 @@
 #root {
   height: 100%;
 }
+html {
+  font-size: 14px;
+}
 html,
 body {
   height: 100vh;
@@ -97,5 +100,16 @@ code {
     .scrollable::-webkit-scrollbar-thumb:active {
       background-color: #585858;
     }
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
   }
 }

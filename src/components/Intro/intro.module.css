@@ -65,6 +65,7 @@
   white-space: nowrap;
 }
 .Title h5 {
+  font-size: 1rem;
   font-weight: lighter;
   color: var(--text-3);
 }
