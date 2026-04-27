@@ -20,9 +20,16 @@ export class PerfMonitor {
       this.at = 0;
 
       const currCalls = this.world.renderer.info.render.calls;
+      const dimension = metrics.dimension ?? { width: "?", height: "?" };
+
       const perfSnapshot = [
         { name: "FPS", value: this.fps },
         { name: "Base Font Size", value: this.baseFS },
+        {
+          name: "Viewport Dimension",
+          value: `${Math.round(window.visualViewport.width)} x ${Math.round(window.visualViewport.height)}`,
+        },
+        { name: "World Dimension", value: `${dimension.width} x ${dimension.height}` },
         { name: "Trees", value: metrics.noOfTrees ?? "-" },
         { name: "Instances per Tree", value: metrics.noOfInstancesPerTree ?? "-" },
         { name: "Reed Clusters", value: metrics.noOfReedClusters ?? "-" },

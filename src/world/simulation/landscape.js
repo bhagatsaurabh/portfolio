@@ -114,6 +114,8 @@ export class Landscape extends Simulation {
   }
 
   setProfile() {
+    this.world.metrics.dimension = { width: this.world.width, height: this.world.height };
+
     if (this.world.width < 768) this.props.noOfTrees = 5;
     else if (this.world.width < 1024) this.props.noOfTrees = 10;
     else if (this.world.width < 1280) this.props.noOfTrees = 15;

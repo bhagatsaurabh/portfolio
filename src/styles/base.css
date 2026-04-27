@@ -6,7 +6,7 @@ html {
 }
 html,
 body {
-  height: 100vh;
+  height: 100dvh;
 }
 * {
   box-sizing: border-box;
