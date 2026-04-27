@@ -5,6 +5,7 @@ export class PerfMonitor {
     this.frames = 0;
     this.last = performance.now();
     this.fps = 0;
+    this.baseFS = getComputedStyle(document.documentElement).fontSize;
   }
 
   at = 0;
@@ -21,6 +22,7 @@ export class PerfMonitor {
       const currCalls = this.world.renderer.info.render.calls;
       const perfSnapshot = [
         { name: "FPS", value: this.fps },
+        { name: "Base Font Size", value: this.baseFS },
         { name: "Trees", value: metrics.noOfTrees ?? "-" },
         { name: "Instances per Tree", value: metrics.noOfInstancesPerTree ?? "-" },
         { name: "Reed Clusters", value: metrics.noOfReedClusters ?? "-" },
