@@ -13,6 +13,7 @@ export const useThree = (
   perfEl,
   weather,
   perfMonitor,
+  onReady,
 ) => {
   const world = useRef(null);
   const landscape = useRef(null);
@@ -70,12 +71,13 @@ export const useThree = (
       wrld.simulations.push(landscape.current);
       wrld.sync();
       wrld.start();
+      onReady(wrld);
     }
 
     if (world.current.state.theme !== theme) {
       world.current.state = { ...world.current.state, theme };
     }
-  }, [containerEl, noOfRoutes, perfEl, resetPanPosition, routeOrder, theme]);
+  }, [containerEl, noOfRoutes, onReady, perfEl, resetPanPosition, routeOrder, theme]);
   useEffect(
     () => () => {
       world.current?.destroy();

@@ -19,12 +19,15 @@ export class PerfMonitor {
       this.at = 0;
 
       const currCalls = this.world.renderer.info.render.calls;
-      this.el.innerText = `
-        FPS:                  ${this.fps}
-        No. of Trees:         ${metrics.noOfTrees ?? "-"}
-        No. of Reed Clusters: ${metrics.noOfReedClusters ?? "-"}
-        GPU Draw Calls:       ${(currCalls ?? 0) - this.lastCalls}
-      `;
+      const perfSnapshot = [
+        { name: "FPS", value: this.fps },
+        { name: "Trees", value: metrics.noOfTrees ?? "-" },
+        { name: "Instances per Tree", value: metrics.noOfInstancesPerTree ?? "-" },
+        { name: "Reed Clusters", value: metrics.noOfReedClusters ?? "-" },
+        { name: "Device Pixel Ratio", value: window.devicePixelRatio },
+        { name: "GPU Draw Calls", value: (currCalls ?? 0) - this.lastCalls },
+      ];
+      this.world.events.emit("perf", perfSnapshot);
       this.lastCalls = currCalls;
     }
   }

@@ -25,7 +25,6 @@ import { House } from "../props/house";
 import { Windmill } from "../props/windmill";
 import { Flock } from "../props/flock";
 import { SPREAD_VARIETIES } from "../utils/tree-utils";
-import { EventBus } from "@/utils/event-bus";
 
 export class Landscape extends Simulation {
   color = "#363537";
@@ -84,7 +83,6 @@ export class Landscape extends Simulation {
     ambient: [0.1, 0.5],
     sun: [0.4, 0.85],
   };
-  events = new EventBus();
 
   get targetPos() {
     return this.#targetPos;
@@ -257,6 +255,7 @@ export class Landscape extends Simulation {
       this.world.scene.add(tree.mesh);
     }
     this.world.metrics.noOfTrees = this.props.trees.length;
+    this.world.metrics.noOfInstancesPerTree = this.props.treeInstanceCount;
   }
   randomizeTreeConfig(pos, nearZ, farZ) {
     const lod = rescale(pos.z, farZ, nearZ, 0.1, 1);
@@ -604,7 +603,5 @@ export class Landscape extends Simulation {
       // TODO: (extra still?) birb behaviour, exaggerate wind
     } else console.warn("Unknown world weather: ", type);
   }
-  destroy() {
-    this.events.clear();
-  }
+  destroy() {}
 }
