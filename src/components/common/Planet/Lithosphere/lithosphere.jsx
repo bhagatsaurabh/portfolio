@@ -29,7 +29,8 @@ const Lithosphere = ({
     enablePerfMonitor,
     onReady,
   );
-  useResizeObserver(document.body, (width, height) => resize(width, height), 500);
+  // eslint-disable-next-line react-hooks/refs
+  useResizeObserver(containerEl.current, (width, height) => resize(width, height), 500);
 
   useEffect(() => {
     if (routeDirection !== 0) {

@@ -4,70 +4,63 @@
   z-index: 50;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 3rem,
-    rgba(0, 0, 0, 1) 5rem calc(100% - 8rem),
-    transparent calc(100% - 3rem)
-  );
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-composite: intersect;
-  overflow-y: overlay;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-}
-.Experience button {
-  align-items: flex-start;
-  border: none;
-  opacity: 0.5;
+  align-items: center;
+  --fade-padding: 10rem;
+  --set-height: 25rem;
 }
 .Container {
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
-  font-weight: lighter;
-  height: 25rem;
-  overflow-y: auto;
+  height: calc(var(--set-height) + 2 * var(--fade-padding));
+  overflow-y: overlay;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-snap-stop: always;
+  padding: var(--fade-padding) 1rem var(--fade-padding) 1rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--fade-padding),
+    black var(--set-height),
+    transparent 100%
+  );
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+  display: flex;
+  position: relative;
+  font-weight: lighter;
 }
 .Container svg {
   opacity: 0.75;
-}
-.Container h4 {
-  font-weight: 100;
-}
-.Container svg {
   position: relative;
   top: 0.15rem;
 }
-.Container button svg {
-  top: unset;
-}
-.Container button {
-  margin-top: 1rem;
-}
 .Container h2 {
+  font-size: 1.5rem;
   margin: 0;
   font-weight: 100;
   color: var(--text-0);
   transition: color var(--theme-transition-duration) linear;
 }
 .Container span {
+  font-size: 1rem;
   font-weight: normal;
   color: var(--text-2);
   transition: color var(--theme-transition-duration) linear;
 }
 .Container .Set {
-  border-left: 3px solid var(--text-3);
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-  height: 25rem;
+  width: 100%;
+  height: calc(var(--set-height) + var(--fade-padding));
+  padding-top: var(--fade-padding);
   scroll-snap-align: start;
+}
+.Container .Set:last-child {
+  padding-bottom: calc(var(--fade-padding));
+  height: calc(var(--set-height) + 2 * var(--fade-padding));
 }
 .Container .Set:not(:last-child) {
   margin-bottom: 2rem;
@@ -87,13 +80,34 @@
 .XP:not(:last-child) {
   margin-bottom: 1rem;
 }
+.Stepper {
+  position: sticky;
+  top: 0;
+  right: 0;
+  width: 0.25rem;
+  background-color: var(--background-2);
+  height: var(--set-height);
+}
+.Thumb {
+  width: 100%;
+  position: relative;
+  height: calc(100% / var(--steps));
+  background-color: var(--text-2);
+  transform: translateY(calc(var(--step) * 100%));
+  transition: transform 0.1s linear;
+}
+.Content {
+  height: 100%;
+  border-left: 3px solid var(--text-3);
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
 
 @media (min-width: 1024px) {
-  .Container .Set {
+  .Content {
     border-left: 1px solid var(--text-3);
   }
 }
-
 @media (min-width: 1000px) {
   .Container {
     max-width: 750px;
@@ -102,5 +116,20 @@
 @media (min-width: 1300px) {
   .Container {
     max-width: 1000px;
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  @media (min-width: 1024px) {
+    .Container {
+      scrollbar-width: none;
+    }
+  }
+}
+@supports selector(::-webkit-scrollbar) {
+  @media (min-width: 1024px) {
+    .Container::-webkit-scrollbar {
+      display: none;
+    }
   }
 }

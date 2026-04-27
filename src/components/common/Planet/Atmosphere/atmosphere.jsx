@@ -10,7 +10,8 @@ const Atmosphere = ({ theme, routeDirection, currRoute, onWorldWeatherChange = (
   const canvasEl = useRef(null);
   const { world } = useWorld(canvasEl, theme, onWorldWeatherChange);
   const { weather: currWeather, pending } = useWeather();
-  useResizeObserver(document.body, () => world.current?.resize(), 500);
+  // eslint-disable-next-line react-hooks/refs
+  useResizeObserver(canvasEl.current, () => world.current?.resize(), 500);
 
   useEffect(() => {
     if (pending || !world.current) return;
