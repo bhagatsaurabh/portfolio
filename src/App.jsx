@@ -33,12 +33,15 @@ const App = () => {
   const prefsLoaded = useSelector(selectPrefsLoaded);
   const { currRoute, direction, navigate } = useRouteDirection(routes);
   const moveSection = (forward) => {
-    const nextRouteIdx = clamp(
+    const newRouteOrder = clamp(
       currRoute.handle.routeOrder + (forward ? 1 : -1),
       0,
       routes.length - 1,
     );
-    handleNavigate(nextRouteIdx);
+    const newRoute = routes.find((r) => r.handle.routeOrder === newRouteOrder);
+    if (newRoute.path !== currRoute.path) {
+      handleNavigate(newRoute);
+    }
   };
   const swipeHandlers = useHorizontalSwipe({ onSwipe: moveSection });
   const preloads = useMemo(
@@ -51,6 +54,7 @@ const App = () => {
     [],
   );
   useIdlePreload(preloads);
+  const [lithosphere, setLithosphere] = useState(null);
 
   useEffect(() => {
     const appInit = async () => {
@@ -113,10 +117,10 @@ const App = () => {
   const currentIdx = currRoute.handle.routeOrder;
 
   return (
-    <div className={[classes.App, theme].join(" ")} id="App" {...swipeHandlers}>
+    <div id="App" className={[classes.App, theme].join(" ")} {...swipeHandlers}>
       {prefsLoaded && (
         <>
-          <PerfMonitor />
+          <PerfMonitor world={lithosphere} />
           <Planet.Atmosphere
             theme={theme}
             routeDirection={direction}
@@ -129,6 +133,7 @@ const App = () => {
             currRoute={currRoute}
             noOfRoutes={routes.length}
             weather={worldWeather}
+            onReady={(wrld) => setLithosphere(wrld)}
           />
           <Navigator activeRoute={currRoute} routes={routes} onNavigate={handleNavigate} />
           <ThemeSelector />

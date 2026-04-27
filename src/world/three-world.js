@@ -14,6 +14,7 @@ import { AmbientLightNode, DirectionalLightNode, PointLightNode } from "three/sr
 
 import { themes } from "@/utils/constants";
 import { PerfMonitor } from "@/world/utils/monitor";
+import { EventBus } from "@/utils/event-bus";
 
 export class SimulatedThreeWorld {
   #width = 0;
@@ -33,6 +34,7 @@ export class SimulatedThreeWorld {
   gltfLoader = null;
   texLoader = null;
   activeCamera = null;
+  events = new EventBus();
 
   get width() {
     return this.#width;
@@ -132,6 +134,7 @@ export class SimulatedThreeWorld {
     }
   }
   destroy() {
+    this.events.clear();
     for (const simulation of this.simulations) {
       simulation.destroy?.();
     }

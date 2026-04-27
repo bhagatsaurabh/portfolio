@@ -7,7 +7,14 @@ import useThree from "@/hooks/useThree";
 import { useSelector } from "react-redux";
 import { selectEnablePerfMonitor } from "@/store/app";
 
-const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) => {
+const Lithosphere = ({
+  theme,
+  routeDirection,
+  currRoute,
+  noOfRoutes,
+  weather,
+  onReady = () => {},
+}) => {
   const containerEl = useRef();
   const perfEl = useRef(document.createElement("div"));
   const enablePerfMonitor = useSelector(selectEnablePerfMonitor);
@@ -20,6 +27,7 @@ const Lithosphere = ({ theme, routeDirection, currRoute, noOfRoutes, weather }) 
     perfEl,
     weather,
     enablePerfMonitor,
+    onReady,
   );
   useResizeObserver(document.body, (width, height) => resize(width, height), 500);
 
