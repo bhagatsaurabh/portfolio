@@ -4,7 +4,7 @@
     "name": "Frontend Architecture",
     "points": [
       "Contributed to a centralized design system, making components more reusable and keeping the UI consistent across applications.",
-      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage beyond 95%.",
+      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage beyond 90%.",
       "Built a micro-frontend setup with Module Federation for 4 interdependent SPAs, reducing duplication and enabling independent deployments.",
       "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility."
     ]
