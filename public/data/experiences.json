@@ -3,18 +3,18 @@
     "id": 0,
     "name": "Frontend Architecture",
     "points": [
+      "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility.",
       "Contributed to a centralized design system, making components more reusable and keeping the UI consistent across applications.",
-      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage beyond 90%.",
       "Built a micro-frontend setup with Module Federation for 4 interdependent SPAs, reducing duplication and enabling independent deployments.",
-      "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility."
+      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage of functional scenarios beyond 90%."
     ]
   },
   {
     "id": 1,
     "name": "Performance Optimization",
     "points": [
-      "Improved Core Web Vitals (LCP) by ~20% by fixing tree-shaking issues, introducing code-splitting, and enabling gzip compression.",
-      "Switched the build system from legacy tooling to #vite Vite, cutting down build times and making development feedback loops much faster."
+      "Improved Core Web Vitals by ~20% by fixing tree-shaking issues, introducing code-splitting, and enabling gzip compression.",
+      "Switched the build system from legacy tooling to #vite Vite, cutting down build times and making development loops much faster."
     ]
   },
   {
@@ -22,8 +22,8 @@
     "name": "Testing & Quality",
     "points": [
       "Built a functional testing setup (#playwright Playwright) integrated with CI/CD, cutting down manual regression effort significantly.",
-      "Put together an end-to-end API testing framework using #postman Postman/Newman, covering authentication and authorization flows.",
-      "Established a high-coverage testing strategy (>95%) to keep large-scale changes stable over time."
+      "Put together an end-to-end, CICD integrated, API testing framework, using #postman Postman (Newman), covering authentication and authorization flows.",
+      "Established a high-coverage testing strategy (>90%) to keep large-scale changes stable over time."
     ]
   },
   {
@@ -41,7 +41,7 @@
     "id": 4,
     "name": "Backend & Distributed Systems",
     "points": [
-      "Designed and maintained #spring Spring Boot services, including #kafka Kafka consumers, batch jobs, and REST APIs.",
+      "Designed and maintained #spring Spring Boot services, including #kafka Kafka producers/consumers, batch jobs, REST APIs and standalone components/libraries.",
       "Worked with event-driven and service-based architectures to support scalable backend workflows."
     ]
   },
@@ -57,7 +57,7 @@
     "name": "Developer Experience",
     "points": [
       "Modernized application's stack with #nodejs Node.js upgrades, Pinia for state management, and Composition API, improving maintainability and developer workflow.",
-      "Introduced #docker Docker-based local environments to make complex setups reproducible and easier to work with.",
+      "Configured #docker Docker-based local environments to make complex testing setups reproducible and easier to work with.",
       "Mentored engineers and ran internal sessions on #react React, #vue Vue, and micro-frontends, helping raise the team's overall capability."
     ]
   },
