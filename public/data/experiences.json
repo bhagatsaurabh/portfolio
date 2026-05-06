@@ -6,7 +6,7 @@
       "Designed a schema-driven form engine to power complex multi-step workflows with dynamic validation and extensibility.",
       "Contributed to a centralized design system, making components more reusable and keeping the UI consistent across applications.",
       "Built a micro-frontend setup with Module Federation for 4 interdependent SPAs, reducing duplication and enabling independent deployments.",
-      "Rebuilt a legacy frontend using #vue Vue (Composition API), shaping a more maintainable architecture and pushing test coverage of functional scenarios beyond 90%."
+      "Rebuilt a legacy frontend using #vue Vue, shaping a more maintainable architecture and pushing test coverage of functional scenarios beyond 90%."
     ]
   },
   {
@@ -41,7 +41,7 @@
     "id": 4,
     "name": "Backend & Distributed Systems",
     "points": [
-      "Designed and maintained #spring Spring Boot services, including #kafka Kafka producers/consumers, batch jobs, REST APIs and standalone components/libraries.",
+      "Designed and maintained #spring Spring Boot micro-services, including #kafka Kafka producers/consumers, batch jobs, REST APIs and standalone components/libraries.",
       "Worked with event-driven and service-based architectures to support scalable backend workflows."
     ]
   },
@@ -72,7 +72,7 @@
     "id": 8,
     "name": "Tooling & Automation",
     "points": [
-      "Built database migration tooling in #java Java, including a semantic analyzer and an automated documentation generator."
+      "Built database migration tooling in #java Java and #react React, including a semantic analyzer and an automated documentation generator."
     ]
   }
 ]
