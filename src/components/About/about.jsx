@@ -44,7 +44,7 @@ const About = () => {
     >
       <div className={classes.Container}>
         <h4>
-          I'm a frontend-leaning full-stack engineer with 6+ years of experience building scalable
+          I'm a frontend-leaning full-stack engineer with 7 years of experience building scalable
           web apps and backend systems. I enjoy working across the stack—whether it's shaping
           frontend architecture, designing APIs, setting up cloud infrastructure, or improving
           workflows with CI/CD.
