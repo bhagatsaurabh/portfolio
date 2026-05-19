@@ -7,6 +7,7 @@ import projectsReducer from "@/store/projects";
 import skillsReducer from "@/store/skills";
 import experiencesReducer from "@/store/experiences";
 import preloaderReducer from "@/store/preloader";
+import summaryReducer from "@/store/summary";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     preloader: preloaderReducer,
     skills: skillsReducer,
     experiences: experiencesReducer,
+    summary: summaryReducer,
   },
 });
 

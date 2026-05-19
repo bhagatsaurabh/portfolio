@@ -2,18 +2,32 @@
   {
     "id": 0,
     "name": "Frontend",
-    "skills": ["React", "Vue", "TypeScript", "JavaScript", "HTML", "CSS"]
+    "skills": [
+      "React",
+      "Vue",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Tailwind",
+      "Vite",
+      "Playwright"
+    ]
   },
-  { "id": 1, "name": "Backend", "skills": ["Java", "NodeJS", "GoLang", "Spring", "NestJS"] },
-  { "id": 2, "name": "Cloud", "skills": ["Azure", "Firebase", "Bicep", "Kubernetes", "Linux"] },
+  {
+    "id": 1,
+    "name": "Backend",
+    "skills": ["Java", "Go", "Node.js", "Spring", "Express.js", "NestJS"]
+  },
+  { "id": 2, "name": "Cloud", "skills": ["Azure", "Bicep", "Kubernetes", "Linux", "Firebase"] },
   {
     "id": 3,
     "name": "Tooling",
-    "skills": ["Figma", "NPM", "Docker", "Postman", "Maven", "Vite", "SonarQube", "Grafana"]
+    "skills": ["Figma", "NPM", "Docker", "Postman", "Maven", "SonarQube", "Grafana"]
   },
   {
     "id": 4,
     "name": "Other technologies I've worked with",
-    "skills": ["Redis", "NATS", "Playwright", "RabbitMQ", "PostgreSQL", "Kafka"]
+    "skills": ["Redis", "NATS", "RabbitMQ", "PostgreSQL", "Kafka"]
   }
 ]

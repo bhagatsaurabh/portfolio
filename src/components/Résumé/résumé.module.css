@@ -1,4 +1,4 @@
-.Resumé {
+.Résumé {
   opacity: 1;
   position: absolute;
   top: 0;
@@ -15,14 +15,14 @@
 }
 .Download {
 }
-.Resumé a {
+.Résumé a {
   text-decoration: none;
   color: #6f6f6f;
 }
-.Resumé a.Simple {
+.Résumé a.Simple {
   margin: 0;
 }
-.Resumé a img {
+.Résumé a img {
   margin-right: 0.5rem;
   position: relative;
   top: -0.125rem;

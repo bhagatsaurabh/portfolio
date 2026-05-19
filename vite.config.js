@@ -4,6 +4,9 @@ import { fileURLToPath } from "url";
 import svgSpriteSheet from "./plugins/vite-plugin-svg-spritesheet";
 
 export default defineConfig({
+  define: {
+    "import.meta.env.VITE_BUILD_TIMESTAMP": JSON.stringify(new Date().toISOString()),
+  },
   plugins: [react(), svgSpriteSheet()],
   resolve: {
     alias: [

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 
@@ -7,15 +7,15 @@ import classes from "./about.module.css";
 import Icon from "../common/Icon/icon.jsx";
 import FeedButton from "../common/FeedButton/feed-button.jsx";
 import { router } from "@/router";
-import { setEnablePerfMonitor } from "@/store/app";
+import DSLRenderer from "../common/DSLRenderer/DSLRenderer";
+import { formatAge } from "@/utils/age-formatter";
 
 const About = () => {
+  const summary = useSelector((state) => state.summary);
   const contact = useSelector((state) => state.contact);
   const [emailCopied, setEmailCopied] = useState(false);
   const location = useLocation();
   const isActive = location.pathname === "/about";
-  const [clicks, setClicks] = useState(0);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let handle;
@@ -24,11 +24,6 @@ const About = () => {
     }
     return () => clearTimeout(handle);
   }, [emailCopied]);
-  useEffect(() => {
-    if (clicks >= 3) {
-      dispatch(setEnablePerfMonitor(true));
-    }
-  }, [clicks, dispatch]);
 
   const handleEmailCopy = () => {
     navigator.clipboard.writeText(contact.email);
@@ -43,37 +38,7 @@ const About = () => {
       ])}
     >
       <div className={classes.Container}>
-        <h4>
-          I'm a frontend-leaning full-stack engineer with 7 years of experience building scalable
-          web apps and backend systems. I enjoy working across the stack—whether it's shaping
-          frontend architecture, designing APIs, setting up cloud infrastructure, or improving
-          workflows with CI/CD.
-        </h4>
-        <h4>
-          Over the years, I've worked in multiple domains, building end-to-end systems and finding
-          ways to make development faster and more efficient through better tooling and DevOps
-          practices.
-        </h4>
-        <div className={classes.MeContainer}>
-          {
-            <img
-              className={classes.Me}
-              alt="Me"
-              src={`${import.meta.env.VITE_SB_CDN_URL}/images/me.webp`}
-            />
-          }
-        </div>
-        <h4>
-          Outside of work, I'm drawn to creative and exploratory projects—I enjoy diving deep into
-          ideas, especially around research and development of games and interactive systems.
-          <br />
-          <br />I also spend time composing instrumental music, which is a completely different kind
-          of creative outlet but just as rewarding{" "}
-          <span className={classes.Silly} onClick={() => setClicks((c) => c + 1)}>
-            🎶
-          </span>
-          .
-        </h4>
+        <DSLRenderer entries={summary} />
         <div className={classNames([classes.Email, { [classes.copied]: emailCopied }])}>
           <a href={"mailto:" + contact.email}>
             <Icon name="email" size={1} />
@@ -101,12 +66,12 @@ const About = () => {
         <FeedButton
           customStyle={{ alignSelf: "unset", marginTop: "1rem" }}
           icon="resume"
-          onClick={() => router.navigate("/resumé")}
+          onClick={() => router.navigate("/résumé")}
         >
           {"Résumé"}
         </FeedButton>
-        <span className={classes.Copyright}>
-          &copy;&nbsp;{new Date().getFullYear()}&nbsp;Saurabh Bhagat
+        <span className={classes.Build}>
+          Updated {formatAge(import.meta.env.VITE_BUILD_TIMESTAMP)}
         </span>
       </div>
     </div>

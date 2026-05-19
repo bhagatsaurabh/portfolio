@@ -25,6 +25,7 @@ import useIdlePreload from "./hooks/useIdlePreload";
 import { loadSkills } from "./store/skills";
 import { loadExperiences } from "./store/experiences";
 import PerfMonitor from "./components/common/PerfMonitor/PerfMonitor";
+import { loadSummary } from "./store/summary";
 
 const App = () => {
   const [worldWeather, setWorldWeather] = useState("");
@@ -64,6 +65,7 @@ const App = () => {
       tasks.push(dispatch(loadSkills()).unwrap());
       tasks.push(dispatch(loadExperiences()).unwrap());
       tasks.push(dispatch(loadContact()).unwrap());
+      tasks.push(dispatch(loadSummary()).unwrap());
       await Promise.all(tasks);
       dispatch(setPrefsLoaded(true));
     };

@@ -1,20 +1,22 @@
 import { useMemo } from "react";
 import FeedButton from "../common/FeedButton/feed-button";
-import classes from "./resumé.module.css";
+import classes from "./résumé.module.css";
 import usePdfPreview from "@/hooks/usePdfPreview";
 
-const Resumé = () => {
+const fileName = "Saurabh_Bhagat_Resume_Senior_Full_Stack_Engineer.pdf";
+
+const Résumé = () => {
   const file = useMemo(
     () => ({
-      name: "Resume_SaurabhBhagat.pdf",
-      url: `${import.meta.env.VITE_SB_CDN_URL}/data/Resume_SaurabhBhagat.pdf`,
+      name: fileName,
+      url: `${import.meta.env.VITE_SB_CDN_URL}/data/${fileName}`,
     }),
     [],
   );
   usePdfPreview("adobe-dc-view", file);
 
   return (
-    <div className={classes.Resumé}>
+    <div className={classes.Résumé}>
       <div className={classes.Controls}>
         <a className={classes.Download} href={file.url} download>
           <FeedButton icon="download">Download PDF</FeedButton>
@@ -27,4 +29,4 @@ const Resumé = () => {
   );
 };
 
-export default Resumé;
+export default Résumé;

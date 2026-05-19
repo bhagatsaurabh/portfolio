@@ -16,19 +16,10 @@
   justify-content: center;
   align-items: center;
 }
-.Silly {
-  filter: grayscale(1);
-  transition: filter var(--theme-transition-duration) linear;
-  cursor: pointer;
-  user-select: none;
-}
-html[data-theme="dark"] .Silly {
-  filter: grayscale(1) invert(1);
-}
 .About h4 {
   font-size: 0.9rem;
   font-weight: 100;
-  margin: 0.5rem 0;
+  margin: 0.35rem 0;
   text-align: center;
   color: var(--text-1);
   transition: color var(--theme-transition-duration) linear;
@@ -101,43 +92,30 @@ html[data-theme="dark"] .Silly {
 .Location {
   opacity: 0.6;
 }
-.Copyright {
+.Build {
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 1.25rem;
   font-size: 0.75rem;
   transition:
     color var(--theme-transition-duration) linear,
     background-color var(--theme-transition-duration) linear;
   margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   background-color: #dcdcdcb3;
   padding: 0.15rem 0.5rem;
   color: var(--text-3);
 }
-html[data-theme="dark"] .Copyright {
+html[data-theme="dark"] .Build {
   background-color: #424242b3;
 }
-.MeContainer {
-  text-align: center;
-  display: flex;
-  transition: max-height 0.5s linear;
-  max-height: 0rem;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.About.animate .MeContainer {
+
+.About.animate :global(.me-container) {
   animation: open 0.75s cubic-bezier(0, 0, 0.02, 1) both 1s normal;
 }
-.About.c-animate .MeContainer {
+.About.c-animate :global(.me-container) {
   animation: close 0.75s cubic-bezier(0, 0, 0.02, 1) both 0s normal;
 }
-.Me {
-  margin-bottom: 1.5rem;
-  opacity: 0.8;
-}
 .Container > span {
-  margin-top: 1.5rem;
   display: flex;
   align-items: center;
 }
@@ -145,20 +123,6 @@ html[data-theme="dark"] .Copyright {
   margin-right: 0.5rem;
 }
 
-@media (orientation: landscape) {
-  .Me {
-    max-width: 30%;
-    min-width: 130px;
-    max-height: 12rem;
-  }
-}
-@media (orientation: portrait) {
-  .Me {
-    max-width: 30%;
-    min-width: 130px;
-    max-height: 12rem;
-  }
-}
 @media (hover: hover) {
   .Email button:hover {
     background-color: var(--background-nav);

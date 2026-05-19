@@ -4,7 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { routes } from "./routes";
 import App from "@/App";
 import CrashBoard from "@/components/common/CrashBoard/CrashBoard";
-const Resumé = lazy(() => import("@/components/Resumé/resumé"));
+const Résumé = lazy(() => import("@/components/Résumé/résumé"));
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +19,8 @@ export const router = createBrowserRouter([
     })),
   },
   {
-    path: "/resumé",
-    Component: Resumé,
+    path: "/résumé",
+    Component: Résumé,
     errorElement: <CrashBoard />,
   },
 ]);
