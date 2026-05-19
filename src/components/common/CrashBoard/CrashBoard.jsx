@@ -5,8 +5,8 @@ const CrashBoard = () => {
     <div className={classes.CrashBoard}>
       <h2>Something went wrong</h2>
       <div className={classes.Controls}>
-        <a href="/resumé">
-          <button>📝 Resumé</button>
+        <a href="/résumé">
+          <button>📝 Résumé</button>
         </a>
         <a href="/">
           <button onClick={() => location.reload()}>⭮ Reload</button>

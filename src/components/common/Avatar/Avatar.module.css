@@ -1,0 +1,19 @@
+.Me {
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+@media (orientation: landscape) {
+  .Me {
+    max-width: 30%;
+    min-width: 130px;
+    max-height: 12rem;
+  }
+}
+@media (orientation: portrait) {
+  .Me {
+    max-width: 30%;
+    min-width: 130px;
+    max-height: 12rem;
+  }
+}

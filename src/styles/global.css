@@ -1,0 +1,9 @@
+.me-container {
+  text-align: center;
+  display: flex;
+  transition: max-height 0.5s linear;
+  max-height: 0rem;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
