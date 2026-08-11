@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
 
   Content-Delivery:
     name: Content Delivery
-    needs: [ Build ]
+    needs: [Build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -59,7 +59,7 @@ jobs:
 
   Deploy-Firebase:
     name: Deploy to Firebase
-    needs: [ Build, Content-Delivery ]
+    needs: [Build, Content-Delivery]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -77,7 +77,7 @@ jobs:
           projectId: saurabh-bhagat-portfolio
 
   Cleanup:
-    needs: [ Deploy-Firebase ]
+    needs: [Deploy-Firebase]
     if: always()
     runs-on: ubuntu-latest
     steps:
