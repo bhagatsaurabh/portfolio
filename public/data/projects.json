@@ -5,9 +5,9 @@
     "description": "A zero-dependency, highly-customizable framework for creating node-based editors.",
     "descriptionLong": null,
     "tags": ["typescript", "npm", "vue", "#vuepress", "#web-canvas"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/flow-connect.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/flow-connect.webp",
     "githubLink": "https://github.com/saurabh-prosoft/flow-connect",
-    "liveLink": "https://flow-connect.saurabhagat.me"
+    "liveLink": "https://flow-connect.saurabhagat.dev"
   },
   {
     "id": 4,
@@ -15,9 +15,9 @@
     "description": "A plugin-extensible HTML5 canvas rendering engine.",
     "descriptionLong": null,
     "tags": ["react", "typescript", "npm", "#web-canvas"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/percept.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/percept.webp",
     "githubLink": "https://github.com/saurabh-prosoft/percept",
-    "liveLink": "https://percept.saurabhagat.me"
+    "liveLink": "https://percept.saurabhagat.dev"
   },
   {
     "id": 5,
@@ -25,9 +25,9 @@
     "description": "Simple and effective sound mixing web-app with interactive and dynamic design.",
     "descriptionLong": null,
     "tags": ["react", "webaudio"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/mixbee.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/mixbee.webp",
     "githubLink": "https://github.com/saurabh-prosoft/mix-bee",
-    "liveLink": "https://mix-bee.saurabhagat.me"
+    "liveLink": "https://mix-bee.saurabhagat.dev"
   },
   {
     "id": 3,
@@ -35,9 +35,9 @@
     "description": "End-to-end encrypted messaging solution for the web.",
     "descriptionLong": null,
     "tags": ["vue", "firebase", "nodejs"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/openchat.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/openchat.webp",
     "githubLink": "https://github.com/saurabh-prosoft/openchat",
-    "liveLink": "https://openchat.saurabhagat.me"
+    "liveLink": "https://openchat.saurabhagat.dev"
   },
   {
     "id": 1,
@@ -45,9 +45,9 @@
     "description": "A cloud platform with real-time collaborative tools for prototyping in on-demand Linux workspaces.",
     "descriptionLong": null,
     "tags": ["react", "typescript", "nodejs", "java", "golang", "kubernetes", "docker"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/h-ide.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/h-ide.webp",
     "githubLink": "https://github.com/bhagatsaurabh/hide-server",
-    "liveLink": "https://hide.saurabhagat.me"
+    "liveLink": "https://hide.saurabhagat.dev"
   },
   {
     "id": 7,
@@ -55,9 +55,9 @@
     "description": "A web-app to create visual programs for audio processing and analysis.",
     "descriptionLong": null,
     "tags": ["react", "webaudio", "#web-canvas"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/vap.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/vap.webp",
     "githubLink": "https://github.com/saurabh-prosoft/vap",
-    "liveLink": "https://vap.saurabhagat.me/"
+    "liveLink": "https://vap.saurabhagat.dev/"
   },
   {
     "id": 9,
@@ -65,10 +65,10 @@
     "description": "2D side-scrolling 'purr-former' starring a 'feline-tastic' hero on whisker-raising adventures !",
     "descriptionLong": null,
     "tags": ["typescript", "game", "_2d"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/catana-adventures.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/catana-adventures.webp",
     "githubLink": "https://github.com/saurabh-prosoft/catana-adventures",
-    "liveLink": "https://catana-adventures.saurabhagat.me",
-    "mediaLink": "https://cdn.saurabhagat.me/portfolio/previews/catana-bg.webm"
+    "liveLink": "https://catana-adventures.saurabhagat.dev",
+    "mediaLink": "https://cdn.saurabhagat.dev/portfolio/previews/catana-bg.webm"
   },
   {
     "id": 0,
@@ -86,9 +86,9 @@
     "description": "A simple node-based editor for image processing.",
     "descriptionLong": null,
     "tags": ["javascript", "#web-canvas", "#web-worker"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/nodeip.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/nodeip.webp",
     "githubLink": "https://github.com/saurabh-prosoft/node-ip",
-    "liveLink": "https://node-ip.saurabhagat.me/"
+    "liveLink": "https://node-ip.saurabhagat.dev/"
   },
   {
     "id": 6,
@@ -96,10 +96,10 @@
     "description": "Multiplayer online PvP tank battle !",
     "descriptionLong": null,
     "tags": ["typescript", "webgl", "vue", "game", "_3d"],
-    "image": "https://cdn.saurabhagat.me/portfolio/images/tankme.webp",
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/tankme.webp",
     "githubLink": "https://github.com/saurabh-prosoft/tank-me",
-    "liveLink": "https://tankme.saurabhagat.me",
-    "mediaLink": "https://cdn.saurabhagat.me/portfolio/previews/tankme-bg.webm"
+    "liveLink": "https://tankme.saurabhagat.dev",
+    "mediaLink": "https://cdn.saurabhagat.dev/portfolio/previews/tankme-bg.webm"
   },
   {
     "id": 8,
@@ -109,7 +109,7 @@
     "tags": ["react", "#web-canvas"],
     "image": null,
     "githubLink": "https://github.com/saurabh-prosoft/portfolio",
-    "liveLink": "https://saurabhagat.me",
-    "mediaLink": "https://cdn.saurabhagat.me/portfolio/previews/portfolio-bg.webm"
+    "liveLink": "https://saurabhagat.dev",
+    "mediaLink": "https://cdn.saurabhagat.dev/portfolio/previews/portfolio-bg.webm"
   }
 ]
