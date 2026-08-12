@@ -50,6 +50,16 @@
     "liveLink": "https://hide.saurabhagat.dev"
   },
   {
+    "id": 11,
+    "name": "Ignis Lazari",
+    "description": "An extensible Rust library; wake & monitor virtual machines using provider-agnostic activation.",
+    "descriptionLong": null,
+    "tags": ["rust", "docker"],
+    "image": "https://cdn.saurabhagat.dev/portfolio/images/ignis-lazari.webp",
+    "githubLink": "https://github.com/bhagatsaurabh/ignis-lazari",
+    "liveLink": "https://github.com/bhagatsaurabh/ignis-lazari"
+  },
+  {
     "id": 7,
     "name": "vAP",
     "description": "A web-app to create visual programs for audio processing and analysis.",
