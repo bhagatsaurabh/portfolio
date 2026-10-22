@@ -21,7 +21,7 @@
   font-weight: 100;
   margin: 0.35rem 0;
   text-align: center;
-  color: var(--text-1);
+  color: var(--text-0p5);
   transition: color var(--theme-transition-duration) linear;
 }
 .Platforms {

@@ -15,7 +15,7 @@ const PerfControl = () => {
 
   return (
     <span className={classes.Silly} onClick={() => setClicks((c) => c + 1)}>
-      🎶
+      😏
     </span>
   );
 };

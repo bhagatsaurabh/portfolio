@@ -1,5 +1,5 @@
 .Silly {
-  filter: grayscale(1);
+  filter: grayscale(0.3);
   transition: filter var(--theme-transition-duration) linear;
   cursor: pointer;
   user-select: none;
