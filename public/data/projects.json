@@ -7,7 +7,7 @@
     "tags": ["typescript", "npm", "vue", "#vuepress", "#web-canvas"],
     "image": "https://cdn.saurabhagat.dev/portfolio/images/flow-connect.webp",
     "githubLink": "https://github.com/saurabh-prosoft/flow-connect",
-    "liveLink": "https://flow-connect.saurabhagat.dev"
+    "liveLink": "https://flowconnect.saurabhagat.dev"
   },
   {
     "id": 4,
@@ -27,7 +27,7 @@
     "tags": ["react", "webaudio"],
     "image": "https://cdn.saurabhagat.dev/portfolio/images/mixbee.webp",
     "githubLink": "https://github.com/saurabh-prosoft/mix-bee",
-    "liveLink": "https://mix-bee.saurabhagat.dev"
+    "liveLink": "https://mixbee.saurabhagat.dev"
   },
   {
     "id": 3,
